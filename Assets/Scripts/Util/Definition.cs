@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Acceleration
+namespace AccelerationSpace
 { 
     public enum AccelerationLevel
     {
@@ -13,6 +13,20 @@ namespace Acceleration
         Max
     }
 }
+
+namespace ClearGradeSpace
+{
+    public enum ClearGrade
+    {
+        Perfect,
+        Excellent,
+        Great,
+        Good,
+        Normal,
+        Bad
+    }
+}
+
 public class Definition : MonoBehaviour
 {
     public const string WALK_CLIP = "walk";

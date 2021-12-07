@@ -82,23 +82,23 @@ public class RunningBar : MonoBehaviour
         return _runningBar.maxValue;
     }
 
-    public void IncreaseFillSpeed(Acceleration.AccelerationLevel level)
+    public void IncreaseFillSpeed(AccelerationSpace.AccelerationLevel level)
     {
         switch (level)
         {
-            case Acceleration.AccelerationLevel.None:
+            case AccelerationSpace.AccelerationLevel.None:
                 SetDefaultFillSpeed();
                 break;
-            case Acceleration.AccelerationLevel.One:
+            case AccelerationSpace.AccelerationLevel.One:
                 _fillSpeed = _fillSpeedValue[0];
                 break;
-            case Acceleration.AccelerationLevel.Two:
+            case AccelerationSpace.AccelerationLevel.Two:
                 _fillSpeed = _fillSpeedValue[1];
                 break;
-            case Acceleration.AccelerationLevel.Three:
+            case AccelerationSpace.AccelerationLevel.Three:
                 _fillSpeed = _fillSpeedValue[2];
                 break;
-            case Acceleration.AccelerationLevel.Max:
+            case AccelerationSpace.AccelerationLevel.Max:
                 _fillSpeed = _fillSpeedValue[3];
                 break;
         }

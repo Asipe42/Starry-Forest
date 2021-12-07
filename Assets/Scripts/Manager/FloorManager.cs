@@ -109,23 +109,23 @@ public class FloorManager : MonoBehaviour
         _moveSpeed = value;
     }
 
-    public void OnAcceleration(Acceleration.AccelerationLevel level)
+    public void OnAcceleration(AccelerationSpace.AccelerationLevel level)
     {
         switch (level)
         {
-            case Acceleration.AccelerationLevel.None:
+            case AccelerationSpace.AccelerationLevel.None:
                 SetDefaultAcceleration();
                 break;
-            case Acceleration.AccelerationLevel.One:
+            case AccelerationSpace.AccelerationLevel.One:
                 _acceleration = _accelerationValue[0];
                 break;
-            case Acceleration.AccelerationLevel.Two:
+            case AccelerationSpace.AccelerationLevel.Two:
                 _acceleration = _accelerationValue[1];
                 break;
-            case Acceleration.AccelerationLevel.Three:
+            case AccelerationSpace.AccelerationLevel.Three:
                 _acceleration = _accelerationValue[2];
                 break;
-            case Acceleration.AccelerationLevel.Max:
+            case AccelerationSpace.AccelerationLevel.Max:
                 _acceleration = _accelerationValue[3];
                 break;
         }

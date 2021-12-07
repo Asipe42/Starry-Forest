@@ -65,7 +65,7 @@ public class Dialog : MonoBehaviour
             else if (_onEnd)
             {
                 LoadingSceneController.LoadScene("End");
-                GameManager.instance.UIManagerInstance.OnResult();
+                GameManager.instance.UIManagerInstance.SetResult(true);
             }
             else
             {
@@ -78,7 +78,7 @@ public class Dialog : MonoBehaviour
     {
         GameManager.instance.StageManagerInstance.end = false;
         GameManager.instance.StageManagerInstance.stop = false;
-        GameManager.instance.UIManagerInstance.onHUD();
+        GameManager.instance.UIManagerInstance.SetHUD(true);
     }
 
     private void PrintScript(int start, int end) // need to change portrait logic

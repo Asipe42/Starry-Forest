@@ -60,7 +60,7 @@ public class StageManager : MonoBehaviour
 
     public void GameOver()
     {
-        GameManager.instance.IncreaseDeathCount();
+        //GameManager.instance.IncreaseDeathCount();
 
         SceneManager.LoadScene(_preSceneName);
     }
@@ -96,13 +96,13 @@ public class StageManager : MonoBehaviour
         {
             _end = true;
 
-            GameManager.instance.UIManagerInstance.OnResult();
+            GameManager.instance.UIManagerInstance.SetResult(true);
         }
     }
 
     public void StartDialog()
     {
-        GameManager.instance.UIManagerInstance.OnDialog();
+        GameManager.instance.UIManagerInstance.SetDialog(true);
         GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(0);
     }
 

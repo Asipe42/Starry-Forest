@@ -37,38 +37,41 @@ public class UIManager : MonoBehaviour
         _option = Option.GetComponent<Option>();
     }
 
-    public void OnDialog()
+    public void SetDialog(bool state)
     {
-        Result.SetActive(false);
+        Result.SetActive(!state);
 
-        Dialog.SetActive(true);
+        Dialog.SetActive(state);
     }
 
-    public void onHUD()
+    public void SetHUD(bool state)
     {
-        Dialog.SetActive(false);
+        Dialog.SetActive(!state);
 
-        HUD.SetActive(true);
+        HUD.SetActive(state);
     }
 
-    public void OnResult()
+    public void SetResult(bool state)
     {
-        HUD.SetActive(false);
+        HUD.SetActive(!state);
 
-        Result.SetActive(true);
+        Result.SetActive(state);
 
-        _result.SetResult();
+        if (state)
+            _result.SetResult();
     }
 
-    public void OnOption()
+    public void SetOption(bool state)
     {
-        Option.SetActive(true);
-        GameManager.instance.GameStop();
-    }
-
-    public void OffOption()
-    {
-        Option.SetActive(false);
-        GameManager.instance.GameContinue();
+        Option.SetActive(state);
+        
+        if (state)
+        {
+            GameManager.instance.GameStop();
+        }
+        else
+        {
+            GameManager.instance.GameContinue();
+        }
     }
 }

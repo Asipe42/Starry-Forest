@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class SaveValue
 {
-    public static int _deathCount = 0;
+    static int _totalStageCount = 6;
+
+    //public static int _deathCount = 0;
     public static int _totalScore = 0;
     public static int _hp = 3;
     public static int _maxHp = 3;
     public static int _nowSceneIndex = 0;
+
+    public static ClearGradeSpace.ClearGrade[] BestGrades = new ClearGradeSpace.ClearGrade[_totalStageCount];
 }
 
 public class GameManager : MonoBehaviour
@@ -74,9 +78,9 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (_onOption)
-                theUIManager.OffOption();
+                theUIManager.SetOption(false);
             else
-                theUIManager.OnOption();
+                theUIManager.SetOption(true);
 
             _onOption = !_onOption;
         }
@@ -103,15 +107,15 @@ public class GameManager : MonoBehaviour
         SaveValue._nowSceneIndex = index;
     }
 
-    public int GetDeathCount()
-    {
-        return SaveValue._deathCount;
-    }
+    //public int GetDeathCount()
+    //{
+    //    return SaveValue._deathCount;
+    //}
 
-    public void IncreaseDeathCount()
-    {
-        SaveValue._deathCount++;
-    }
+    //public void IncreaseDeathCount()
+    //{
+    //    SaveValue._deathCount++;
+    //}
 
     public int LoadTotalScore()
     {

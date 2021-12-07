@@ -28,12 +28,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] BoxCollider2D _slidingCollider;
     IEnumerator _slidingCorutine;
     bool _onSliding;
+    bool _slidingOnce;
 
     [Header("Dash")]
     float _dashCurrentTime;
     [SerializeField] float[] _dashChangingTime;
     [SerializeField] Color[] _dashColors;
-    Acceleration.AccelerationLevel _dashLevel;
+    AccelerationSpace.AccelerationLevel _dashLevel;
     IEnumerator _dashCorutine;
     bool _onDash;
 
@@ -225,21 +226,26 @@ public class PlayerMovement : MonoBehaviour
         if (!_onGround)
             return;
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             _onSliding = true;
 
-            audioManager.PlaySFX(Definition.SLIDING_CLIP);
+            if (!_slidingOnce)
+            {
+                _slidingOnce = true;
 
-            playerAnim.PlayAnimationClip(Definition.ANIM_SLIDE, true);
+                audioManager.PlaySFX(Definition.SLIDING_CLIP);
 
-            _defaultCollider.enabled = false;
-            _slidingCollider.enabled = true;
+                playerAnim.PlayAnimationClip(Definition.ANIM_SLIDE, true);
 
-            playerVFX.PlayVFX(Definition.VFX_DUST);
+                _defaultCollider.enabled = false;
+                _slidingCollider.enabled = true;
 
-            _slidingCorutine = CancleSliding();
-            StartCoroutine(_slidingCorutine);
+                playerVFX.PlayVFX(Definition.VFX_DUST);
+
+                _slidingCorutine = CancleSliding();
+                StartCoroutine(_slidingCorutine);
+            }
         }
     }
 
@@ -257,6 +263,7 @@ public class PlayerMovement : MonoBehaviour
                 playerVFX.StopVFX(Definition.VFX_DUST);
 
                 _onSliding = false;
+                _slidingOnce = false;
 
                 if (_slidingCorutine != null)
                     StopCoroutine(_slidingCorutine);
@@ -288,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
     [System.Obsolete]
     IEnumerator ChangeDashGrade()
     {
-        _dashLevel = Acceleration.AccelerationLevel.One;
+        _dashLevel = AccelerationSpace.AccelerationLevel.One;
 
         GameManager.instance.UIManagerInstance.runningBarInstance.IncreaseFillSpeed(_dashLevel);
         GameManager.instance.FloorManagerInstance.OnAcceleration(_dashLevel);
@@ -303,7 +310,7 @@ public class PlayerMovement : MonoBehaviour
 
                 _dashCurrentTime = 0f;
 
-                _dashLevel = Acceleration.AccelerationLevel.None;
+                _dashLevel = AccelerationSpace.AccelerationLevel.None;
 
                 GameManager.instance.UIManagerInstance.runningBarInstance.IncreaseFillSpeed(_dashLevel);
                 GameManager.instance.FloorManagerInstance.OnAcceleration(_dashLevel);
@@ -331,7 +338,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (_dashLevel < Acceleration.AccelerationLevel.Max && _dashCurrentTime >= _dashChangingTime[(int)_dashLevel - 1])
+            if (_dashLevel < AccelerationSpace.AccelerationLevel.Max && _dashCurrentTime >= _dashChangingTime[(int)_dashLevel - 1])
             {
                 _dashLevel++;
 

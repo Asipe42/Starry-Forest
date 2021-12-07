@@ -6,16 +6,6 @@ using UnityEngine.Playables;
 
 public class Result : MonoBehaviour
 {
-    enum ClearGrade
-    {
-        Perfect,
-        Excellent, 
-        Great,
-        Good,
-        Normal,
-        Bad
-    }
-
     enum ResultMenu
     {
         None,
@@ -39,7 +29,7 @@ public class Result : MonoBehaviour
     [SerializeField] Image _gradeImage;
     [SerializeField] Sprite[] _gradeSprites;
     bool _printedGrade;
-    ClearGrade _myGrade;
+    ClearGradeSpace.ClearGrade _myGrade;
 
     [Header("Selected Menu")]
     [SerializeField] KeyCode left;
@@ -59,7 +49,7 @@ public class Result : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        _mySelectedMenu = ResultMenu.Retry;
+        _mySelectedMenu = ResultMenu.None;
     }
 
     void Update()
@@ -126,33 +116,33 @@ public class Result : MonoBehaviour
 
         if (totalWeight <= 30)
         {
-            _myGrade = ClearGrade.Perfect;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Perfect];
+            _myGrade = ClearGradeSpace.ClearGrade.Perfect;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Perfect];
         }
         else if (totalWeight <= 27)
         {
-            _myGrade = ClearGrade.Excellent;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Excellent];
+            _myGrade = ClearGradeSpace.ClearGrade.Excellent;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Excellent];
         }
         else if (totalWeight <= 23)
         {
-            _myGrade = ClearGrade.Great;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Great];
+            _myGrade = ClearGradeSpace.ClearGrade.Great;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Great];
         }
         else if (totalWeight <= 19)
         {
-            _myGrade = ClearGrade.Good;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Good];
+            _myGrade = ClearGradeSpace.ClearGrade.Good;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Good];
         }
         else if (totalWeight <= 15)
         {
-            _myGrade = ClearGrade.Normal;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Normal];
+            _myGrade = ClearGradeSpace.ClearGrade.Normal;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Normal];
         }
         else
         {
-            _myGrade = ClearGrade.Bad;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGrade.Bad];
+            _myGrade = ClearGradeSpace.ClearGrade.Bad;
+            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Bad];
         }
 
         SetGrade(_myGrade);
@@ -222,28 +212,28 @@ public class Result : MonoBehaviour
         return scoreWeight;
     }
 
-    void SetGrade(ClearGrade grade)
+    void SetGrade(ClearGradeSpace.ClearGrade grade)
     {
         string gradeStr = null;
 
         switch (grade)
         {
-            case ClearGrade.Perfect:
+            case ClearGradeSpace.ClearGrade.Perfect:
                 gradeStr = "참 잘했어요!";
                 break;
-            case ClearGrade.Excellent:
+            case ClearGradeSpace.ClearGrade.Excellent:
                 gradeStr = "멋져요!";
                 break;
-            case ClearGrade.Great:
+            case ClearGradeSpace.ClearGrade.Great:
                 gradeStr = "잘했어요";
                 break;
-            case ClearGrade.Good:
+            case ClearGradeSpace.ClearGrade.Good:
                 gradeStr = "좋아요";
                 break;
-            case ClearGrade.Normal:
+            case ClearGradeSpace.ClearGrade.Normal:
                 gradeStr = "더 열심히";
                 break;
-            case ClearGrade.Bad:
+            case ClearGradeSpace.ClearGrade.Bad:
                 gradeStr = "노력하세요!";
                 break;
         }
@@ -269,7 +259,7 @@ public class Result : MonoBehaviour
         {
             _mySelectedMenu--;
 
-            if (_mySelectedMenu == ResultMenu.None)
+            if (_mySelectedMenu <= ResultMenu.None)
             {
                 _mySelectedMenu = ResultMenu.Retry;
             }
@@ -280,7 +270,7 @@ public class Result : MonoBehaviour
         {
             _mySelectedMenu++;
 
-            if (_mySelectedMenu == ResultMenu.Maximam)
+            if (_mySelectedMenu >= ResultMenu.Maximam)
             {
                 _mySelectedMenu = ResultMenu.Next;
             }
@@ -324,11 +314,11 @@ public class Result : MonoBehaviour
 
     void SelectRetry()
     {
-        Debug.Log("Selected Retry");
+        GameManager.instance.StageManagerInstance.Retry();
     }
 
     void SelectNext()
     {
-        Debug.Log("Selected Next");
+        GameManager.instance.StageManagerInstance.Victory();
     }
 }

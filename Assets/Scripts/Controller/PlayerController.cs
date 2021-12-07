@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     PlayerAnimation playerAnim;
     PlayerVFX playerVFX;
 
-
     void Awake()
     {
         AllocateComponent();
