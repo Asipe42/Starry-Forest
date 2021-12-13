@@ -11,6 +11,10 @@ public class StageManager : MonoBehaviour
     public string _preSceneName;
     public string _nextSceneName;
 
+    [HideInInspector]
+    int _totalItemCount = 0;
+    public int totalItemCount { get { return _totalItemCount; } set { _totalItemCount = value; } }
+
     float _clearTime;
 
     bool _stop;

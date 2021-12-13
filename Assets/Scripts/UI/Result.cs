@@ -14,26 +14,43 @@ public class Result : MonoBehaviour
         Maximam
     }
 
+    enum EffectColor
+    {
+        Gold,
+        Silver,
+        Bronze
+    }
+
     [Header("Score")]
-    [SerializeField] Text _scoreText;
+    [SerializeField] Text _scoreRatioText;
     [SerializeField] int _minimuScoreValue_1;
+    [SerializeField] Image _scoreEffectImage;
     bool _printedScore;
 
     [Header("Time")]
     [SerializeField] Text _clearTimeText;
     [SerializeField] float[] _clearTimeTable_1;
+    [SerializeField] Image _clearTimeEffectImage;
     bool _printedTime;
+
+    [Header("Hp")]
+    [SerializeField] Text _hpText;
+    [SerializeField] Image _hpEffectImage;
 
     [Header("Grade")]
     [SerializeField] Text _gradeText;
     [SerializeField] Image _gradeImage;
     [SerializeField] Sprite[] _gradeSprites;
+    [SerializeField] Image _gradeEffectImage;
     bool _printedGrade;
     ClearGradeSpace.ClearGrade _myGrade;
 
+    [Space]
+    [SerializeField] Color[] _effectColors;
+
     [Header("Selected Menu")]
-    [SerializeField] KeyCode left;
-    [SerializeField] KeyCode right;
+    [SerializeField] KeyCode[] leftKeys;
+    [SerializeField] KeyCode[] rightKeys;
     [SerializeField] Image _RetryButtonImage;
     [SerializeField] Image _NextButtonImage;
     [SerializeField] Color _SelectedColor;
@@ -74,18 +91,18 @@ public class Result : MonoBehaviour
 
         float clearTime = GameManager.instance.StageManagerInstance.clearTime;
 
-        SetScore(score);
-
         SetClearTime(clearTime);
+
+        SetHp(hp, maxHp);
 
         CalcGrade(score, clearTime, hp, maxHp);
 
         playableDirector.Play();
     }
 
-    void SetScore(float score)
+    void SetScore(float ratio)
     {
-        _scoreText.text = score.ToString();
+        _scoreRatioText.text = ratio.ToString() + "%";
     }
 
     void SetClearTime(float time)
@@ -106,6 +123,11 @@ public class Result : MonoBehaviour
         _clearTimeText.text = timeStr;
     }
 
+    void SetHp(int hp, int maxHp)
+    {
+        _hpText.text = hp + " / " + maxHp;
+    }
+
     void CalcGrade(int score, float clearTime, int hp, int maxHp)
     {
         int totalWeight = 0;
@@ -114,35 +136,31 @@ public class Result : MonoBehaviour
         totalWeight += SetClearTimeWeight(clearTime);
         totalWeight += SetHpWeight(hp, maxHp);
 
+        Debug.Log(totalWeight);
+
         if (totalWeight <= 30)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Perfect;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Perfect];
         }
         else if (totalWeight <= 27)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Excellent;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Excellent];
         }
         else if (totalWeight <= 23)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Great;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Great];
         }
         else if (totalWeight <= 19)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Good;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Good];
         }
         else if (totalWeight <= 15)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Normal;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Normal];
         }
         else
         {
             _myGrade = ClearGradeSpace.ClearGrade.Bad;
-            _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Bad];
         }
 
         SetGrade(_myGrade);
@@ -150,12 +168,46 @@ public class Result : MonoBehaviour
 
     int SetScoreWeight(int score)
     {
-        int scoreWeight = 10;
+        int scoreWeight;
 
-        if (score > _minimuScoreValue_1)
+        float totalItemCount = (float)GameManager.instance.StageManagerInstance.totalItemCount;
+
+        float takedItemCount = (float)score;
+
+        int itemRatio = (int)((takedItemCount / totalItemCount) * 100);
+
+        if (itemRatio > 90)
+        {
             scoreWeight = 10;
-        else
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Gold];
+        }
+        else if (itemRatio > 80)
+        {
             scoreWeight = 9;
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Silver];
+        }
+        else if (itemRatio > 70)
+        {
+            scoreWeight = 8;
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Silver];
+        }
+        else if (itemRatio > 60)
+        {
+            scoreWeight = 7;
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Bronze];
+        }
+        else if (itemRatio > 50)
+        {
+            scoreWeight = 6;
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Bronze];
+        }
+        else
+        {
+            scoreWeight = 5;
+            _scoreEffectImage.color = _effectColors[(int)EffectColor.Bronze];
+        }
+
+        SetScore(itemRatio);
 
         return scoreWeight;
     }
@@ -167,26 +219,32 @@ public class Result : MonoBehaviour
         if (clearTime < _clearTimeTable_1[0])
         {
             clearTimeWeight = 10;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Gold];
         }
         else if (clearTime < _clearTimeTable_1[1])
         {
             clearTimeWeight = 8;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Silver];
         }
         else if (clearTime < _clearTimeTable_1[2])
         {
             clearTimeWeight = 6;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Silver];
         }
         else if (clearTime < _clearTimeTable_1[3])
         {
             clearTimeWeight = 4;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
         }
         else if (clearTime < _clearTimeTable_1[4])
         {
             clearTimeWeight = 2;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
         }
         else
         {
             clearTimeWeight = 0;
+            _clearTimeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
         }
 
         return clearTimeWeight;
@@ -199,14 +257,17 @@ public class Result : MonoBehaviour
         if (maxHp == hp)
         {
             scoreWeight = 10;
+            _hpEffectImage.color = _effectColors[(int)EffectColor.Gold];
         }
         else if (maxHp / 2 <= hp)
         {
             scoreWeight = 8;
+            _hpEffectImage.color = _effectColors[(int)EffectColor.Silver];
         }
         else
         {
             scoreWeight = 6;
+            _hpEffectImage.color = _effectColors[(int)EffectColor.Bronze];
         }
 
         return scoreWeight;
@@ -220,21 +281,33 @@ public class Result : MonoBehaviour
         {
             case ClearGradeSpace.ClearGrade.Perfect:
                 gradeStr = "참 잘했어요!";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Perfect];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Gold];
                 break;
             case ClearGradeSpace.ClearGrade.Excellent:
                 gradeStr = "멋져요!";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Excellent];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Gold];
                 break;
             case ClearGradeSpace.ClearGrade.Great:
                 gradeStr = "잘했어요";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Great];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Silver];
                 break;
             case ClearGradeSpace.ClearGrade.Good:
                 gradeStr = "좋아요";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Good];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Silver];
                 break;
             case ClearGradeSpace.ClearGrade.Normal:
                 gradeStr = "더 열심히";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Normal];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
                 break;
             case ClearGradeSpace.ClearGrade.Bad:
                 gradeStr = "노력하세요!";
+                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Bad];
+                _gradeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
                 break;
         }
 
@@ -255,7 +328,7 @@ public class Result : MonoBehaviour
 
     void ChangeMenu()
     {
-        if (Input.GetKeyDown(left))
+        if (Input.GetKeyDown(leftKeys[0]) || Input.GetKeyDown(leftKeys[1]))
         {
             _mySelectedMenu--;
 
@@ -266,7 +339,7 @@ public class Result : MonoBehaviour
 
             audioSource.PlayOneShot(_menuChangeClip);
         }
-        else if (Input.GetKeyDown(right))
+        else if (Input.GetKeyDown(rightKeys[0]) || Input.GetKeyDown(rightKeys[1]))
         {
             _mySelectedMenu++;
 

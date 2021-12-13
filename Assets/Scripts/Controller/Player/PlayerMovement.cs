@@ -108,13 +108,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    RaycastHit2D DetectGround()
+    RaycastHit2D[] DetectGround()
     {
-        RaycastHit2D hit;
-        Debug.DrawRay(transform.position, Vector2.down * 2.0f, Color.green);
-        hit = Physics2D.Raycast(transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Platform"));
+        RaycastHit2D[] hits = new RaycastHit2D[2];
 
-        return hit;
+        Debug.DrawRay(transform.position, Vector2.down * 2.0f, Color.green);
+        hits[0] = Physics2D.Raycast(transform.position, Vector2.down, 2.0f, LayerMask.GetMask("Platform"));
+
+        Debug.DrawRay(transform.position, Vector2.right * 1.0f, Color.green);
+        hits[1] = Physics2D.Raycast(transform.position, Vector2.right, 1.0f, LayerMask.GetMask("Platform"));
+
+        return hits;
     }
 
     void AirStateAnimation()
@@ -150,9 +154,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            RaycastHit2D hit = DetectGround();
+            RaycastHit2D[] hits = DetectGround();
 
-            if (hit.collider != null)
+            if (hits[0].collider != null && hits[1].collider == null)
             {
                 _onGround = false;
                 _onJump = true;
