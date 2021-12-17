@@ -27,10 +27,10 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        _runningBar = GameObject.Find("RunningBox").GetComponent<RunningBar>();
-        _heart = GameObject.Find("HeartBox").GetComponent<Heart>();
-        _score = GameObject.Find("ScoreBox").GetComponent<Score>();
-        _blood = GameObject.Find("BloodBox").GetComponent<Blood>();
+        _runningBar = GameObject.Find("Running Box").GetComponent<RunningBar>();
+        _heart = GameObject.Find("Heart Box").GetComponent<Heart>();
+        _score = GameObject.Find("Score Box").GetComponent<Score>();
+        _blood = GameObject.Find("Blood Box").GetComponent<Blood>();
 
         _dialog = Dialog.GetComponent<Dialog>();
         _result = Result.GetComponent<Result>();
@@ -56,6 +56,8 @@ public class UIManager : MonoBehaviour
         HUD.SetActive(!state);
 
         Result.SetActive(state);
+
+        GameManager.instance._onResult = true;
 
         if (state)
             _result.SetResult();

@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip _dandelionClip;
     [SerializeField] AudioClip _dashClip;
     [SerializeField] AudioClip _doubleDashClip;
+    [SerializeField] AudioClip _popUpClip;
 
     [Header("Special Channel")]
     [SerializeField] AudioSource walkChannel;
@@ -120,6 +121,12 @@ public class AudioManager : MonoBehaviour
                 tempChannel = selectChannel();
                 tempChannel.clip = _doubleDashClip;
                 tempChannel.volume = Definition.DASH_LEVEL_UP_VOLUME;
+                tempChannel.Play();
+                break;
+            case Definition.POP_UP_CLIP:
+                tempChannel = selectChannel();
+                tempChannel.clip = _popUpClip;
+                tempChannel.volume = Definition.POP_UP_VOLUME;
                 tempChannel.Play();
                 break;
         }

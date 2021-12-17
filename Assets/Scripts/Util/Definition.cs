@@ -39,6 +39,10 @@ public class Definition : MonoBehaviour
     public const string DANDELION_CLIP = "dandelion";
     public const string DASH_CLIP = "dash";
     public const string DASH_LEVEL_UP_CLIP = "doubleDash";
+    public const string POP_UP_CLIP = "popup";
+
+    public const string ANIM_POP_UP = "PopUp";
+    public const string ANIM_POP_DOWN = "PopDown";
 
     public const float WALK_VOLUME = 0.3f;
     public const float JUMP_VOLUME = 0.6f;
@@ -50,6 +54,7 @@ public class Definition : MonoBehaviour
     public const float DANDELION_VOLUME = 0.4f;
     public const float DASH_VOLUME = 0.6f;
     public const float DASH_LEVEL_UP_VOLUME = 0.8f;
+    public const float POP_UP_VOLUME = 1.0f;
 
     public const string ANIM_STANDING = "onStand";
     public const string ANIM_JUMP = "doJump";

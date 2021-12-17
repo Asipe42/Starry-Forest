@@ -6,12 +6,12 @@ public class Potion : ItemController
 {
     [SerializeField] int startValue = 0;
     [SerializeField] int endValue = 3;
+    [SerializeField] int _potionScore = 1;
+
     bool _onItem;
 
     void Awake()
     {
-        base.SetInfo();
-
         _myType = ItemType.Potion;
 
         CreateRandomValue();
@@ -44,7 +44,7 @@ public class Potion : ItemController
         {
             pc = collision.GetComponent<PlayerController>();
 
-            pc.Recover(_info._score);
+            pc.Recover(_potionScore);
 
             Destroy(gameObject);
         }

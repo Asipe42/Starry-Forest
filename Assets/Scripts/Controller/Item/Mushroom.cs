@@ -6,12 +6,12 @@ public class Mushroom : ItemController
 {
     [SerializeField] bool _onMove;
     [SerializeField] float _moveSpeed = 2;
+    [SerializeField] int _mushroomScore = 1;
+
     float _angleValue;
 
     void Awake()
     {
-        base.SetInfo();
-
         _myType = ItemType.Mushroom;
 
         _angleValue = transform.position.y;
@@ -37,7 +37,7 @@ public class Mushroom : ItemController
         {
             PlayerController pc = collision.GetComponent<PlayerController>();
 
-            GameManager.instance.UIManagerInstance.ScoreInstance.CheckScore(_info._score);
+            GameManager.instance.UIManagerInstance.ScoreInstance.CheckScore(_mushroomScore);
             pc.TakeItem();
 
             Destroy(gameObject);

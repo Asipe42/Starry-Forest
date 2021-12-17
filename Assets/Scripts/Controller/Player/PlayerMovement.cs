@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _flyDownValue = 1f;
     [SerializeField] SpriteRenderer _dandelionBuds;
     bool _validFly;
-    bool _onFly;
+    public bool _onFly;
 
     bool _onGround;
 
@@ -121,27 +121,27 @@ public class PlayerMovement : MonoBehaviour
         return hits;
     }
 
-    void AirStateAnimation()
-    {
-        if (_onGround)
-            return;
+    //void AirStateAnimation()
+    //{
+    //    if (_onGround)
+    //        return;
 
-        if ( _onJump)
-        {
-            if (_onDownhill)
-            {
-                playerAnim.PlayAnimationClip(Definition.ANIM_DOWNHILL, true);
-            }
-            else if (_onFly)
-            {
-                playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
-            }
-            else
-            {
-                playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, true);
-            }
-        }
-    }
+    //    if (_onJump)
+    //    {
+    //        if (_onDownhill)
+    //        {
+    //            playerAnim.PlayAnimationClip(Definition.ANIM_DOWNHILL, true);
+    //        }
+    //        else if (_onFly)
+    //        {
+    //            playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
+    //        }
+    //        else
+    //        {
+    //            playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, true);
+    //        }
+    //    }
+    //}
 
     void Movement_Jump()
     {
@@ -161,6 +161,8 @@ public class PlayerMovement : MonoBehaviour
                 _onGround = false;
                 _onJump = true;
 
+                playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, true);
+
                 Invoke("OnDownhill", _downhillWaitingTime);
 
                 rigid.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
@@ -169,7 +171,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        AirStateAnimation();
     }
 
     void OnDownhill()
@@ -185,8 +186,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Movement_Downhill()
-    {        
+    {
         if (!_validDownhill)
+            return;
+
+        if (_onFly)
             return;
 
         if (Input.GetButtonDown("Jump"))
@@ -362,38 +366,39 @@ public class PlayerMovement : MonoBehaviour
         if (_onGround)
             return;
 
-        //if (!_onFly)
-        //{
-        //    if (_flyCurrentTime != 0)
-        //        _flyCurrentTime = 0;
+        if (!_onFly)
+        {
+            _flyCurrentTime = 0;
+            return;
+        }
 
-        //    animator.SetBool("onFly", false);
-        //    if (_dandelionEffect.isPlaying)
-        //        _dandelionEffect.Stop();
+        playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
+        playerVFX.PlayVFX(Definition.VFX_DANDELION);
 
-        //    return;
-        //}
+        _flyCurrentTime += Time.deltaTime;
 
-        //animator.SetBool("onFly", true);
-        //if (!_dandelionEffect.isPlaying)
-        //    _dandelionEffect.Play();
+        _dandelionBuds.color = new Color(1, 1, 1, 1 - _flyCurrentTime / _flyMaxTime);
 
-        //_flyCurrentTime += Time.deltaTime;
-        //_dandelionBuds.color = new Color(1, 1, 1, 1 - _flyCurrentTime / _flyTime);
+        if (_flyCurrentTime >= _flyMaxTime)
+        {
+            _onFly = false;
 
-        //if (_flyCurrentTime >= _flyTime)
-        //{
-        //    _onFly = false;
-        //    rigidbody2D.gravityScale = FLY_DOWN_VALUE;
-        //    return;
-        //}
+            playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
+            playerVFX.StopVFX(Definition.VFX_DANDELION);
 
-        //if (Input.GetButton("Jump"))
-        //{
-        //    rigidbody2D.gravityScale = FLY_UP_VALUE;
-        //}
-        //else
-        //    rigidbody2D.gravityScale = FLY_DOWN_VALUE;
+            rigid.gravityScale = _defaultGravityValue;
+            return;
+        }
+
+        if (Input.GetButton("Jump"))
+        {
+            rigid.gravityScale = _flyUpValue;
+            rigid.AddForce(Vector2.up, ForceMode2D.Force);
+        }
+        else
+        {
+            rigid.gravityScale = _flyDownValue;
+        }
     }
 
     void SetDefaultGravityValue()
@@ -421,6 +426,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnim.PlayAnimationClip(Definition.ANIM_STANDING, false);
         playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, false);
         playerAnim.PlayAnimationClip(Definition.ANIM_DOWNHILL, false);
+        playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
 
         if (_downhillCorutine != null)
             StopCoroutine(_downhillCorutine);
@@ -441,16 +447,6 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Platform"))
         {
             _onGround = true;
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Fly")
-        {
-            //_onFly = true;
-            audioManager.PlaySFX(Definition.DANDELION_CLIP);
-            Destroy(collision.gameObject);
         }
     }
 }

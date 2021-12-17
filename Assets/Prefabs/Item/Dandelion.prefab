@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3122217798008555142}
   - component: {fileID: 3122217798008555143}
   - component: {fileID: 3122217798008555129}
+  - component: {fileID: 7698004082954761637}
   m_Layer: 0
   m_Name: Dandelion
   m_TagString: Fly
@@ -29,7 +30,7 @@ Transform:
   m_LocalPosition: {x: -1.43, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1688211581}
+  - {fileID: 589790850579328064}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -100,7 +101,22 @@ CircleCollider2D:
   m_Offset: {x: -0.003919959, y: 0}
   serializedVersion: 2
   m_Radius: 0.35090494
---- !u!1001 &520056920147406620
+--- !u!114 &7698004082954761637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3122217798008555140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d8dbe15f24f0704b92563eec15d1e37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myType: 3
+  _mushroomScore: 1
+  _potionScore: 1
+--- !u!1001 &1087837718969373473
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -121,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 520056918480174945, guid: a4a7ec30b906a7041b702e5326fa4a4a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.067
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 520056918480174945, guid: a4a7ec30b906a7041b702e5326fa4a4a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -157,8 +173,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4a7ec30b906a7041b702e5326fa4a4a, type: 3}
---- !u!4 &1688211581 stripped
+--- !u!4 &589790850579328064 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 520056918480174945, guid: a4a7ec30b906a7041b702e5326fa4a4a, type: 3}
-  m_PrefabInstance: {fileID: 520056920147406620}
+  m_PrefabInstance: {fileID: 1087837718969373473}
   m_PrefabAsset: {fileID: 0}

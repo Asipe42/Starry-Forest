@@ -59,6 +59,12 @@ public class Result : MonoBehaviour
     ResultMenu _mySelectedMenu;
     bool _onSelectMenu;
 
+    [Header("Box Anim")]
+    [SerializeField] Animator _resultBoxAnim;
+    [SerializeField] GameObject _guideBox;
+    [SerializeField] Animator _guideBoxAnim;
+    public static bool _onGuideBox;
+
     AudioSource audioSource;
 
     public PlayableDirector playableDirector;
@@ -387,7 +393,18 @@ public class Result : MonoBehaviour
 
     void SelectRetry()
     {
-        GameManager.instance.StageManagerInstance.Retry();
+        if (!_onGuideBox)
+        {
+            GameManager.instance.AudioManagerInstance.PlaySFX(Definition.POP_UP_CLIP);
+
+            _resultBoxAnim.SetTrigger(Definition.ANIM_POP_DOWN);
+
+            _guideBox.SetActive(true);
+
+            _onGuideBox = true;
+
+            _guideBoxAnim.SetTrigger(Definition.ANIM_POP_UP);
+        }
     }
 
     void SelectNext()

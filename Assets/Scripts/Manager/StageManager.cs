@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
-    [SerializeField] int _index;
-    public string _preSceneName;
+    public int _sceneIndex;
+    public string _nowSceneName;
     public string _nextSceneName;
 
     [HideInInspector]
@@ -42,9 +42,9 @@ public class StageManager : MonoBehaviour
         GameManager.instance.SaveHp(GameManager.instance.PlayerControllerInstance._hp, GameManager.instance.PlayerControllerInstance._maxHp);
 
         if (victory)
-            GameManager.instance.IncreaseSceneIndex(_index + 1);
+            GameManager.instance.IncreaseSceneIndex(_sceneIndex + 1);
         else
-            GameManager.instance.IncreaseSceneIndex(_index);
+            GameManager.instance.IncreaseSceneIndex(_sceneIndex);
     }
 
     /*void CheckDeathEvent()
@@ -66,7 +66,7 @@ public class StageManager : MonoBehaviour
     {
         //GameManager.instance.IncreaseDeathCount();
 
-        SceneManager.LoadScene(_preSceneName);
+        SceneManager.LoadScene(_nowSceneName);
     }
 
     public void Victory()
@@ -80,7 +80,7 @@ public class StageManager : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        SceneManager.LoadScene(_preSceneName);
+        SceneManager.LoadScene(_nowSceneName);
     }
 
     public void Title()

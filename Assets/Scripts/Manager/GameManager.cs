@@ -33,9 +33,8 @@ public class GameManager : MonoBehaviour
     public StageManager StageManagerInstance { get { return theStageManager; } }
     public AudioManager AudioManagerInstance { get { return theAudioManager; } }
 
-    public string[] sceneNames;
-
     bool _onOption;
+    public bool _onResult;
 
     void Awake()
     {
@@ -51,14 +50,11 @@ public class GameManager : MonoBehaviour
         thefloorManager = GameObject.Find("FloorGroup").GetComponent<FloorManager>();
         theStageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         theAudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-
-        theStageManager._preSceneName = sceneNames[SaveValue._nowSceneIndex];
-        theStageManager._nextSceneName = sceneNames[SaveValue._nowSceneIndex + 1];
     }
 
     private void Start()
     {
-        theAudioManager.PlayBGM(SaveValue._nowSceneIndex);
+        theAudioManager.PlayBGM(StageManagerInstance._sceneIndex);
     }
 
     private void Update()
@@ -75,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     void CheckOption()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!_onResult && Input.GetKeyDown(KeyCode.Escape))
         {
             if (_onOption)
                 theUIManager.SetOption(false);

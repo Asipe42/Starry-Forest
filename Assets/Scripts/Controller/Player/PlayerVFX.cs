@@ -16,19 +16,24 @@ public class PlayerVFX : MonoBehaviour
         switch (clip)
         {
             case Definition.VFX_DUST:
-                _dustEffect.Play();
+                if (!_dustEffect.isPlaying)
+                    _dustEffect.Play();
                 break;
             case Definition.VFX_TAKE_ITEM:
-                _takeItemEffect.Play();
+                if (!_takeItemEffect.isPlaying)
+                    _takeItemEffect.Play();
                 break;
             case Definition.VFX_RECOVER:
-                _recoverEffect.Play();
+                if (!_recoverEffect.isPlaying)
+                    _recoverEffect.Play();
                 break;
             case Definition.VFX_DANDELION:
+                if (!_dandelionEffect.isPlaying)
                 _dandelionEffect.Play();
                 break;
             case Definition.VFX_DASH:
-                _dashEffect.Play();
+                if (!_dashEffect.isPlaying)
+                    _dashEffect.Play();
                 break;
         }
     }
