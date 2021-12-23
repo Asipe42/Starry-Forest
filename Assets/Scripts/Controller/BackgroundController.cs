@@ -11,10 +11,25 @@ public class BackgroundController : MonoBehaviour
     const float LIMIT_VALUE = -71.0f;
     Vector3 _reposVec = new Vector3(106.5f, 0f, 0f);
 
+    static bool _onStop;
+
     private void Update()
     {
+        if (_onStop)
+            return;
+
         MoveLayer();
         Reposition();
+    }
+
+    public static void StopBackgroundScrolling()
+    {
+        _onStop = true;
+    }
+
+    public static void ContinueBackgroundScrolling()
+    {
+        _onStop = false;
     }
 
     private void MoveLayer()

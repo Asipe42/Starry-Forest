@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     Dialog _dialog;
     Result _result;
     Option _option;
+    StageInfo _stageInfo;
 
     public RunningBar runningBarInstance { get { return _runningBar; } }
     public Heart heartInstance { get { return _heart; } }
@@ -24,13 +25,21 @@ public class UIManager : MonoBehaviour
     public Blood BloodInstance { get { return _blood; } }
     public Dialog DialogInstance { get { return _dialog; } }
     public Result ResultInstance { get { return _result; } }
+    public StageInfo StageInfoInstance { get { return _stageInfo; } }
 
     private void Awake()
     {
-        _runningBar = GameObject.Find("Running Box").GetComponent<RunningBar>();
-        _heart = GameObject.Find("Heart Box").GetComponent<Heart>();
-        _score = GameObject.Find("Score Box").GetComponent<Score>();
-        _blood = GameObject.Find("Blood Box").GetComponent<Blood>();
+        //_runningBar = GameObject.Find("Running Box").GetComponent<RunningBar>();
+        //_heart = GameObject.Find("Heart Box").GetComponent<Heart>();
+        //_score = GameObject.Find("Score Box").GetComponent<Score>();
+        //_blood = GameObject.Find("Blood Box").GetComponent<Blood>();
+        //_stageInfo = GameObject.Find("Stage Info Box").GetComponent<StageInfo>();
+
+        _runningBar = GameObject.FindObjectOfType<RunningBar>();
+        _heart = GameObject.FindObjectOfType<Heart>();
+        _score = GameObject.FindObjectOfType<Score>();
+        _blood = GameObject.FindObjectOfType<Blood>();
+        _stageInfo = GameObject.FindObjectOfType<StageInfo>();
 
         _dialog = Dialog.GetComponent<Dialog>();
         _result = Result.GetComponent<Result>();

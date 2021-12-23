@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public int _hp;
     public int _maxHp;
     bool _onInvincibility;
+    bool _onDead;
 
     SpriteRenderer spriteRenderer;
     AudioManager audioManager;
@@ -50,7 +51,18 @@ public class PlayerController : MonoBehaviour
         if (_hp > 0)
             return;
 
-        GameManager.instance.StageManagerInstance.GameOver();
+        if (_onDead)
+            return;
+
+        _onDead = true;
+        
+        playerVFX.PlayVFX(Definition.VFX_KNOCKDOWN);
+        playerAnim.PlayAnimationClip(Definition.ANIM_KNOCKDOWN, true);
+        Debug.Log("!");
+
+        StopAllMovement();
+  
+        //GameManager.instance.StageManagerInstance.GameOver();
     }
 
     public void Damaged(int damage, string clipName)
@@ -91,5 +103,14 @@ public class PlayerController : MonoBehaviour
 
         audioManager.PlaySFX(Definition.RECOVER_CLIP);
         playerVFX.PlayVFX(Definition.VFX_RECOVER);
+    }
+
+    void StopAllMovement()
+    {
+        PlayerMovement.StopPlayerMovement();
+
+        BackgroundController.StopBackgroundScrolling();
+
+        FloorManager.StopFloorScrolling();
     }
 }

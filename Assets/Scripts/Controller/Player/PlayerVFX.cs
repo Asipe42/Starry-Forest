@@ -10,6 +10,7 @@ public class PlayerVFX : MonoBehaviour
     [SerializeField] ParticleSystem _recoverEffect;
     [SerializeField] ParticleSystem _dandelionEffect;
     [SerializeField] ParticleSystem _dashEffect;
+    [SerializeField] ParticleSystem _knockdownEffect;
 
     public void PlayVFX(string clip)
     {
@@ -35,6 +36,10 @@ public class PlayerVFX : MonoBehaviour
                 if (!_dashEffect.isPlaying)
                     _dashEffect.Play();
                 break;
+            case Definition.VFX_KNOCKDOWN:
+                if (!_knockdownEffect.isPlaying)
+                    _knockdownEffect.Play();
+                break;
         }
     }
 
@@ -56,6 +61,9 @@ public class PlayerVFX : MonoBehaviour
                 break;
             case Definition.VFX_DASH:
                 _dashEffect.Stop();
+                break;
+            case Definition.VFX_KNOCKDOWN:
+                _knockdownEffect.Stop();
                 break;
         }
     }
@@ -92,6 +100,11 @@ public class PlayerVFX : MonoBehaviour
                     return false;
             case Definition.VFX_DASH:
                 if (_dashEffect.isPlaying)
+                    return true;
+                else
+                    return false;
+            case Definition.VFX_KNOCKDOWN:
+                if (_knockdownEffect.isPlaying)
                     return true;
                 else
                     return false;

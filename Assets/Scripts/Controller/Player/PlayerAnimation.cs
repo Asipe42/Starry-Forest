@@ -26,6 +26,7 @@ public class PlayerAnimation : MonoBehaviour
             case Definition.ANIM_DOWNHILL:
             case Definition.ANIM_FLY:
             case Definition.ANIM_DASH:
+            case Definition.ANIM_KNOCKDOWN:
                 anim.SetBool(clipName, state);
                 break;
             default:

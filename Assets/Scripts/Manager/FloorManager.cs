@@ -14,6 +14,8 @@ public class FloorManager : MonoBehaviour
     float _acceleration = 1f;
     bool _onLast;
 
+    static bool _onStop;
+
     RunningBar runningBar;
 
     private void Start()
@@ -23,12 +25,25 @@ public class FloorManager : MonoBehaviour
 
     void Update()
     {
+        if (_onStop)
+            return;
+
         Move();
 
         if (runningBar.GetBarPreValue() >= runningBar.GetBarMaxValue())
             Replace(true);
         else
             Replace(false);
+    }
+
+    public static void StopFloorScrolling()
+    {
+        _onStop = true;
+    }
+
+    public static void ContinueFloorScrolling()
+    {
+        _onStop = false;
     }
 
     void Move()

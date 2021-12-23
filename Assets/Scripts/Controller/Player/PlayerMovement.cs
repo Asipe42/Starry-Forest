@@ -49,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
     bool _onGround;
 
+    static bool _onStop;
+
     Rigidbody2D rigid;
     PlayerAnimation playerAnim;
     PlayerVFX playerVFX;
@@ -65,9 +67,22 @@ public class PlayerMovement : MonoBehaviour
         audioManager = GameManager.instance.AudioManagerInstance;
     }
 
+    public static void StopPlayerMovement()
+    {
+        _onStop = true;
+    }
+
+    public static void ContinuePlayerMovement()
+    {
+        _onStop = false;
+    }
+
     [System.Obsolete]
     void Update()
     {
+        if (_onStop)
+            return;
+
         if (GameManager.instance.StageManagerInstance.end)
         {
             Movement_Rest();
@@ -120,28 +135,6 @@ public class PlayerMovement : MonoBehaviour
 
         return hits;
     }
-
-    //void AirStateAnimation()
-    //{
-    //    if (_onGround)
-    //        return;
-
-    //    if (_onJump)
-    //    {
-    //        if (_onDownhill)
-    //        {
-    //            playerAnim.PlayAnimationClip(Definition.ANIM_DOWNHILL, true);
-    //        }
-    //        else if (_onFly)
-    //        {
-    //            playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
-    //        }
-    //        else
-    //        {
-    //            playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, true);
-    //        }
-    //    }
-    //}
 
     void Movement_Jump()
     {

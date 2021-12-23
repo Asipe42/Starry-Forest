@@ -41,9 +41,6 @@ public class Definition : MonoBehaviour
     public const string DASH_LEVEL_UP_CLIP = "doubleDash";
     public const string POP_UP_CLIP = "popup";
 
-    public const string ANIM_POP_UP = "PopUp";
-    public const string ANIM_POP_DOWN = "PopDown";
-
     public const float WALK_VOLUME = 0.3f;
     public const float JUMP_VOLUME = 0.6f;
     public const float SLIDING_VOLUME = 0.3f;
@@ -62,10 +59,16 @@ public class Definition : MonoBehaviour
     public const string ANIM_DOWNHILL = "doDownhill";
     public const string ANIM_FLY = "onFly";
     public const string ANIM_DASH = "onDash";
+    public const string ANIM_APPEAR = "appear";
+    public const string ANIM_DISAPPEAR = "disappear";
+    public const string ANIM_POP_UP = "PopUp";
+    public const string ANIM_POP_DOWN = "PopDown";
+    public const string ANIM_KNOCKDOWN = "onDead";
 
     public const string VFX_DUST = "dust";
     public const string VFX_TAKE_ITEM = "takeItem";
     public const string VFX_RECOVER = "recover";
     public const string VFX_DANDELION = "dandelion";
     public const string VFX_DASH = "dash";
+    public const string VFX_KNOCKDOWN = "knockdown";
 }
