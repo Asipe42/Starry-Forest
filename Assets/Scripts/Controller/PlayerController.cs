@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour
     bool _onInvincibility;
     bool _onDead;
 
+    [Header("Dead")]
+    [SerializeField] Vector2 _deadMotionDirection = new Vector2(-1, 1.5f);
+    [SerializeField] float _deatMotionForce = 1f;
+
+    Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     AudioManager audioManager;
     PlayerAnimation playerAnim;
@@ -21,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     void AllocateComponent()
     {
+        rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerAnim = GetComponent<PlayerAnimation>();
         playerVFX = GetComponent<PlayerVFX>();
@@ -55,13 +61,16 @@ public class PlayerController : MonoBehaviour
             return;
 
         _onDead = true;
-        
+
+        GameManager.instance.AudioManagerInstance.PauseWalkCahnnel();
+
         playerVFX.PlayVFX(Definition.VFX_KNOCKDOWN);
         playerAnim.PlayAnimationClip(Definition.ANIM_KNOCKDOWN, true);
-        Debug.Log("!");
 
         StopAllMovement();
-  
+
+        rigid.AddForce(_deadMotionDirection * _deatMotionForce, ForceMode2D.Impulse);
+
         //GameManager.instance.StageManagerInstance.GameOver();
     }
 
