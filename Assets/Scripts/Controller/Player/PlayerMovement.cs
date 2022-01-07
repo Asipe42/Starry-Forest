@@ -346,7 +346,7 @@ public class PlayerMovement : MonoBehaviour
                 GameManager.instance.UIManagerInstance.runningBarInstance.IncreaseFillSpeed(_dashLevel);
                 GameManager.instance.FloorManagerInstance.OnAcceleration(_dashLevel);
 
-                audioManager.PlaySFX(Definition.DASH_LEVEL_UP_CLIP);
+                audioManager.PlaySFX(Definition.DASH_UPGRADE_CLIP);
                 playerVFX.ChangeDashEffectColor(_dashColors[(int)_dashLevel - 1]);
             }
 
@@ -364,6 +364,8 @@ public class PlayerMovement : MonoBehaviour
             _flyCurrentTime = 0;
             return;
         }
+
+        Debug.Log("I'm flying!");
 
         playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
         playerVFX.PlayVFX(Definition.VFX_DANDELION);
@@ -409,6 +411,8 @@ public class PlayerMovement : MonoBehaviour
 
             _validDownhill = false;
             _validFly = false;
+
+            rigid.gravityScale = _defaultGravityValue;
         }
     }
 

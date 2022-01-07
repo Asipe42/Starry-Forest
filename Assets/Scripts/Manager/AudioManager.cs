@@ -12,13 +12,13 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource[] SFX_Channels;
     [SerializeField] AudioClip _jumpClip;
     [SerializeField] AudioClip _slidingClip;
-    [SerializeField] AudioClip _itemClip;
+    [SerializeField] AudioClip _takeItemClip;
     [SerializeField] AudioClip _thronClip;
     [SerializeField] AudioClip _recoverClip;
     [SerializeField] AudioClip _downhillClip;
     [SerializeField] AudioClip _dandelionClip;
     [SerializeField] AudioClip _dashClip;
-    [SerializeField] AudioClip _doubleDashClip;
+    [SerializeField] AudioClip _dashUpgradeClip;
     [SerializeField] AudioClip _popUpClip;
 
     [Header("Special Channel")]
@@ -81,9 +81,9 @@ public class AudioManager : MonoBehaviour
                 tempChannel.volume = Definition.SLIDING_VOLUME;
                 tempChannel.Play();
                 break;
-            case Definition.ITEM_CLIP:
+            case Definition.TAKE_ITEM_CLIP:
                 tempChannel = selectChannel();
-                tempChannel.clip = _itemClip;
+                tempChannel.clip = _takeItemClip;
                 tempChannel.volume = Definition.ITEM_VOLUME;
                 tempChannel.Play();
                 break;
@@ -117,9 +117,9 @@ public class AudioManager : MonoBehaviour
                 tempChannel.volume = Definition.DASH_VOLUME;
                 tempChannel.Play();
                 break;
-            case Definition.DASH_LEVEL_UP_CLIP:
+            case Definition.DASH_UPGRADE_CLIP:
                 tempChannel = selectChannel();
-                tempChannel.clip = _doubleDashClip;
+                tempChannel.clip = _dashUpgradeClip;
                 tempChannel.volume = Definition.DASH_LEVEL_UP_VOLUME;
                 tempChannel.Play();
                 break;

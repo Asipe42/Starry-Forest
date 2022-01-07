@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeItem()
     {
-        audioManager.PlaySFX(Definition.ITEM_CLIP);
+        audioManager.PlaySFX(Definition.TAKE_ITEM_CLIP);
         playerVFX.PlayVFX(Definition.VFX_TAKE_ITEM);
     }
 

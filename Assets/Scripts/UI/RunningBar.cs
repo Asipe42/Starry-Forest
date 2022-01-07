@@ -17,6 +17,14 @@ public class RunningBar : MonoBehaviour
     bool[] _changedColor = new bool[7];
     bool _runinng;
 
+    public float progressPercentage
+    {
+        get
+        {
+            return (int)((_runningGague / _runningGagueMaxValue) * 100);
+        }
+    }
+
     [Header("Bar Colors")]
     [SerializeField] Color32[] _nextColors = new Color32[7];
 

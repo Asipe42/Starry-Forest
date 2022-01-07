@@ -32,13 +32,13 @@ public class Definition : MonoBehaviour
     public const string WALK_CLIP = "walk";
     public const string JUMP_CLIP = "jump";
     public const string SLIDING_CLIP = "sliding";
-    public const string ITEM_CLIP = "item";
+    public const string TAKE_ITEM_CLIP = "item";
     public const string THORN_CLIP = "thron"; // == vine clip
     public const string RECOVER_CLIP = "recover";
     public const string DOWNHILL_CLIP = "downhill";
     public const string DANDELION_CLIP = "dandelion";
     public const string DASH_CLIP = "dash";
-    public const string DASH_LEVEL_UP_CLIP = "doubleDash";
+    public const string DASH_UPGRADE_CLIP = "doubleDash";
     public const string POP_UP_CLIP = "popup";
 
     public const float WALK_VOLUME = 0.3f;
@@ -53,17 +53,18 @@ public class Definition : MonoBehaviour
     public const float DASH_LEVEL_UP_VOLUME = 0.8f;
     public const float POP_UP_VOLUME = 1.0f;
 
-    public const string ANIM_STANDING = "onStand";
-    public const string ANIM_JUMP = "doJump";
-    public const string ANIM_SLIDE = "doSlide";
-    public const string ANIM_DOWNHILL = "doDownhill";
-    public const string ANIM_FLY = "onFly";
-    public const string ANIM_DASH = "onDash";
+    public const string ANIM_STANDING = "idle";
+    public const string ANIM_JUMP = "jump";
+    public const string ANIM_SLIDE = "slide";
+    public const string ANIM_DOWNHILL = "downhill";
+    public const string ANIM_FLY = "fly";
+    public const string ANIM_DASH = "dash";
+    public const string ANIM_KNOCKDOWN = "dead";
+
     public const string ANIM_APPEAR = "appear";
     public const string ANIM_DISAPPEAR = "disappear";
     public const string ANIM_POP_UP = "PopUp";
     public const string ANIM_POP_DOWN = "PopDown";
-    public const string ANIM_KNOCKDOWN = "onDead";
 
     public const string VFX_DUST = "dust";
     public const string VFX_TAKE_ITEM = "takeItem";
