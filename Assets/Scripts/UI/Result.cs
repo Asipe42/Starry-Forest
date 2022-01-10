@@ -83,7 +83,7 @@ public class Result : MonoBehaviour
 
     public void StartDialog(int index)
     {
-        GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(index);
+        //GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(index);
     }
 
     public void SetResult()

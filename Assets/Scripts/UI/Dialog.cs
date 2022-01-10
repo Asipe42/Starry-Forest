@@ -4,29 +4,50 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+[System.Serializable]
+class CharacterInfo
+{
+    public Sprite _portait;
+    public Vector3 _scale;
+    public string _name;
+}
+
+[System.Serializable]
+class ScriptInfo
+{
+    [TextArea] public string _script;
+    public int _characterIndex;
+    public bool _onPortriat;
+}
+
 public class Dialog : MonoBehaviour
 {
-    [Header("Dialog")]
-    [SerializeField] Image _portrait;
-    [SerializeField] Image _arrow;
+    [Header("Core")]
+    [SerializeField] CharacterInfo[] _characterInfo;
+    [SerializeField] ScriptInfo[] _scriptInfo;
+    [SerializeField] int _startScriptNumber;
+    [SerializeField] int _endScriptNumber;
+    [SerializeField] string _nextSceneName;
+    int _nowScriptNumber = 0;
+    bool _onEnd;
+
+    [Header("Portrait")]
+    [SerializeField] Image _portraitImage;
+
+    [Header("Texts")]
     [SerializeField] TextMeshProUGUI _name;
     [SerializeField] Text _typingText;
     [SerializeField] float _typingSpeed;
     [SerializeField] AudioClip _messageClip;
-    [SerializeField, TextArea] string[] _script;
-    [SerializeField] int[] _portraitIndex;
-    [SerializeField] string[] _names;
 
-    [SerializeField] bool[] _condition = new bool[10];
-    int _nowScriptNumber = 0;
-    int _endScriptNumber = 0;
-    bool _onEnd;
+    [Header("etc")]
+    [SerializeField] Image _arrowImage;
 
     AudioSource audioSource;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();   
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -34,38 +55,27 @@ public class Dialog : MonoBehaviour
         NextScript();
     }
 
-    public void SetCondition(int index)
+    public void StartScript()
     {
-        if (!_condition[index])
-        {
-            _condition[index] = true;
-            Checkcondition();
-        }
-    }
-
-    public void Checkcondition()
-    {
-        if (_condition[0])
-        {
-            PrintScript(0, 2);
-            _onEnd = true;
-            _condition[0] = false;
-        }
+        PrintScript(_startScriptNumber, _endScriptNumber);
+        _onEnd = true;
     }
 
     private void NextScript()
     {
-        if (Input.GetButtonDown("Submit") && _arrow.enabled)
+        if (Input.GetButtonDown("Submit") && _arrowImage.enabled)
         {
             if (_nowScriptNumber < _endScriptNumber)
             {
                 _nowScriptNumber++;
-                StartCoroutine(TypingText(_script[_nowScriptNumber], _typingSpeed, _portraitIndex[_nowScriptNumber], _names[_nowScriptNumber]));
+
+                ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
+
+                StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, tempScriptInfo._characterIndex));                  
             }
             else if (_onEnd)
             {
-                LoadingSceneController.LoadScene("End");
-                GameManager.instance.UIManagerInstance.SetResult(true);
+                LoadingSceneController.LoadScene(_nextSceneName);
             }
             else
             {
@@ -86,22 +96,27 @@ public class Dialog : MonoBehaviour
         _nowScriptNumber = start;
         _endScriptNumber = end;
 
-        StartCoroutine(TypingText(_script[_nowScriptNumber], _typingSpeed, _portraitIndex[_nowScriptNumber], _names[_nowScriptNumber]));
+        ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
+
+        StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, tempScriptInfo._characterIndex));
     }
 
-    IEnumerator TypingText(string message, float speed, int portrait, string name)
+    IEnumerator TypingText(string message, float speed, bool portrait, int characterIndex)
     {
-        _arrow.enabled = false;
-        _name.text = name;
+        _arrowImage.enabled = false;
 
-        switch (portrait)
+        _name.text = _characterInfo[characterIndex]._name;
+
+        if (portrait)
         {
-            case 0:
-                _portrait.enabled = true;
-                break;
-            case 1:
-                _portrait.enabled = false;
-                break;
+            _portraitImage.enabled = true;
+
+            _portraitImage.sprite = _characterInfo[characterIndex]._portait;
+            _portraitImage.rectTransform.localScale = _characterInfo[characterIndex]._scale;
+        }
+        else
+        {
+            _portraitImage.enabled = false;
         }
 
         for (int i = 0; i < message.Length; i++)
@@ -117,6 +132,6 @@ public class Dialog : MonoBehaviour
         }
 
         audioSource.Stop();
-        _arrow.enabled = true;
+        _arrowImage.enabled = true;
     }
 }

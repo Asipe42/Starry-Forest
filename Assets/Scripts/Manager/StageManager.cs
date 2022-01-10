@@ -107,7 +107,7 @@ public class StageManager : MonoBehaviour
     public void StartDialog()
     {
         GameManager.instance.UIManagerInstance.SetDialog(true);
-        GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(0);
+        //GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(0);
     }
 
     public void StopGame()

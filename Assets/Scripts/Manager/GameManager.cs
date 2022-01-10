@@ -46,10 +46,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         theplayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        theUIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        thefloorManager = GameObject.Find("FloorGroup").GetComponent<FloorManager>();
-        theStageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
-        theAudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        theUIManager = GameObject.FindObjectOfType<UIManager>();
+        thefloorManager = GameObject.FindObjectOfType<FloorManager>();  
+        theStageManager = GameObject.FindObjectOfType<StageManager>();  
+        theAudioManager = GameObject.FindObjectOfType<AudioManager>();  
     }
 
     private void Start()
