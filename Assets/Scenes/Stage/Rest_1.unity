@@ -2426,37 +2426,55 @@ MonoBehaviour:
   - _script: "\uBC40\uC778\uC904 \uC54C\uACE0 \uAE5C\uC9DD \uB180\uB790\uB124!"
     _characterIndex: 0
     _onPortriat: 1
-  - _script: "\uB124\uAC00 \uBAA8\uB2E5\uBD88\uC758 \uC8FC\uC778\uC774\uB2C8?"
-    _characterIndex: 0
-    _onPortriat: 1
-  - _script: "\uC548\uB155 \uB09C \uB2E4\uB78C\uC774\uC57C \uB10C \uB204\uAD6C\uB2C8?"
+  - _script: "\uC5EC\uAE34 \uB0B4 \uBAA8\uB2E5\uBD88\uC778\uB370\n\uB10C \uB204\uAD6C\uC57C?"
     _characterIndex: 1
     _onPortriat: 1
   - _script: "\uB09C \uB2EC\uC774\uB77C\uACE0 \uD574\n\uD639\uC2DC \uD770\uC0C9 \uC950\uB97C
       \uBABB\uBD24\uB2C8?"
     _characterIndex: 0
     _onPortriat: 1
-  - _script: "\uC751? \uD770\uC0C9 \uC950\uB77C\uBA74...\n\uB4A4\uCABD\uC73C\uB85C
-      \uC9C0\uB098\uAC14\uC5B4!"
+  - _script: "\uD770\uC0C9 \uC950?\n\uAC80\uC740 \uACE0\uC591\uC774\uB294 \uBCF8
+      \uC801\uC774 \uC788\uB2E4\uB9CC"
     _characterIndex: 1
     _onPortriat: 1
-  - _script: "\uC815\uB9D0? \uACE0\uB9C8\uC6CC"
+  - _script: "\uB9DE\uC544! \uAC80\uC740 \uACE0\uC591\uC774\uAC00 \uB0B4 \uB3D9\uC0DD\uC744
+      \uB370\uB9AC\uACE0 \uAC00\uBC84\uB838\uC5B4\n\uB09C \uB3D9\uC0DD\uC744 \uCC3E\uC73C\uB824\uACE0
+      \uC9C0\uAE08\uAE4C\uC9C0 \uB6F0\uC5B4\uC11C..."
     _characterIndex: 0
     _onPortriat: 1
-  - _script: "\uAD1C\uCC2E\uB2E4\uBA74 \uC5EC\uAE30\uC11C \uC880 \uC26C\uC5B4\uAC00\uB3C4
-      \uB420\uAE4C?"
-    _characterIndex: 0
-    _onPortriat: 1
-  - _script: "\uADF8\uB7FC \uBB3C\uB860\uC774\uC9C0"
+  - _script: ...
     _characterIndex: 1
+    _onPortriat: 1
+  - _script: "\uB108\uB3C4 \uC0AC\uC815\uC774 \uCC38 \uB531\uD558\uAD6C\uB098\n\uBC24\uC5D0\uB294
+      \uC704\uD5D8\uD558\uB2C8 \uC7A0\uAE50 \uC26C\uC5C8\uB2E4 \uAC00\uB3C4\uB85D
+      \uD574"
+    _characterIndex: 1
+    _onPortriat: 1
+  - _script: "\uACE0\uB9C8\uC6CC..."
+    _characterIndex: 0
+    _onPortriat: 1
+  - _script: "\uC55E\uC73C\uB85C \uAC00\uBA74 \uBBFC\uB4E4\uB808 \uC232\uC774\uC57C\n\uBBFC\uB4E4\uB808
+      \uD640\uC528\uB97C \uC774\uC6A9\uD558\uBA74 \uAC1C\uC6B8\uC744 \uAC74\uB110
+      \uC218 \uC788\uC744\uAEBC\uC57C"
+    _characterIndex: 1
+    _onPortriat: 1
+  - _script: "\uC54C\uACA0\uC5B4! \uC774 \uC740\uD61C\uB294 \uC78A\uC9C0 \uC54A\uC744\uAC8C!"
+    _characterIndex: 0
+    _onPortriat: 1
+  - _script: "\uB3D9\uC0DD\uC744 \uCC3E\uACE0 \uB098\uBA74 \uB3C4\uD1A0\uB9AC\uB85C
+      \uAC1A\uC544\uC57C \uB3FC!"
+    _characterIndex: 1
+    _onPortriat: 1
+  - _script: "\uC751... \uC54C\uACA0\uC5B4"
+    _characterIndex: 0
     _onPortriat: 1
   _startScriptNumber: 0
-  _endScriptNumber: 7
+  _endScriptNumber: 11
   _nextSceneName: Stage_2
   _portraitImage: {fileID: 1217822721}
   _name: {fileID: 1439059338}
   _typingText: {fileID: 961166579}
-  _typingSpeed: 0.05
+  _typingSpeed: 0.03
   _messageClip: {fileID: 8300000, guid: d2df4a1ebb71b94459e35d68f0fbd79a, type: 3}
   _arrowImage: {fileID: 243721974}
 --- !u!82 &1115844089
