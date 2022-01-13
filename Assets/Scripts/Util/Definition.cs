@@ -40,6 +40,7 @@ public class Definition : MonoBehaviour
     public const string DASH_CLIP = "dash";
     public const string DASH_UPGRADE_CLIP = "doubleDash";
     public const string POP_UP_CLIP = "popup";
+    public const string SELECT_CLIP = "select";
 
 
     public const float WALK_VOLUME = 0.3f;
@@ -53,6 +54,7 @@ public class Definition : MonoBehaviour
     public const float DASH_VOLUME = 0.6f;
     public const float DASH_LEVEL_UP_VOLUME = 0.8f;
     public const float POP_UP_VOLUME = 1.0f;
+    public const float SELECT_VOLUME = 1.0f;
 
     public const string ANIM_STANDING = "idle";
     public const string ANIM_JUMP = "jump";
@@ -64,8 +66,8 @@ public class Definition : MonoBehaviour
 
     public const string ANIM_APPEAR = "appear";
     public const string ANIM_DISAPPEAR = "disappear";
-    public const string ANIM_POP_UP = "PopUp";
-    public const string ANIM_POP_DOWN = "PopDown";
+    public const string ANIM_POP_UP = "popup";
+    public const string ANIM_POP_DOWN = "popdown";
     public const string ANIM_SELECTED_RETRY = "selected_retry";
     public const string ANIM_SELECTED_NEXT = "selected_next";
 

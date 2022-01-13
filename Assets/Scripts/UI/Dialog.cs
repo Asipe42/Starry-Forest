@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
+public enum CharacterIndex
+{
+    None,
+    Dal,
+    Daram,
+}
 
 [System.Serializable]
 class CharacterInfo
@@ -16,12 +24,22 @@ class CharacterInfo
 class ScriptInfo
 {
     [TextArea] public string _script;
-    public int _characterIndex;
+    public CharacterIndex _characterIndex;
     public bool _onPortriat;
+    public bool _onOption;
+    public int _optionCount;
+    public bool[] _event = new bool[3];
 }
 
 public class Dialog : MonoBehaviour
 {
+    enum OptionIndex
+    {
+        first,
+        Second,
+        Third
+    }
+
     [Header("Core")]
     [SerializeField] CharacterInfo[] _characterInfo;
     [SerializeField] ScriptInfo[] _scriptInfo;
@@ -38,32 +56,34 @@ public class Dialog : MonoBehaviour
     int _nowCharacterIndex = -1;
     float _portraitImageColorAlphaValue;
     IEnumerator FadePortraitCorutine;
+    OptionIndex _nowOptionIndex = OptionIndex.first;
     
     [Header("Texts")]
     [SerializeField] TextMeshProUGUI _name;
     [SerializeField] Text _typingText;
     [SerializeField] float _typingSpeed;
     [SerializeField] AudioClip _messageClip;
+    [SerializeField] AudioClip _selectClip; 
+    [SerializeField] Image[] _selectBar;
+    [SerializeField] AudioSource channel_1;
+    [SerializeField] AudioSource channel_2;
+    int _nowOptionCount = 0;
+    bool _onSelect;
 
     [Header("etc")]
     [SerializeField] Image _arrowImage;
 
-    AudioSource audioSource;
-
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
     private void Update()
     {
         NextScript();
+        OnSelect();
     }
 
     public void StartScript()
     {
         PrintScript(_startScriptNumber, _endScriptNumber);
         _onEnd = true;
+
     }
 
     private void NextScript()
@@ -76,7 +96,7 @@ public class Dialog : MonoBehaviour
 
                 ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
 
-                StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, tempScriptInfo._characterIndex));                  
+                StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex, tempScriptInfo._onOption, tempScriptInfo._optionCount));
             }
             else if (_onEnd)
             {
@@ -103,10 +123,10 @@ public class Dialog : MonoBehaviour
 
         ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
 
-        StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, tempScriptInfo._characterIndex));
+        StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex, tempScriptInfo._onOption, tempScriptInfo._optionCount));
     }
 
-    IEnumerator TypingText(string message, float speed, bool portrait, int characterIndex)
+    IEnumerator TypingText(string message, float speed, bool portrait, int characterIndex, bool option, int optionCount)
     {
         _arrowImage.enabled = false;
 
@@ -119,7 +139,6 @@ public class Dialog : MonoBehaviour
             _name.text = "";
             Debug.Log("empty name");
         }
-
 
         if (_nowCharacterIndex != characterIndex)
         {
@@ -149,20 +168,40 @@ public class Dialog : MonoBehaviour
             _portraitImage.enabled = false;
         }
 
-        for (int i = 0; i < message.Length; i++)
+        foreach (var bar in _selectBar)
         {
-            if (!audioSource.isPlaying)
-            {
-                audioSource.clip = _messageClip;
-                audioSource.Play();
-            }
-
-            _typingText.text = message.Substring(0, i + 1);
-            yield return new WaitForSeconds(speed);
+            bar.enabled = false;
         }
 
-        audioSource.Stop();
-        _arrowImage.enabled = true;
+        if (option)
+        {
+            _selectBar[0].enabled = true;
+            _nowOptionIndex = OptionIndex.first;
+
+            _typingText.text = message;
+
+            _nowOptionCount = optionCount;
+            OnSelect();
+
+            _onSelect = true;
+        }
+        else
+        {
+            for (int i = 0; i < message.Length; i++)
+            {
+                if (!channel_1.isPlaying)
+                {
+                    channel_1.clip = _messageClip;
+                    channel_1.Play();
+                }
+
+                _typingText.text = message.Substring(0, i + 1);
+                yield return new WaitForSeconds(speed);
+            }
+
+            channel_1.Stop();
+            _arrowImage.enabled = true;
+        }
     }
 
     IEnumerator FadePortrait()
@@ -174,6 +213,112 @@ public class Dialog : MonoBehaviour
             _portraitImage.color = new Color(1, 1, 1, _portraitImageColorAlphaValue);
 
             yield return new WaitForSeconds(_portraitFadeDelay);
+        }
+    }
+
+    void OnSelect()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            channel_2.PlayOneShot(_selectClip);
+
+            switch (_nowOptionIndex)
+            {
+                case OptionIndex.first:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.Third;
+                    }
+                    else if (_nowOptionCount >= 2)
+                    {
+                        _nowOptionIndex = OptionIndex.Second;
+                    }
+                    else
+                    {
+                        ;
+                    }
+                    break;
+                case OptionIndex.Second:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.first;
+                    }
+                    else if (_nowOptionCount >= 2)
+                    {
+                        _nowOptionIndex = OptionIndex.first;
+                    }
+                    break;
+                case OptionIndex.Third:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.Second;
+                    }
+                    break;
+            }
+            ConvertSelectBar();
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            channel_2.PlayOneShot(_selectClip);
+
+            switch (_nowOptionIndex)
+            {
+                case OptionIndex.first:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.Second;
+                    }
+                    else if (_nowOptionCount >= 2)
+                    {
+                        _nowOptionIndex = OptionIndex.Second;
+                    }
+                    else
+                    {
+                        ;
+                    }
+                    break;
+                case OptionIndex.Second:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.Third;
+                    }
+                    else if (_nowOptionCount >= 2)
+                    {
+                        _nowOptionIndex = OptionIndex.first;
+                    }
+                    break;
+                case OptionIndex.Third:
+                    if (_nowOptionCount >= 3)
+                    {
+                        _nowOptionIndex = OptionIndex.first;
+                    }
+                    break;
+            }
+            ConvertSelectBar();
+        }
+    }
+
+    void ConvertSelectBar()
+    {
+        foreach (var bar in _selectBar)
+        {
+            bar.enabled = false;
+        }
+
+        switch (_nowOptionIndex)
+        {
+            case OptionIndex.first:
+                _selectBar[0].enabled = true;
+                break;
+            case OptionIndex.Second:
+                _selectBar[1].enabled = true;
+                break;
+            case OptionIndex.Third:
+                _selectBar[2].enabled = true;
+                break;
+            default:
+                break;
         }
     }
 }
