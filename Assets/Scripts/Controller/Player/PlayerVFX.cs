@@ -21,7 +21,6 @@ public class PlayerVFX : MonoBehaviour
                     _dustEffect.Play();
                 break;
             case Definition.VFX_TAKE_ITEM:
-                if (!_takeItemEffect.isPlaying)
                     _takeItemEffect.Play();
                 break;
             case Definition.VFX_RECOVER:

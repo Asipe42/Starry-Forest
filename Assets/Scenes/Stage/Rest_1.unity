@@ -506,7 +506,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1115844087}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -625,7 +625,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5.3
+    OrthographicSize: 5.2
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1501,7 +1501,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5.3
+    OrthographicSize: 5.2
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -2032,6 +2032,81 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &950970620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 950970621}
+  - component: {fileID: 950970623}
+  - component: {fileID: 950970622}
+  m_Layer: 0
+  m_Name: Select Bar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &950970621
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950970620}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.7, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1115844087}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 145, y: -243}
+  m_SizeDelta: {x: 1200, y: 100}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &950970622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950970620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.8792194, b: 0.07075471, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -2476163776565534322, guid: 19f144dc86010814c90b478482ddb9d9, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &950970623
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950970620}
+  m_CullTransparentMesh: 1
 --- !u!1 &961166577
 GameObject:
   m_ObjectHideFlags: 0
@@ -2062,7 +2137,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1115844087}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2167,7 +2242,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5.3
+    OrthographicSize: 5.2
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -2393,6 +2468,7 @@ RectTransform:
   - {fileID: 138820135}
   - {fileID: 1998701398}
   - {fileID: 1439059337}
+  - {fileID: 950970621}
   - {fileID: 961166578}
   - {fileID: 243721972}
   m_Father: {fileID: 852598664}
@@ -2423,7 +2499,7 @@ MonoBehaviour:
     _scale: {x: -1, y: 1, z: 1}
     _name: "\uB2E4\uB78C"
   _scriptInfo:
-  - _script: "\uBC40\uC778\uC904 \uC54C\uACE0 \uAE5C\uC9DD \uB180\uB790\uB124!"
+  - _script: "\uD734... \uBC40\uC778\uC904 \uC54C\uACE0 \uAE5C\uC9DD \uB180\uB790\uB124!"
     _characterIndex: 0
     _onPortriat: 1
   - _script: "\uC5EC\uAE34 \uB0B4 \uBAA8\uB2E5\uBD88\uC778\uB370\n\uB10C \uB204\uAD6C\uC57C?"
@@ -2434,7 +2510,7 @@ MonoBehaviour:
     _characterIndex: 0
     _onPortriat: 1
   - _script: "\uD770\uC0C9 \uC950?\n\uAC80\uC740 \uACE0\uC591\uC774\uB294 \uBCF8
-      \uC801\uC774 \uC788\uB2E4\uB9CC"
+      \uC801\uC774 \uC788\uB2E4\uB9CC\u2026"
     _characterIndex: 1
     _onPortriat: 1
   - _script: "\uB9DE\uC544! \uAC80\uC740 \uACE0\uC591\uC774\uAC00 \uB0B4 \uB3D9\uC0DD\uC744
@@ -2458,20 +2534,32 @@ MonoBehaviour:
       \uC218 \uC788\uC744\uAEBC\uC57C"
     _characterIndex: 1
     _onPortriat: 1
-  - _script: "\uC54C\uACA0\uC5B4! \uC774 \uC740\uD61C\uB294 \uC78A\uC9C0 \uC54A\uC744\uAC8C!"
+  - _script: "\uC54C\uC558\uC5B4! \n\uC774 \uC740\uD61C\uB294 \uC78A\uC9C0 \uC54A\uC744\uAC8C!"
     _characterIndex: 0
     _onPortriat: 1
-  - _script: "\uB3D9\uC0DD\uC744 \uCC3E\uACE0 \uB098\uBA74 \uB3C4\uD1A0\uB9AC\uB85C
-      \uAC1A\uC544\uC57C \uB3FC!"
+  - _script: "\uACF5\uC9DC\uB294 \uC544\uB2C8\uC57C\n\uB3D9\uC0DD\uC744 \uCC3E\uACE0
+      \uB098\uBA74 \uB3C4\uD1A0\uB9AC\uB85C \uAC1A\uC544\uC57C \uB3FC!"
     _characterIndex: 1
     _onPortriat: 1
   - _script: "\uC751... \uC54C\uACA0\uC5B4"
     _characterIndex: 0
     _onPortriat: 1
+  - _script: "\uB2EC\uC774\uB294 \uBAA8\uB2E5\uBD88 \uC55E\uC5D0\uC11C \uC7A0\uC2DC
+      \uC26C\uC5C8\uB2E4"
+    _characterIndex: -1
+    _onPortriat: 0
+  - _script: "\uCD5C\uB300 \uCCB4\uB825\uC774 \uD55C \uCE78 \uC0C1\uC2B9\uD588\uB2E4!"
+    _characterIndex: -1
+    _onPortriat: 0
+  - _script: "\uCD5C\uB300 \uCCB4\uB825\uC774 \uD55C \uCE78 \uC0C1\uC2B9\uD588\uB2E4!"
+    _characterIndex: -1
+    _onPortriat: 0
   _startScriptNumber: 0
-  _endScriptNumber: 11
+  _endScriptNumber: 12
   _nextSceneName: Stage_2
   _portraitImage: {fileID: 1217822721}
+  _portraitFadeSpeed: 0.1
+  _portraitFadeDelay: 0.03
   _name: {fileID: 1439059338}
   _typingText: {fileID: 961166579}
   _typingSpeed: 0.03
@@ -2923,7 +3011,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 215ce30fc7a8ee148ac55a0f18f69cdd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c278d9adb0581ba458b25ad8fe97a259, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4706,7 +4794,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.3
+  orthographic size: 5.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

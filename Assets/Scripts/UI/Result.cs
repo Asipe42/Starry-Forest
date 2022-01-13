@@ -58,6 +58,7 @@ public class Result : MonoBehaviour
     [SerializeField] AudioClip _menuChangeClip;
     ResultMenu _mySelectedMenu;
     bool _onSelectMenu;
+    [SerializeField] Animator buttonLayerAnim;
 
     [Header("Box Anim")]
     [SerializeField] Animator _resultBoxAnim;
@@ -142,25 +143,24 @@ public class Result : MonoBehaviour
         totalWeight += SetClearTimeWeight(clearTime);
         totalWeight += SetHpWeight(hp, maxHp);
 
-        Debug.Log(totalWeight);
 
-        if (totalWeight <= 30)
+        if (totalWeight >= 30)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Perfect;
         }
-        else if (totalWeight <= 27)
+        else if (totalWeight >= 27)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Excellent;
         }
-        else if (totalWeight <= 23)
+        else if (totalWeight >= 23)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Great;
         }
-        else if (totalWeight <= 19)
+        else if (totalWeight >= 19)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Good;
         }
-        else if (totalWeight <= 15)
+        else if (totalWeight >= 15)
         {
             _myGrade = ClearGradeSpace.ClearGrade.Normal;
         }
@@ -168,6 +168,9 @@ public class Result : MonoBehaviour
         {
             _myGrade = ClearGradeSpace.ClearGrade.Bad;
         }
+
+        Debug.Log("total weight: " + totalWeight);
+        Debug.Log("my grade: " + _myGrade);
 
         SetGrade(_myGrade);
     }
@@ -282,40 +285,38 @@ public class Result : MonoBehaviour
     void SetGrade(ClearGradeSpace.ClearGrade grade)
     {
         string gradeStr = null;
+        int gradeEffectColorIndex = 0;
 
         switch (grade)
         {
             case ClearGradeSpace.ClearGrade.Perfect:
+                gradeEffectColorIndex = (int)EffectColor.Gold;
                 gradeStr = "참 잘했어요!";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Perfect];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Gold];
                 break;
             case ClearGradeSpace.ClearGrade.Excellent:
+                gradeEffectColorIndex = (int)EffectColor.Gold;
                 gradeStr = "멋져요!";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Excellent];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Gold];
                 break;
             case ClearGradeSpace.ClearGrade.Great:
+                gradeEffectColorIndex = (int)EffectColor.Silver;
                 gradeStr = "잘했어요";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Great];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Silver];
                 break;
             case ClearGradeSpace.ClearGrade.Good:
+                gradeEffectColorIndex = (int)EffectColor.Silver;
                 gradeStr = "좋아요";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Good];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Silver];
                 break;
             case ClearGradeSpace.ClearGrade.Normal:
+                gradeEffectColorIndex = (int)EffectColor.Bronze;
                 gradeStr = "더 열심히";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Normal];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
                 break;
             case ClearGradeSpace.ClearGrade.Bad:
+                gradeEffectColorIndex = (int)EffectColor.Bronze;
                 gradeStr = "노력하세요!";
-                _gradeImage.sprite = _gradeSprites[(int)ClearGradeSpace.ClearGrade.Bad];
-                _gradeEffectImage.color = _effectColors[(int)EffectColor.Bronze];
                 break;
         }
+
+        _gradeImage.sprite = _gradeSprites[(int)grade];
+        _gradeEffectImage.color = _effectColors[gradeEffectColorIndex];
 
         _gradeText.text = gradeStr;
     }
@@ -363,11 +364,17 @@ public class Result : MonoBehaviour
         switch (_mySelectedMenu)
         {
             case ResultMenu.Retry:
+                buttonLayerAnim.SetBool(Definition.ANIM_SELECTED_RETRY, true);
+                buttonLayerAnim.SetBool(Definition.ANIM_SELECTED_NEXT, false);
+
                 _RetryButtonImage.color = _SelectedColor;
                 _NextButtonImage.color = _defaultColor;
                 break;
 
             case ResultMenu.Next:
+                buttonLayerAnim.SetBool(Definition.ANIM_SELECTED_NEXT, true);
+                buttonLayerAnim.SetBool(Definition.ANIM_SELECTED_RETRY, false);
+
                 _NextButtonImage.color = _SelectedColor;
                 _RetryButtonImage.color = _defaultColor; 
                 break;

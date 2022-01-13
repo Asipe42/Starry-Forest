@@ -41,6 +41,7 @@ public class Definition : MonoBehaviour
     public const string DASH_UPGRADE_CLIP = "doubleDash";
     public const string POP_UP_CLIP = "popup";
 
+
     public const float WALK_VOLUME = 0.3f;
     public const float JUMP_VOLUME = 0.6f;
     public const float SLIDING_VOLUME = 0.3f;
@@ -65,6 +66,8 @@ public class Definition : MonoBehaviour
     public const string ANIM_DISAPPEAR = "disappear";
     public const string ANIM_POP_UP = "PopUp";
     public const string ANIM_POP_DOWN = "PopDown";
+    public const string ANIM_SELECTED_RETRY = "selected_retry";
+    public const string ANIM_SELECTED_NEXT = "selected_next";
 
     public const string VFX_DUST = "dust";
     public const string VFX_TAKE_ITEM = "takeItem";

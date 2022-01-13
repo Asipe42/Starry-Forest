@@ -33,7 +33,12 @@ public class Dialog : MonoBehaviour
 
     [Header("Portrait")]
     [SerializeField] Image _portraitImage;
-
+    [SerializeField, Range(0, 1)] float _portraitFadeSpeed = 0.1f;
+    [SerializeField] float _portraitFadeDelay = 0.05f;
+    int _nowCharacterIndex = -1;
+    float _portraitImageColorAlphaValue;
+    IEnumerator FadePortraitCorutine;
+    
     [Header("Texts")]
     [SerializeField] TextMeshProUGUI _name;
     [SerializeField] Text _typingText;
@@ -105,7 +110,32 @@ public class Dialog : MonoBehaviour
     {
         _arrowImage.enabled = false;
 
-        _name.text = _characterInfo[characterIndex]._name;
+        if (characterIndex >= 0)
+        {
+            _name.text = _characterInfo[characterIndex]._name;
+        }
+        else
+        {
+            _name.text = "";
+            Debug.Log("empty name");
+        }
+
+
+        if (_nowCharacterIndex != characterIndex)
+        {
+            _portraitImageColorAlphaValue = 0f;
+            _portraitImage.color = new Color(1, 1, 1, 0);
+
+            if (FadePortraitCorutine != null)
+            {
+                StopCoroutine(FadePortraitCorutine);
+            }
+
+            FadePortraitCorutine = FadePortrait();
+            StartCoroutine(FadePortraitCorutine);
+        }
+
+        _nowCharacterIndex = characterIndex;
 
         if (portrait)
         {
@@ -133,5 +163,17 @@ public class Dialog : MonoBehaviour
 
         audioSource.Stop();
         _arrowImage.enabled = true;
+    }
+
+    IEnumerator FadePortrait()
+    {
+        while (_portraitImageColorAlphaValue <= 1)
+        {
+            _portraitImageColorAlphaValue += _portraitFadeSpeed;
+
+            _portraitImage.color = new Color(1, 1, 1, _portraitImageColorAlphaValue);
+
+            yield return new WaitForSeconds(_portraitFadeDelay);
+        }
     }
 }
