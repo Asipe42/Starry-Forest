@@ -93,7 +93,7 @@ public class Dialog : MonoBehaviour
                 _nowScriptNumber++;
 
                 ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
-                StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex));
+                StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex, tempScriptInfo._onEnd));
             }
             else if (!_onEnd)
             {
@@ -117,11 +117,15 @@ public class Dialog : MonoBehaviour
         _endScriptNumber = end;
 
         ScriptInfo tempScriptInfo = _scriptInfo[_nowScriptNumber];
-        StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex));
+
+        StartCoroutine(TypingText(tempScriptInfo._script, _typingSpeed, tempScriptInfo._onPortriat, (int)tempScriptInfo._characterIndex, tempScriptInfo._onEnd));
     }
 
-    IEnumerator TypingText(string message, float speed, bool portrait, int characterIndex)
+    IEnumerator TypingText(string message, float speed, bool portrait, int characterIndex, bool endSignal)
     {
+        if (endSignal)
+            _onEnd = endSignal;
+
         _arrowImage.enabled = false;
 
         if (characterIndex >= 0) _name.text = _characterInfo[characterIndex]._name;
