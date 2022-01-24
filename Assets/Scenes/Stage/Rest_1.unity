@@ -2838,8 +2838,8 @@ MonoBehaviour:
     _onPortriat: 1
     _onEnd: 0
   - _script: "\uC2E4\uC740 \uB9D0\uC774\uC57C. \uC544\uAE4C \uC800\uCABD\uC5D0 \uAC80\uC740
-      \uACE0\uC591\uC774\uAC00 \uC788\uAE38\uB798\n\uD5D0\uB808\uBC8C\uB5A1 \uB3C4\uB9DD
-      \uC654\uAC78\uB791. \uC8FC\uC758\uB97C \uBCFC \uC2DC\uAC04\uC774 \uC5C6\uC5C8\uC5B4."
+      \uACE0\uC591\uC774\uAC00 \uC788\uAE38\uB798 \uD5D0\uB808\uBC8C\uB5A1 \uB3C4\uB9DD
+      \uC654\uAC78\uB791. \n\uC8FC\uC704\uB97C \uBCFC \uC2DC\uAC04\uC774 \uC5C6\uC5C8\uC5B4."
     _characterIndex: 2
     _onPortriat: 1
     _onEnd: 0
@@ -2883,8 +2883,8 @@ MonoBehaviour:
     _characterIndex: 2
     _onPortriat: 1
     _onEnd: 0
-  - _script: "\uC0AC\uC2E4 \uB098\uB3C4 \uC61B\uB0A0\uC5D4 \uADF8\uB807\uAC8C \uB2E4\uB154\uC5C8\uB294\uB370\n\uC694\uC998
-      \uC0B4\uC774 \uCA84\uAC00\uC9C0\uACE0 \uC798 \uC548\uB418\uB354\uB77C\uACE0\n\uB108\uAC19\uC774
+  - _script: "\uC0AC\uC2E4 \uB098\uB3C4 \uC61B\uB0A0\uC5D4 \uADF8\uB807\uAC8C \uB2E4\uB154\uC5C8\uB294\uB370
+      \uC694\uC998 \uC0B4\uC774 \uCA84\uAC00\uC9C0\uACE0 \uC798 \uC548\uB418\uB354\uB77C\uACE0.\n\uB108\uAC19\uC774
       \uCABC\uADF8\uB9CC \uC560\uB4E4\uC740 \uCDA9\uBD84\uD788 \uAC00\uB2A5\uD560
       \uAC70\uC57C."
     _characterIndex: 2
@@ -2894,8 +2894,8 @@ MonoBehaviour:
     _characterIndex: 1
     _onPortriat: 1
     _onEnd: 0
-  - _script: "\uACF5\uC9DC\uB294 \uC544\uB2C8\uC57C. \uB3D9\uC0DD\uC744 \uCC3E\uACE0
-      \uB3CC\uC544\uC624\uBA74\n\uB098\uD55C\uD14C \uB3C4\uD1A0\uB9AC \uC794\uB729
+  - _script: "\uACF5\uC9DC\uB294 \uC544\uB2C8\uC57C. \n\uB3D9\uC0DD\uC744 \uCC3E\uACE0
+      \uB3CC\uC544\uC624\uBA74 \uB098\uD55C\uD14C \uB3C4\uD1A0\uB9AC \uC794\uB729
       \uAC00\uC838\uB2E4\uC918\uC57C \uD574!"
     _characterIndex: 2
     _onPortriat: 1
@@ -4028,6 +4028,8 @@ PlayableDirector:
   - key: {fileID: -3049349145054012007, guid: 66107ba7edfc5eb479d8bf0f1767e0cf, type: 2}
     value: {fileID: 1407964461103566589}
   - key: {fileID: -3657228345566648363, guid: 66107ba7edfc5eb479d8bf0f1767e0cf, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 5258311721718138217, guid: 66107ba7edfc5eb479d8bf0f1767e0cf, type: 2}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References:
