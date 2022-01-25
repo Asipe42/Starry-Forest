@@ -56,11 +56,11 @@ TagManager:
   - name: Water
     uniqueID: 2089493345
     locked: 0
-  - name: Floor
-    uniqueID: 1665205799
-    locked: 0
   - name: Obstacle
     uniqueID: 3497431105
+    locked: 0
+  - name: Floor
+    uniqueID: 1665205799
     locked: 0
   - name: Object
     uniqueID: 3467575277

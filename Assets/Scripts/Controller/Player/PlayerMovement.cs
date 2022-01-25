@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _flyMaxTime = 3.5f;
     [SerializeField] float _flyUpValue = 0.6f;
     [SerializeField] float _flyDownValue = 1f;
+    [SerializeField] float _decreaseGravitySpeed = 0.05f;
     [SerializeField] SpriteRenderer _dandelionBuds;
     bool _validFly;
     public bool _onFly;
@@ -371,7 +372,7 @@ public class PlayerMovement : MonoBehaviour
 
         _flyCurrentTime += Time.deltaTime;
 
-        _dandelionBuds.color = new Color(1, 1, 1, 1 - _flyCurrentTime / _flyMaxTime);
+        _dandelionBuds.color = new Color(1, 1, 1, 1.2f - _flyCurrentTime / _flyMaxTime);
 
         if (_flyCurrentTime >= _flyMaxTime)
         {
@@ -381,7 +382,8 @@ public class PlayerMovement : MonoBehaviour
             playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
             playerVFX.StopVFX(Definition.VFX_DANDELION);
 
-            rigid.gravityScale = _defaultGravityValue;
+            StartCoroutine(DecreaseGravityValue());
+
             return;
         }
 
@@ -395,6 +397,15 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             rigid.gravityScale = _flyDownValue;
+        }
+    }
+
+    IEnumerator DecreaseGravityValue()
+    {
+        while (rigid.gravityScale <= _defaultGravityValue)
+        {
+            rigid.gravityScale += Time.deltaTime;
+            yield return new WaitForSeconds(_decreaseGravitySpeed);               
         }
     }
 

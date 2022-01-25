@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3122217798008555140
+--- !u!1 &3021769571606413905
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3122217798008555142}
-  - component: {fileID: 3122217798008555143}
-  - component: {fileID: 3122217798008555129}
-  - component: {fileID: 7698004082954761637}
+  - component: {fileID: 4370900673657770306}
+  - component: {fileID: 8206582897747074876}
+  - component: {fileID: 2072934047422627704}
+  - component: {fileID: 8434502053551330697}
   m_Layer: 0
-  m_Name: Dandelion
-  m_TagString: Fly
+  m_Name: Floating Wood
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3122217798008555142
+--- !u!4 &4370900673657770306
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122217798008555140}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.43, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_GameObject: {fileID: 3021769571606413905}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.526, y: -0.232, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3122217798008555143
+--- !u!212 &8206582897747074876
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122217798008555140}
+  m_GameObject: {fileID: 3021769571606413905}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -70,46 +70,70 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -827392019
-  m_SortingLayer: 7
-  m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 4e9ea481f2aae854294ab91c67cbed33, type: 3}
+  m_SortingLayerID: -1284699191
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 999aad94c0a026c409b978816b6ce799, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.82, y: 1.22}
+  m_Size: {x: 4.8, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &3122217798008555129
-CircleCollider2D:
+--- !u!60 &2072934047422627704
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122217798008555140}
+  m_GameObject: {fileID: 3021769571606413905}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.003919959, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.35090494
---- !u!114 &7698004082954761637
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4.8, y: 5.12}
+    newSize: {x: 4.8, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -1.3457291, y: -0.25447583}
+      - {x: -2.2864444, y: 1.1198534}
+      - {x: -1.7483633, y: 1.2059313}
+      - {x: -2.292271, y: 2.5187616}
+      - {x: -1.5360236, y: 1.4296343}
+      - {x: -1.230782, y: 1.4268135}
+      - {x: -0.65654904, y: 0.61733377}
+      - {x: -0.4530957, y: 0.18180823}
+      - {x: 0.23574987, y: -0.85146546}
+      - {x: 1.7505811, y: -2.4464004}
+      - {x: -0.11111677, y: -2.4904087}
+--- !u!114 &8434502053551330697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122217798008555140}
+  m_GameObject: {fileID: 3021769571606413905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d8dbe15f24f0704b92563eec15d1e37, type: 3}
+  m_Script: {fileID: 11500000, guid: 626d054f0fdceed42afd89855031d1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myType: 3
+  _myType: 4
+  _thronDamage: 1
+  _vineDamage: 1
+  _stoneDamage: 1
+  _floatingWoodDamage: 1
