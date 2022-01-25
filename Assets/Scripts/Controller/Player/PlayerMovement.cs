@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     bool _onJump;
 
     [Header("Downhill")]
-    [SerializeField] float _downhillPower = 1.25f;
+    [SerializeField] float _downhillPower = 1.5f;
     [SerializeField] float _defaultGravityValue = 1.5f;
     [SerializeField] float _downhillGravityValue = 0.15f;
     [SerializeField] float _downhillWaitingTime = 0.5f;
@@ -40,8 +40,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Flying")]
     float _flyCurrentTime;
-    [SerializeField] float _flyMaxTime = 3f;
-    [SerializeField] float _flyUpValue = 0.75f;
+    [SerializeField] float _flyPower = 1f;
+    [SerializeField] float _flyMaxTime = 3.5f;
+    [SerializeField] float _flyUpValue = 0.6f;
     [SerializeField] float _flyDownValue = 1f;
     [SerializeField] SpriteRenderer _dandelionBuds;
     bool _validFly;
@@ -365,8 +366,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        Debug.Log("I'm flying!");
-
         playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
         playerVFX.PlayVFX(Definition.VFX_DANDELION);
 
@@ -377,6 +376,7 @@ public class PlayerMovement : MonoBehaviour
         if (_flyCurrentTime >= _flyMaxTime)
         {
             _onFly = false;
+            OnDownhill();
 
             playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
             playerVFX.StopVFX(Definition.VFX_DANDELION);
@@ -387,8 +387,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButton("Jump"))
         {
-            rigid.gravityScale = _flyUpValue;
-            rigid.AddForce(Vector2.up, ForceMode2D.Force);
+            if (rigid.gravityScale != _flyUpValue)
+                rigid.gravityScale = _flyUpValue;
+
+            rigid.AddForce(Vector2.up * _flyPower , ForceMode2D.Impulse);
         }
         else
         {

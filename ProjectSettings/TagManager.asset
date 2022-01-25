@@ -50,9 +50,21 @@ TagManager:
   - name: Background_2
     uniqueID: 1721866641
     locked: 0
-  - name: Background_3
+  - name: Flooded Object
+    uniqueID: 3010268105
+    locked: 0
+  - name: Water
+    uniqueID: 2089493345
+    locked: 0
+  - name: Floor
     uniqueID: 1665205799
+    locked: 0
+  - name: Obstacle
+    uniqueID: 3497431105
     locked: 0
   - name: Object
     uniqueID: 3467575277
+    locked: 0
+  - name: Character
+    uniqueID: 117142495
     locked: 0
