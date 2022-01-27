@@ -194,7 +194,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7978025706809708563}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.7, y: 0.1, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children:
@@ -263,7 +263,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.041838884, y: 2.1023793}
@@ -287,5 +287,5 @@ MonoBehaviour:
   _stoneDamage: 1
   _floatingWoodDamage: 1
   _onDown: 0
-  _downSpeed: 2
-  _donwLimitPosition: -0.1
+  _downSpeed: 1.5
+  _donwLimitPosition: 0

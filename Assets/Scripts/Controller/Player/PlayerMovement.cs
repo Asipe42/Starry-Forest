@@ -46,11 +46,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _flyDownValue = 1f;
     [SerializeField] float _decreaseGravitySpeed = 0.05f;
     [SerializeField] SpriteRenderer _dandelionBuds;
-    bool _validFly;
+    bool _up;
     public bool _onFly;
+    
 
     bool _onGround;
-
     static bool _onStop;
 
     Rigidbody2D rigid;
@@ -92,11 +92,9 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Movement_Walk();
-
+            Movement_Fly();
             Movement_Jump();
-
             Movement_Sliding();
-
             Movement_Dash();
         }
     }
@@ -141,8 +139,6 @@ public class PlayerMovement : MonoBehaviour
     void Movement_Jump()
     {
         Movement_Downhill();
-
-        Movement_Fly();
 
         if (!_onGround)
             return;
@@ -387,12 +383,22 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (Input.GetButton("Jump"))
+        if (Input.GetButtonDown("Jump"))
+        {
+            _up = true;
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            _up = false;
+        }
+
+        if (_up)
         {
             if (rigid.gravityScale != _flyUpValue)
                 rigid.gravityScale = _flyUpValue;
 
-            rigid.AddForce(Vector2.up * _flyPower , ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.up * _flyPower, ForceMode2D.Force);
         }
         else
         {
@@ -421,9 +427,7 @@ public class PlayerMovement : MonoBehaviour
             _onJump = false;
             _onDownhill = false;
             _onFly = false;
-
             _validDownhill = false;
-            _validFly = false;
 
             rigid.gravityScale = _defaultGravityValue;
         }

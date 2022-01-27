@@ -838,7 +838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &141778135
 Transform:
   m_ObjectHideFlags: 0
@@ -1922,6 +1922,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274262370}
   m_CullTransparentMesh: 1
+--- !u!1 &277336308 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2123509471624470954, guid: 93351ad17245ff74fb6684f7b7e6c39c, type: 3}
+  m_PrefabInstance: {fileID: 1781323596}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &277336313
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277336308}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 56012d39c531c0d43bf862cc0b799938, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &289215015
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,7 +3077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &512597639
 Transform:
   m_ObjectHideFlags: 0
@@ -5712,7 +5736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyPower
-      value: 0.1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyMaxTime
@@ -5720,11 +5744,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyUpValue
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyDownValue
-      value: 0.6
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
+      propertyPath: _decreaseGravitySpeed
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
@@ -8138,10 +8166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floorPrefabs:
-  - {fileID: 780972730023669342, guid: 433cad22ee335384ba85264b9dc50765, type: 3}
-  - {fileID: 1090171287248885075, guid: 2d044fc37dceeac4098698bf1ff9468b, type: 3}
-  - {fileID: 4106384239608879121, guid: 098ba3119d897e94e831ad28ace7af15, type: 3}
-  - {fileID: 4106384239608879121, guid: ff73dcb9758afa741bc6cc1a587a8dbd, type: 3}
+  - {fileID: 4473646430610154227, guid: f9a5ed298e3f0134799e2c2786499bb0, type: 3}
   _preFloor:
   - {fileID: 1600777246}
   - {fileID: 758648037}

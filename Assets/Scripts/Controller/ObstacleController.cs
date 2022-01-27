@@ -8,7 +8,8 @@ public enum ObstacleType
     Thron,
     Vine,
     Stone,
-    FloatingWood
+    FloatingWood,
+    Bird
 }
 
 public class ObstacleInfo
@@ -23,6 +24,7 @@ public class ObstacleController : MonoBehaviour
     [SerializeField] int _vineDamage = 1;
     [SerializeField] int _stoneDamage = 1;
     [SerializeField] int _floatingWoodDamage = 1;
+    [SerializeField] int _birdDamage = 1;
 
     protected ObstacleInfo _info = new ObstacleInfo();
 
@@ -41,6 +43,9 @@ public class ObstacleController : MonoBehaviour
                 break;
             case ObstacleType.FloatingWood:
                 _info._damage = _floatingWoodDamage;
+                break;
+            case ObstacleType.Bird:
+                _info._damage = _birdDamage;
                 break;
         }
     }
