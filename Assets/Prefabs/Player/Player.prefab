@@ -875,6 +875,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Recover
       objectReference: {fileID: 0}
+    - target: {fileID: 3605083731993399355, guid: 4eebd4f5ada9a2e45b3bc4fd393ac533, type: 3}
+      propertyPath: m_SortingLayer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605083731993399355, guid: 4eebd4f5ada9a2e45b3bc4fd393ac533, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605083731993399355, guid: 4eebd4f5ada9a2e45b3bc4fd393ac533, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 117142495
+      objectReference: {fileID: 0}
     - target: {fileID: 3605083731993399357, guid: 4eebd4f5ada9a2e45b3bc4fd393ac533, type: 3}
       propertyPath: m_RootOrder
       value: 3

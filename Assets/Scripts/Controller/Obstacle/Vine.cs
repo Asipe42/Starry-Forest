@@ -25,7 +25,7 @@ public class Vine : ObstacleController
         if (!_onDown)
             return;
 
-        Vector2 downVec = new Vector2(transform.position.x, -0.4f);
+        Vector2 downVec = new Vector2(transform.position.x, _donwLimitPosition);
         transform.position = Vector2.Lerp(transform.position, downVec, _downSpeed * Time.deltaTime);
 
         if (transform.position.y <= _donwLimitPosition)

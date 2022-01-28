@@ -360,6 +360,7 @@ public class PlayerMovement : MonoBehaviour
         if (!_onFly)
         {
             _flyCurrentTime = 0;
+            _dandelionBuds.color = new Color(1, 1, 1, 0);
             return;
         }
 
@@ -377,6 +378,7 @@ public class PlayerMovement : MonoBehaviour
 
             playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
             playerVFX.StopVFX(Definition.VFX_DANDELION);
+
 
             StartCoroutine(DecreaseGravityValue());
 
@@ -398,7 +400,7 @@ public class PlayerMovement : MonoBehaviour
             if (rigid.gravityScale != _flyUpValue)
                 rigid.gravityScale = _flyUpValue;
 
-            rigid.AddForce(Vector2.up * _flyPower, ForceMode2D.Force);
+            rigid.AddForce(Vector2.up * _flyPower * Time.deltaTime, ForceMode2D.Force);
         }
         else
         {
@@ -410,7 +412,7 @@ public class PlayerMovement : MonoBehaviour
     {
         while (rigid.gravityScale <= _defaultGravityValue)
         {
-            rigid.gravityScale += Time.deltaTime;
+            rigid.gravityScale += 3 * Time.deltaTime;
             yield return new WaitForSeconds(_decreaseGravitySpeed);               
         }
     }

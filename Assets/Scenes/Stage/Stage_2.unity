@@ -5736,7 +5736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyPower
-      value: 6
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
       propertyPath: _flyMaxTime
@@ -8166,7 +8166,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floorPrefabs:
+  - {fileID: 1090171287248885075, guid: 2d044fc37dceeac4098698bf1ff9468b, type: 3}
+  - {fileID: 4106384239608879121, guid: 098ba3119d897e94e831ad28ace7af15, type: 3}
+  - {fileID: 4106384239608879121, guid: ff73dcb9758afa741bc6cc1a587a8dbd, type: 3}
   - {fileID: 4473646430610154227, guid: f9a5ed298e3f0134799e2c2786499bb0, type: 3}
+  - {fileID: 5270895377469708360, guid: 43a3cbc71821ecc49a1e7b578bc70e1f, type: 3}
   _preFloor:
   - {fileID: 1600777246}
   - {fileID: 758648037}
