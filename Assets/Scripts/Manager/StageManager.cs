@@ -47,25 +47,8 @@ public class StageManager : MonoBehaviour
             GameManager.instance.IncreaseSceneIndex(_sceneIndex);
     }
 
-    /*void CheckDeathEvent()
-    {
-        if (GameManager.instance.GetDeathCount() == 1 && GameManager.instance.GetSceneIndex() == 0)
-        {
-            PlayDeathEvent(1);
-        }
-    }*/
-
-    /*void PlayDeathEvent(int index)
-    {
-        end = true;
-        GameManager.instance.UIManagerInstance.OnDialog();
-        GameManager.instance.UIManagerInstance.DialogInstance.SetCondition(index);
-    }*/
-
     public void GameOver()
     {
-        //GameManager.instance.IncreaseDeathCount();
-
         SceneManager.LoadScene(_nowSceneName);
     }
 

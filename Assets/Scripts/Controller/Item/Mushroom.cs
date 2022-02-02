@@ -5,15 +5,14 @@ using UnityEngine;
 public class Mushroom : ItemController
 {
     [SerializeField] bool _onMove;
-    [SerializeField] float _moveSpeed = 2;
+    [SerializeField] float _moveSpeed = 1.5f;
+    [SerializeField] float _amplitude = 0.6f;
     [SerializeField] int _mushroomScore = 1;
-
     float _angleValue;
 
     void Awake()
     {
         _myType = ItemType.Mushroom;
-
         _angleValue = transform.position.y;
     }
 
@@ -28,7 +27,7 @@ public class Mushroom : ItemController
     void Move()
     {
         _angleValue += Time.deltaTime * _moveSpeed;
-        transform.position = new Vector2(transform.position.x, Mathf.Sin(_angleValue));
+        transform.position = new Vector2(transform.position.x, Mathf.Sin(_angleValue) * _amplitude);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

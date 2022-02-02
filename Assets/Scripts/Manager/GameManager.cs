@@ -6,7 +6,6 @@ public class SaveValue
 {
     static int _totalStageCount = 6;
 
-    //public static int _deathCount = 0;
     public static int _totalScore = 0;
     public static int _hp = 3;
     public static int _maxHp = 3;
@@ -55,6 +54,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         theAudioManager.PlayBGM(StageManagerInstance._sceneIndex);
+
+        PlayerMovement.ContinuePlayerMovement();
     }
 
     private void Update()
@@ -103,16 +104,6 @@ public class GameManager : MonoBehaviour
         SaveValue._nowSceneIndex = index;
     }
 
-    //public int GetDeathCount()
-    //{
-    //    return SaveValue._deathCount;
-    //}
-
-    //public void IncreaseDeathCount()
-    //{
-    //    SaveValue._deathCount++;
-    //}
-
     public int LoadTotalScore()
     {
         return SaveValue._totalScore;
@@ -131,12 +122,13 @@ public class GameManager : MonoBehaviour
     public void GameStop()
     {
         theAudioManager.PauseAllSFXChannel();
+        PlayerMovement.StopPlayerMovement();
         Time.timeScale = 0;
     }
     
     public void GameContinue()
     {
-        theAudioManager.PlayAllSFXChannel();
+        PlayerMovement.ContinuePlayerMovement();
         Time.timeScale = 1;
     }
 }

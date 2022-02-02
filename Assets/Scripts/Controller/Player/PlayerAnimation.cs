@@ -4,6 +4,24 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    [SerializeField] int _dashClipFrameRate = 10;
+    int _dashLevel;
+
+    public int DashLevel 
+    { 
+        get 
+        { 
+            return _dashLevel;
+        } 
+        set 
+        { 
+            if (_dashLevel != value)
+            {
+                _dashLevel = value;
+            }
+        } 
+    }
+
     Animator anim;
 
     void Awake()

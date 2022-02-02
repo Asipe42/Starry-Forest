@@ -15,6 +15,7 @@ public class Dandelion : ItemController
         if (collision.CompareTag("Player"))
         {
             collision.GetComponent<PlayerMovement>()._onFly = true;
+            collision.GetComponent<PlayerMovement>().FlyCurrentTime = 0;
 
             GameManager.instance.AudioManagerInstance.PlaySFX(Definition.DANDELION_CLIP);
 

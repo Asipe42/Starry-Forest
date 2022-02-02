@@ -27,14 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8077460879248780938}
-  m_LocalRotation: {x: 0, y: 0, z: 0.07868527, w: 0.99689955}
-  m_LocalPosition: {x: 7.03, y: 4.46, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.078459114, w: 0.99691737}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 0.07, y: 0.07, z: 0.07}
   m_Children:
   - {fileID: 6208992339770790096}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9.026}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9}
 --- !u!212 &8077460879248780940
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -124,8 +124,8 @@ MonoBehaviour:
   _floatingWoodDamage: 1
   _birdDamage: 1
   _onDown: 0
-  _downSpeed: 1.5
-  _donwLimitPosition: -0.9
+  _downSpeed: 2.5
+  _donwLimitPosition: -1.2
 --- !u!70 &3714582027893891069
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

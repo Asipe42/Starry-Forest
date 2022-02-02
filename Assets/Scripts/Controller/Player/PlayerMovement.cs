@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     float _dashCurrentTime;
     [SerializeField] float[] _dashChangingTime;
     [SerializeField] Color[] _dashColors;
-    AccelerationSpace.AccelerationLevel _dashLevel;
+    DashSpace.DashLevel _dashLevel;
     IEnumerator _dashCorutine;
     bool _onDash;
 
@@ -46,9 +46,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _flyDownValue = 1f;
     [SerializeField] float _decreaseGravitySpeed = 0.05f;
     [SerializeField] SpriteRenderer _dandelionBuds;
+    [SerializeField] Animator _budsAnim;
     bool _up;
     public bool _onFly;
-    
+    public float FlyCurrentTime { get { return _flyCurrentTime;  } set { _flyCurrentTime = value; } }
 
     bool _onGround;
     static bool _onStop;
@@ -294,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
     [System.Obsolete]
     IEnumerator ChangeDashGrade()
     {
-        _dashLevel = AccelerationSpace.AccelerationLevel.One;
+        _dashLevel = DashSpace.DashLevel.One;
 
         GameManager.instance.UIManagerInstance.runningBarInstance.IncreaseFillSpeed(_dashLevel);
         GameManager.instance.FloorManagerInstance.OnAcceleration(_dashLevel);
@@ -309,16 +310,19 @@ public class PlayerMovement : MonoBehaviour
 
                 _dashCurrentTime = 0f;
 
-                _dashLevel = AccelerationSpace.AccelerationLevel.None;
+                _dashLevel = DashSpace.DashLevel.None;
 
                 GameManager.instance.UIManagerInstance.runningBarInstance.IncreaseFillSpeed(_dashLevel);
                 GameManager.instance.FloorManagerInstance.OnAcceleration(_dashLevel);
 
                 playerVFX.StopVFX(Definition.VFX_DASH);
                 playerAnim.PlayAnimationClip(Definition.ANIM_DASH, false);
+                playerAnim.DashLevel = (int)_dashLevel;
 
                 if (_dashCorutine != null)
+                {
                     StopCoroutine(_dashCorutine);
+                }
 
                 yield return null;
             }
@@ -337,7 +341,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (_dashLevel < AccelerationSpace.AccelerationLevel.Max && _dashCurrentTime >= _dashChangingTime[(int)_dashLevel - 1])
+            if (_dashLevel < DashSpace.DashLevel.Max && _dashCurrentTime >= _dashChangingTime[(int)_dashLevel - 1])
             {
                 _dashLevel++;
 
@@ -355,21 +359,27 @@ public class PlayerMovement : MonoBehaviour
     void Movement_Fly()
     {
         if (_onGround)
+        {
+            _budsAnim.SetBool("idle", false);
+            _dandelionBuds.color = new Color(1, 1, 1, 0f);
             return;
+        }
 
         if (!_onFly)
         {
             _flyCurrentTime = 0;
-            _dandelionBuds.color = new Color(1, 1, 1, 0);
+            _budsAnim.SetBool("idle", false);
+            _dandelionBuds.color = new Color(1, 1, 1, 0f);
             return;
         }
 
+        _budsAnim.SetBool("idle", false);
+        _budsAnim.SetBool("idle", true);
         playerAnim.PlayAnimationClip(Definition.ANIM_FLY, true);
         playerVFX.PlayVFX(Definition.VFX_DANDELION);
 
         _flyCurrentTime += Time.deltaTime;
-
-        _dandelionBuds.color = new Color(1, 1, 1, 1.2f - _flyCurrentTime / _flyMaxTime);
+        _dandelionBuds.color = new Color(1, 1, 1, 1f);
 
         if (_flyCurrentTime >= _flyMaxTime)
         {
@@ -378,7 +388,6 @@ public class PlayerMovement : MonoBehaviour
 
             playerAnim.PlayAnimationClip(Definition.ANIM_FLY, false);
             playerVFX.StopVFX(Definition.VFX_DANDELION);
-
 
             StartCoroutine(DecreaseGravityValue());
 
@@ -395,7 +404,7 @@ public class PlayerMovement : MonoBehaviour
             _up = false;
         }
 
-        if (_up)
+        if (_up && _flyCurrentTime != 0)
         {
             if (rigid.gravityScale != _flyUpValue)
                 rigid.gravityScale = _flyUpValue;
@@ -439,6 +448,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SetBoolVariables();
 
+        _onFly = false;
         playerAnim.PlayAnimationClip(Definition.ANIM_STANDING, false);
         playerAnim.PlayAnimationClip(Definition.ANIM_JUMP, false);
         playerAnim.PlayAnimationClip(Definition.ANIM_DOWNHILL, false);
@@ -454,7 +464,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (state == PlayerState.Default)
         {
-            audioManager.PlayWalkChannel();
+            audioManager.PlayWalkChannel((int)_dashLevel);
         }
     }
 

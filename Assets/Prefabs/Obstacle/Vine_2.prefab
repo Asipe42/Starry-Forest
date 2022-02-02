@@ -286,6 +286,7 @@ MonoBehaviour:
   _vineDamage: 1
   _stoneDamage: 1
   _floatingWoodDamage: 1
+  _birdDamage: 1
   _onDown: 0
   _downSpeed: 1.5
-  _donwLimitPosition: 0
+  _donwLimitPosition: 0.3

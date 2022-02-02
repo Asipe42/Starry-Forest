@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,11 @@ using UnityEngine;
 public class FloorManager : MonoBehaviour
 {
     [Header("Floor")]
-    [SerializeField] GameObject[] _floorPrefabs;
+    public List<GameObject> _floorPrefabs;
+    public GameObject[] _nowWaitingFloors;
+    [SerializeField] List<GameObject> _levelOneFloors;
+    [SerializeField] List<GameObject> _levelTwoFloors;
+    [SerializeField] List<GameObject> _levelThreeFloors;
     [SerializeField] List<GameObject> _preFloor;
     [SerializeField] GameObject _lastFloor;
     [SerializeField] float _moveSpeed;
@@ -17,6 +22,11 @@ public class FloorManager : MonoBehaviour
     static bool _onStop;
 
     RunningBar runningBar;
+
+    private void Awake()
+    {
+        _floorPrefabs = new List<GameObject>();
+    }
 
     private void Start()
     {
@@ -34,6 +44,31 @@ public class FloorManager : MonoBehaviour
             Replace(true);
         else
             Replace(false);
+    }
+
+    public void ChangeFloors(Level level)
+    {
+        switch (level)
+        {
+            case Level.One:
+                _floorPrefabs?.Clear();
+                foreach (var floor in _levelOneFloors)
+                    _floorPrefabs.Add(floor);
+                break;
+            case Level.Two:
+                _floorPrefabs?.Clear();
+                foreach (var floor in _levelTwoFloors)
+                    _floorPrefabs.Add(floor);
+                break;
+            case Level.Three:
+                Debug.Log("?");
+                _floorPrefabs.Clear();
+                foreach (var floor in _levelThreeFloors)
+                    _floorPrefabs.Add(floor);
+                break;
+        }
+
+        _nowWaitingFloors = _floorPrefabs.ToArray();
     }
 
     public static void StopFloorScrolling()
@@ -93,9 +128,6 @@ public class FloorManager : MonoBehaviour
 
     void CreateFloor(Vector2 _createPos, bool onLast)
     {
-        //const float REPOSITION_VALUE = 35.5f;
-        //Vector2 createPoint = new Vector2(REPOSITION_VALUE, transform.position.y);
-
         if (onLast)
         {
             GameObject lastFloor = Instantiate(_lastFloor, transform);
@@ -104,8 +136,8 @@ public class FloorManager : MonoBehaviour
         }
         else
         {
-            int floorIndex = Random.Range(0, _floorPrefabs.Length);
-            GameObject newFloor = Instantiate(_floorPrefabs[floorIndex], transform);
+            int floorIndex = UnityEngine.Random.Range(0, _nowWaitingFloors.Length);
+            GameObject newFloor = Instantiate(_nowWaitingFloors[floorIndex], transform);
             _preFloor.Add(newFloor);
             newFloor.transform.position = _createPos;
         }
@@ -124,23 +156,23 @@ public class FloorManager : MonoBehaviour
         _moveSpeed = value;
     }
 
-    public void OnAcceleration(AccelerationSpace.AccelerationLevel level)
+    public void OnAcceleration(DashSpace.DashLevel level)
     {
         switch (level)
         {
-            case AccelerationSpace.AccelerationLevel.None:
+            case DashSpace.DashLevel.None:
                 SetDefaultAcceleration();
                 break;
-            case AccelerationSpace.AccelerationLevel.One:
+            case DashSpace.DashLevel.One:
                 _acceleration = _accelerationValue[0];
                 break;
-            case AccelerationSpace.AccelerationLevel.Two:
+            case DashSpace.DashLevel.Two:
                 _acceleration = _accelerationValue[1];
                 break;
-            case AccelerationSpace.AccelerationLevel.Three:
+            case DashSpace.DashLevel.Three:
                 _acceleration = _accelerationValue[2];
                 break;
-            case AccelerationSpace.AccelerationLevel.Max:
+            case DashSpace.DashLevel.Max:
                 _acceleration = _accelerationValue[3];
                 break;
         }

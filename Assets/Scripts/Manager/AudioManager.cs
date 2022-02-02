@@ -14,6 +14,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip _slidingClip;
     [SerializeField] AudioClip _takeItemClip;
     [SerializeField] AudioClip _thronClip;
+    [SerializeField] AudioClip _stoneClip;
+    [SerializeField] AudioClip _woodClip;
     [SerializeField] AudioClip _recoverClip;
     [SerializeField] AudioClip _downhillClip;
     [SerializeField] AudioClip _dandelionClip;
@@ -94,6 +96,18 @@ public class AudioManager : MonoBehaviour
                 tempChannel.volume = Definition.THORN_VOLUME;
                 tempChannel.Play();
                 break;
+            case Definition.STONE_CLIP:
+                tempChannel = selectChannel();
+                tempChannel.clip = _stoneClip;
+                tempChannel.volume = Definition.STONE_VOLUME;
+                tempChannel.Play();
+                break;
+            case Definition.WOOD_CLIP:
+                tempChannel = selectChannel();
+                tempChannel.clip = _woodClip;
+                tempChannel.volume = Definition.WOOD_VOLUME;
+                tempChannel.Play();
+                break;
             case Definition.RECOVER_CLIP:
                 tempChannel = selectChannel();
                 tempChannel.clip = _recoverClip;
@@ -171,10 +185,15 @@ public class AudioManager : MonoBehaviour
         return null;
     }
 
-    public void PlayWalkChannel()
+    public void PlayWalkChannel(int dashLevel)
     {
         if (!walkChannel.isPlaying && Time.timeScale != 0)
         {
+            if (walkChannel.pitch != 0.8f + ((float)dashLevel / 10f))
+                walkChannel.pitch = 0.8f + ((float)dashLevel / 10f);
+
+            Debug.Log(walkChannel.pitch);
+
             walkChannel.Play();
         }
     }

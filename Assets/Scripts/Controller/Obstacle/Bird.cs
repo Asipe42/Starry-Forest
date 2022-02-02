@@ -25,7 +25,7 @@ public class Bird : ObstacleController
         if (!_onDown)
             return;
 
-        Vector2 downVec = new Vector2(transform.position.x, _donwLimitPosition);
+        Vector2 downVec = new Vector2(transform.position.x - 3f, _donwLimitPosition);
         transform.position = Vector2.Lerp(transform.position, downVec, _downSpeed * Time.deltaTime);
 
         if (transform.position.y <= _donwLimitPosition)

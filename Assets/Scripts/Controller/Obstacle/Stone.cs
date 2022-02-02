@@ -17,7 +17,7 @@ public class Stone : ObstacleController
         {
             PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
 
-            pc.Damaged(_info._damage, Definition.THORN_CLIP);
+            pc.Damaged(_info._damage, Definition.STONE_CLIP);
 
             GameManager.instance.UIManagerInstance.heartInstance.CheckHeart();
         }

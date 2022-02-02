@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AccelerationSpace
+namespace DashSpace
 { 
-    public enum AccelerationLevel
+    public enum DashLevel
     {
         None,
         One,
@@ -34,6 +34,8 @@ public class Definition : MonoBehaviour
     public const string SLIDING_CLIP = "sliding";
     public const string TAKE_ITEM_CLIP = "item";
     public const string THORN_CLIP = "thron"; // == vine clip
+    public const string STONE_CLIP = "stone";
+    public const string WOOD_CLIP = "wood";
     public const string RECOVER_CLIP = "recover";
     public const string DOWNHILL_CLIP = "downhill";
     public const string DANDELION_CLIP = "dandelion";
@@ -42,12 +44,13 @@ public class Definition : MonoBehaviour
     public const string POP_UP_CLIP = "popup";
     public const string SELECT_CLIP = "select";
 
-
     public const float WALK_VOLUME = 0.3f;
     public const float JUMP_VOLUME = 0.6f;
     public const float SLIDING_VOLUME = 0.3f;
     public const float ITEM_VOLUME = 0.6f;
     public const float THORN_VOLUME = 0.6f;
+    public const float STONE_VOLUME = 0.7f;
+    public const float WOOD_VOLUME = 0.2f;
     public const float RECOVER_VOLUME = 0.8f;
     public const float DOWNHILL_VOLUME = 0.3f;
     public const float DANDELION_VOLUME = 0.4f;

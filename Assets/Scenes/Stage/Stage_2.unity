@@ -2356,14 +2356,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Audio Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 550302994869563483, guid: 05b748661f7e1db44b7746ef08b56060, type: 3}
-      propertyPath: _takeItemClip
-      value: 
-      objectReference: {fileID: 8300000, guid: d9309b3b7304180458fad8136dbc977c, type: 3}
-    - target: {fileID: 550302994869563483, guid: 05b748661f7e1db44b7746ef08b56060, type: 3}
-      propertyPath: _dashUpgradeClip
-      value: 
-      objectReference: {fileID: 8300000, guid: fe126ff52d3c14b48b17f4b1a3ce95b4, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05b748661f7e1db44b7746ef08b56060, type: 3}
 --- !u!1 &391354402
@@ -5734,26 +5726,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
-      propertyPath: _flyPower
-      value: 2000
-      objectReference: {fileID: 0}
-    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
-      propertyPath: _flyMaxTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
-      propertyPath: _flyUpValue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
-      propertyPath: _flyDownValue
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7485701302952676108, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
-      propertyPath: _decreaseGravitySpeed
-      value: 0.05
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f14efdc1ef3743e4185144dc53caa2c7, type: 3}
 --- !u!1 &879104940
@@ -8165,18 +8137,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf4179160e96084ca9d4ba75c5b1bb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _floorPrefabs:
+  _floorPrefabs: []
+  _nowWaitingFloors: []
+  _levelOneFloors:
+  - {fileID: 3606318392556535002, guid: 2671ec962fc44e849a7ff3f9fa940e15, type: 3}
   - {fileID: 1090171287248885075, guid: 2d044fc37dceeac4098698bf1ff9468b, type: 3}
-  - {fileID: 4106384239608879121, guid: 098ba3119d897e94e831ad28ace7af15, type: 3}
-  - {fileID: 4106384239608879121, guid: ff73dcb9758afa741bc6cc1a587a8dbd, type: 3}
+  - {fileID: 2713390628382207013, guid: 2f1889be4b3652e43af75d8dacb61ee8, type: 3}
+  - {fileID: 4768388533313525602, guid: 9f6d577c025f3534384ebbebd17d7b06, type: 3}
+  - {fileID: 258613939065181648, guid: 11cb2c13abba5f94a996124673b6672c, type: 3}
+  _levelTwoFloors:
   - {fileID: 4473646430610154227, guid: f9a5ed298e3f0134799e2c2786499bb0, type: 3}
+  - {fileID: 8532599505094029460, guid: 3425349086cc8d548994845378ddc38b, type: 3}
+  - {fileID: 1923015960918709205, guid: ce120fcdc820b324fa7c850097a3874c, type: 3}
+  - {fileID: 5378513135569091150, guid: 383d47f38444f0f43869372e9207fbde, type: 3}
   - {fileID: 5270895377469708360, guid: 43a3cbc71821ecc49a1e7b578bc70e1f, type: 3}
+  _levelThreeFloors:
+  - {fileID: 2866282038251001986, guid: 655d69d521ebbe244a64440cfe633986, type: 3}
+  - {fileID: 2038573177857799358, guid: 96c5db4be29e8b645b580f11a867fd10, type: 3}
+  - {fileID: 6142235342481672418, guid: e69f1676d2121834e9be0055a7dfcecd, type: 3}
+  - {fileID: 2078530506507822982, guid: 00d97d9cb59151a47a9c0494f3e66970, type: 3}
+  - {fileID: 4054156747773691074, guid: 67862394e309ed44ca28c20955b8f297, type: 3}
   _preFloor:
   - {fileID: 1600777246}
   - {fileID: 758648037}
   - {fileID: 1781323597}
   _lastFloor: {fileID: 0}
-  _moveSpeed: 4.6
+  _moveSpeed: 2
   _accelerationValue:
   - 1.1
   - 1.25

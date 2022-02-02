@@ -1,7 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum Level
+{
+    None,
+    One,
+    Two,
+    Three,
+}
 
 public class RunningBar : MonoBehaviour
 {
@@ -16,6 +25,7 @@ public class RunningBar : MonoBehaviour
     float _fillSpeed = 1f;
     bool[] _changedColor = new bool[7];
     bool _runinng;
+    Level _myLevel = Level.None;
 
     public float progressPercentage
     {
@@ -37,6 +47,7 @@ public class RunningBar : MonoBehaviour
     {
         IncreaseGaugeValue();
         CheckRunningBar();
+        CheckLevel();
     }
 
     void IncreaseGaugeValue()
@@ -80,6 +91,34 @@ public class RunningBar : MonoBehaviour
         GameManager.instance.FloorManagerInstance.SetMoveValue(value);
     }
 
+    void CheckLevel()
+    {
+        if (_runningGague > _runningGagueMaxValue * 3f / 4f)
+        {
+            if (_myLevel != Level.Three)
+            {
+                _myLevel = Level.Three;
+                GameManager.instance.FloorManagerInstance.ChangeFloors(Level.Three);
+            }
+        }
+        else if (_runningGague > _runningGagueMaxValue * 2f / 4f)
+        {
+            if (_myLevel != Level.Two)
+            {
+                _myLevel = Level.Two;
+                GameManager.instance.FloorManagerInstance.ChangeFloors(Level.Two);
+            }
+        }
+        else
+        {
+            if (_myLevel != Level.One)
+            {
+                _myLevel = Level.One;
+                GameManager.instance.FloorManagerInstance.ChangeFloors(Level.One);
+            }
+        }
+    }
+
     public float GetBarPreValue()
     {
         return _runningBar.value;
@@ -90,23 +129,23 @@ public class RunningBar : MonoBehaviour
         return _runningBar.maxValue;
     }
 
-    public void IncreaseFillSpeed(AccelerationSpace.AccelerationLevel level)
+    public void IncreaseFillSpeed(DashSpace.DashLevel level)
     {
         switch (level)
         {
-            case AccelerationSpace.AccelerationLevel.None:
+            case DashSpace.DashLevel.None:
                 SetDefaultFillSpeed();
                 break;
-            case AccelerationSpace.AccelerationLevel.One:
+            case DashSpace.DashLevel.One:
                 _fillSpeed = _fillSpeedValue[0];
                 break;
-            case AccelerationSpace.AccelerationLevel.Two:
+            case DashSpace.DashLevel.Two:
                 _fillSpeed = _fillSpeedValue[1];
                 break;
-            case AccelerationSpace.AccelerationLevel.Three:
+            case DashSpace.DashLevel.Three:
                 _fillSpeed = _fillSpeedValue[2];
                 break;
-            case AccelerationSpace.AccelerationLevel.Max:
+            case DashSpace.DashLevel.Max:
                 _fillSpeed = _fillSpeedValue[3];
                 break;
         }
@@ -115,5 +154,10 @@ public class RunningBar : MonoBehaviour
     public void SetDefaultFillSpeed()
     {
         _fillSpeed = 1f;
+    }
+
+    void UpLevel(Level level)
+    {
+
     }
 }

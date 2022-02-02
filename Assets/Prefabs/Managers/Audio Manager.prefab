@@ -71,13 +71,15 @@ MonoBehaviour:
   - {fileID: 2364792828128107240}
   _jumpClip: {fileID: 8300000, guid: 924b3dc140815be48b4449e8d87739f1, type: 3}
   _slidingClip: {fileID: 8300000, guid: a08bf25e3998dba40ba37bba77d85a7f, type: 3}
-  _takeItemClip: {fileID: 0}
+  _takeItemClip: {fileID: 8300000, guid: d9309b3b7304180458fad8136dbc977c, type: 3}
   _thronClip: {fileID: 8300000, guid: d9c0872e6b2f6204e851eaaa024cb67f, type: 3}
+  _stoneClip: {fileID: 8300000, guid: 8e2d40614660dee448370657a9d7b5cc, type: 3}
+  _woodClip: {fileID: 8300000, guid: d393ff8b695b4074a8e3853e090b98d9, type: 3}
   _recoverClip: {fileID: 8300000, guid: 0ea9399066b480d4dac44b420e297819, type: 3}
   _downhillClip: {fileID: 8300000, guid: af4910c9b2e3e7d4997c73af579c9621, type: 3}
   _dandelionClip: {fileID: 8300000, guid: 8abd9e76d5e4eb14a97da00319e6352c, type: 3}
   _dashClip: {fileID: 8300000, guid: 0ca800ecf2d06b641a5f3827c52af3d1, type: 3}
-  _dashUpgradeClip: {fileID: 0}
+  _dashUpgradeClip: {fileID: 8300000, guid: fe126ff52d3c14b48b17f4b1a3ce95b4, type: 3}
   _popUpClip: {fileID: 8300000, guid: e7864ed55beea2a43af04b69e007887a, type: 3}
   _selectClip: {fileID: 0}
   walkChannel: {fileID: 550302994869563490}
