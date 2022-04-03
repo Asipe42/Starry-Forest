@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float[] dashTime;
 
     [Space]
+    public bool onTutorial = true;
     public bool canJump;
     public bool canSliding;
     public bool canDownhill;
@@ -286,6 +287,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnDamaged(int damage)
     {
+        if (onTutorial)
+            return;
+
         if (onInvincibility)
             return;
 
@@ -293,6 +297,12 @@ public class PlayerController : MonoBehaviour
         theStatus.hp -= damage;
 
         UIManager.instance.theHp.CheckHp(theStatus.hp);
+    }
+
+    public void TakeItem()
+    {
+        thePlayerAudio.PlaySFX_TakeItem();
+        thePlayerParticle.PlayTakeItem();
     }
 
     void OnCollisionEnter2D(Collision2D collision)

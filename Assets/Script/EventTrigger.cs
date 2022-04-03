@@ -98,6 +98,7 @@ public class EventTrigger : MonoBehaviour
                 playerController.PermitAction("sliding");
                 playerController.PermitAction("downhill");
                 playerController.PermitAction(targetActionName);
+                playerController.onTutorial = false;
                 break;
         }
 

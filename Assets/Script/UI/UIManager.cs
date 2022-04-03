@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
     [Space]
     public Heart theHp;
     public Blood theBlood;
+    public Rank theRank;
+    public Score theScore;
 
     void Awake()
     {
@@ -25,6 +27,8 @@ public class UIManager : MonoBehaviour
 
         theHp = GameObject.FindObjectOfType<Heart>().GetComponent<Heart>();
         theBlood = GameObject.FindObjectOfType<Blood>().GetComponent<Blood>();
+        theRank = GameObject.FindObjectOfType<Rank>().GetComponent<Rank>();
+        theScore =  GameObject.FindObjectOfType<Score>().GetComponent<Score>();
     }
 
     void Start()
