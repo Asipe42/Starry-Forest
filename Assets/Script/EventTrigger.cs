@@ -87,11 +87,17 @@ public class EventTrigger : MonoBehaviour
 
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
                 rigid.gravityScale = 0.2f;
-                #endregion
 
+                playerController.PermitAction("jump", false);
+                playerController.PermitAction(targetActionName, false);
+                #endregion
+                break;
+            case "dash":
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
                 playerController.PermitAction("jump");
                 playerController.PermitAction("sliding");
-                playerController.PermitAction("donwhill");
+                playerController.PermitAction("downhill");
+                playerController.PermitAction(targetActionName);
                 break;
         }
 
@@ -105,9 +111,9 @@ public class EventTrigger : MonoBehaviour
 
         GameObject.FindObjectOfType<Scroll>().GetComponent<Scroll>().canScroll = true;
 
-        if (targetActionName == "downhill")
+        if (targetActionName == "dash")
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1.5f);
             UIManager.instance.ActivateUI(UI.HUD);
             UIManager.instance.ActivateUI(UI.Popup);
         }

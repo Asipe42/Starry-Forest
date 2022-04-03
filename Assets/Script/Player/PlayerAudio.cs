@@ -2,35 +2,43 @@ using UnityEngine;
 
 public class PlayerAudio : MonoBehaviour
 {
-    [SerializeField] AudioClip walkClip;
     [SerializeField] AudioClip jumpClip;
     [SerializeField] AudioClip downhillClip;
     [SerializeField] AudioClip slidingClip;
-
-    AudioSource audioSource; // walk
+    [SerializeField] AudioClip dashClip;
+    [SerializeField] AudioClip dashLevelUpClip;
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        jumpClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Jump");
+        downhillClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Downhill");
+        slidingClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Sliding");
+        dashClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Dash");
+        dashLevelUpClip = Resources.Load<AudioClip>("Audio/SFX/SFX_DashLevelUp");
     }
 
-    public void PlaySFX_Walk()
-    {
-
-    }
-
-    public void PlaySFX_Jump(float delay)
+    public void PlaySFX_Jump(float delay = 0f)
     {
         AudioManager.instance.PlaySFX(jumpClip, delay);
     }
 
-    public void PlaySFX_Downhill(float delay)
+    public void PlaySFX_Downhill(float delay = 0f)
     {
         AudioManager.instance.PlaySFX(downhillClip, delay);
     }
 
-    public void PlaySFX_Sliding(float delay)
+    public void PlaySFX_Sliding(float delay = 0f)
     {
         AudioManager.instance.PlaySFX(slidingClip, delay);
+    }
+
+    public void PlaySFX_Dash(float delay = 0f)
+    {
+        AudioManager.instance.PlaySFX(dashClip, delay);
+    }
+    
+    public void PlaySFX_DashLevelup(float delay = 0f, float pitch = 1f)
+    {
+        AudioManager.instance.PlaySFX(dashLevelUpClip, delay, pitch);
     }
 }

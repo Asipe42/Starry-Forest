@@ -9,7 +9,8 @@ public class Scroll : MonoBehaviour
 
     [SerializeField] Vector3 deadline = new Vector3(-40f, 0f, 0f);
     [SerializeField] Vector3 reposition = new Vector3(115.2f, 0f, 0f);
-    [SerializeField] float[] scrollSpeed;
+    [SerializeField] float[] scrollSpeed_background;
+    [SerializeField] float[] scrollSpeed_floor;
     [SerializeField] FloorGenerator theFloorGenerator;
 
     public bool canScroll;
@@ -26,13 +27,13 @@ public class Scroll : MonoBehaviour
     void Scrolling()
     {
         foreach (var floor in preFloors)
-            floor.transform.Translate(Vector2.left * scrollSpeed[2] * Time.deltaTime);
+            floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
 
         foreach(var layer in backgroundLayer_01)
-            layer.Translate(Vector2.left * scrollSpeed[0] * Time.deltaTime);
+            layer.Translate(Vector2.left * scrollSpeed_background[0] * Time.deltaTime);
 
         foreach (var layer in backgroundLayer_02)
-            layer.Translate(Vector2.left * scrollSpeed[1] * Time.deltaTime);
+            layer.Translate(Vector2.left * scrollSpeed_background[1] * Time.deltaTime);
     }
 
     void Reposition()

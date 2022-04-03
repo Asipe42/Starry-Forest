@@ -13,13 +13,14 @@ public class AudioManager : MonoBehaviour
         instance = this;
     }
 
-    public void PlaySFX(AudioClip clip, float delay = 0)
+    public void PlaySFX(AudioClip clip, float delay = 0f, float pitch = 1f)
     {
         AudioSource channel = FindChannel();
 
         if (channel != null)
         {
             channel.clip = clip;
+            channel.pitch = pitch;
             channel.PlayDelayed(delay);
         }
     }

@@ -1,6 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum DashLevel
+{
+    None = 0,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Max,
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,23 +23,32 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CapsuleCollider2D defaultCollider;
     [SerializeField] CapsuleCollider2D slidingCollider;
 
+    [Header("Dash")]
+    public DashLevel dashLevel = DashLevel.None;
+    [SerializeField] float[] dashTime;
+
+    [Space]
+    public bool canJump;
+    public bool canSliding;
+    public bool canDownhill;
+    public bool canDash;
+
+    [Space]
+    public bool onJump;
+    public bool onDownhill;
+    public bool onSliding;
+    public bool onDash;
+
+    [Space]
+    public bool hasDownhill = true;
+    public bool onInvincibility = false;
+
     PlayerAnimation thePlayerAnimation;
     PlayerAudio thePlayerAudio;
     PlayerMovement thePlayerMovement;
     PlayerParticle thePlayerParticle;
-    InputManager theInputManager;
     Status theStatus;
     SpriteRenderer spriteRenderer;
-
-    public bool canJump;
-    public bool canSliding;
-    public bool canDownhill;
-
-    public bool onJump;
-    public bool onDownhill;
-    public bool hasDownhill = true;
-    public bool onSliding;
-    public bool onInvincibility = false;
 
     void Awake()
     {
@@ -36,9 +58,13 @@ public class PlayerController : MonoBehaviour
         thePlayerAudio = GetComponent<PlayerAudio>();
         thePlayerMovement = GetComponent<PlayerMovement>();
         thePlayerParticle = GetComponent<PlayerParticle>();
-        theInputManager = GetComponent<InputManager>();
         theStatus = GetComponent<Status>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        Debug.Log(dashLevel);
     }
 
     public void PermitAction(string name, bool state = true)
@@ -54,9 +80,13 @@ public class PlayerController : MonoBehaviour
             case "downhill":
                 canDownhill = state;
                 break;
+            case "dash":
+                canDash = state;
+                break;
         }
     }
 
+    #region Jump
     public void Jump()
     {
         if (!canJump)
@@ -68,7 +98,9 @@ public class PlayerController : MonoBehaviour
         thePlayerAnimation.PlayJumpAnimation(true);
         thePlayerAudio.PlaySFX_Jump(0);
     }
+    #endregion
 
+    #region Downhill
     public void Downhill()
     {
         if (!canDownhill)
@@ -94,6 +126,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator CancleDownhill()
+    {
+        while (onDownhill)
+        {
+            if (Input.GetKeyUp(UseKeys.jumpKey))
+            {
+                onDownhill = false;
+
+                thePlayerMovement.Movement_Downhill(onDownhill);
+            }
+
+            yield return null;
+        }
+
+        onDownhill = false;
+        thePlayerMovement.Movement_Downhill(onDownhill);
+
+        yield return null;
+    }
+    #endregion
+
+    #region Sliding
     public void Sliding()
     {
         if (!canSliding)
@@ -117,31 +171,11 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CancleSliding());
     }
 
-    IEnumerator CancleDownhill()
-    {
-        while (onDownhill)
-        {
-            if (Input.GetKeyUp(theInputManager.jumpKey))
-            {
-                onDownhill = false;
-
-                thePlayerMovement.Movement_Downhill(onDownhill);
-            }
-
-            yield return null;
-        }
-
-        onDownhill = false;
-        thePlayerMovement.Movement_Downhill(onDownhill);
-
-        yield return null;
-    }
-
     IEnumerator CancleSliding()
     {
         while (onSliding)
         {
-            if (Input.GetKeyUp(theInputManager.SlidingKey))
+            if (Input.GetKeyUp(UseKeys.SlidingKey))
             {
                 onSliding = false;
 
@@ -157,6 +191,86 @@ public class PlayerController : MonoBehaviour
 
         yield return null;
     }
+    #endregion
+
+    #region Dash
+    public void Dash()
+    {
+        if (!canDash)
+            return;
+
+        if (onDash)
+            return;
+
+        onDash = true;
+        thePlayerAnimation.PlayDashAnimation(onDash);
+        thePlayerAudio.PlaySFX_Dash(0f);
+
+        StartCoroutine(IncreaseDashLevel());
+        StartCoroutine(CancleDash());
+    }
+
+    IEnumerator CancleDash()
+    {
+        while (true)
+        {
+            if (Input.GetKeyUp(UseKeys.dashKey))
+            {
+                onDash = false;
+                thePlayerAnimation.PlayDashAnimation(onDash);
+                StartCoroutine(DecraseDashLevel());
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator IncreaseDashLevel()
+    {
+        while (onDash)
+        {
+            float value = 0;
+
+            if (dashLevel < DashLevel.Max)
+            {
+                while (value < dashTime[(int)dashLevel])
+                {
+                    value += 1;
+                    yield return new WaitForSeconds(1f);
+                }
+
+                thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f);
+
+                if(dashLevel < DashLevel.Max)
+                    dashLevel++;
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator DecraseDashLevel()
+    {
+        while (!onDash || DashLevel.None < dashLevel)
+        {
+            float value = 0;
+
+            if (DashLevel.None < dashLevel)
+            {
+                while (value < 2)
+                {
+                    value += 2;
+                    yield return new WaitForSeconds(1f);
+                }
+
+                if (DashLevel.None < dashLevel)
+                    dashLevel--;
+            }
+
+            yield return null;
+        }
+    }
+    #endregion
 
     IEnumerator Invincibility(float duration, float alphaValue)
     {
