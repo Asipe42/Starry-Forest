@@ -19,9 +19,23 @@ public class Guide : MonoBehaviour
     [SerializeField] string[] Message_NewGame;
     [SerializeField] string Message_Exit;
 
+    [SerializeField] bool onGuide;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (onGuide)
+            {
+                Cancle();
+            }
+        }
+    }
+
     public void PopupGuide(bool state, int targetScale, MenuType menuType)
     {
         this.menuType = menuType;
+        onGuide = true;
 
         FadeInPanel(state);
         SetScaleBox(targetScale);
@@ -83,6 +97,8 @@ public class Guide : MonoBehaviour
 
     public void Cancle()
     {
+        onGuide = false;
+
         FadeInPanel(false);
         SetScaleBox(0);
     }

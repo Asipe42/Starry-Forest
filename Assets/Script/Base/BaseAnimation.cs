@@ -11,4 +11,9 @@ public class BaseAnimation : MonoBehaviour
     {
         anim.SetTrigger(name);
     }
+
+    public void SetAnimationClipSpeed(Animator anim, float speed)
+    {
+        anim.speed = speed;
+    }
 }

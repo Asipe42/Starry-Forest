@@ -20,7 +20,7 @@ public class Rank : MonoBehaviour
 
     void DisplayTime()
     {
-        time = Time.time;
+        time += Time.deltaTime;
         timeText.text = string.Format("{0:0.0}", time);
     }
 }

@@ -5,7 +5,7 @@ public class FloorGenerator : MonoBehaviour
 {
     public GameObject[] candidate;
 
-    [SerializeField] Vector3 createPosition = new Vector3(115.2f, 0f, 0f);
+    [SerializeField] Vector3 createPosition = new Vector3(153.6f, -0.8f, 0f);
     [SerializeField] Transform floorGroup;
 
     public GameObject CreateFloor(Vector3 position)

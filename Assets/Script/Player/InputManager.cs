@@ -8,9 +8,14 @@ public class InputManager : MonoBehaviour
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode SlidingKey = KeyCode.Z;
 
+    public bool onLock;
+
     void Update()
     {
-        InputKey();   
+        if (!onLock)
+        {
+            InputKey();
+        }
     }
 
     void InputKey()

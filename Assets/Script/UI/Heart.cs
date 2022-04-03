@@ -49,9 +49,6 @@ public class Heart : MonoBehaviour
 
     IEnumerator FillHeart(int index, float cooltime, FillState state)
     {
-        Debug.Log(index);
-        Debug.Log(state);
-
         while (images[index].fillAmount > 0)
         {
             if (state == FillState.Up)

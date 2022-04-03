@@ -12,10 +12,15 @@ public class Scroll : MonoBehaviour
     [SerializeField] float[] scrollSpeed;
     [SerializeField] FloorGenerator theFloorGenerator;
 
+    public bool canScroll;
+
     void Update()
     {
-        Scrolling();
-        Reposition();
+        if (canScroll)
+        {
+            Scrolling();
+            Reposition();
+        }
     }
 
     void Scrolling()

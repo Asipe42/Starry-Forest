@@ -27,7 +27,6 @@ public class AudioController : MonoBehaviour
         }
 
         // TODO: create another audio function
-
     }
 
     public IEnumerator FadeOut()

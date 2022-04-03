@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
 
+    [Header("Colliders")]
     [SerializeField] CapsuleCollider2D defaultCollider;
     [SerializeField] CapsuleCollider2D slidingCollider;
 
@@ -17,12 +18,15 @@ public class PlayerController : MonoBehaviour
     Status theStatus;
     SpriteRenderer spriteRenderer;
 
-    [HideInInspector] public bool onJump;
-    [HideInInspector] public bool onDownhill;
-    [HideInInspector] public bool onSliding;
+    public bool canJump;
+    public bool canSliding;
+    public bool canDownhill;
 
-    bool onInvincibility = false;
-    bool canDownhill = true;
+    public bool onJump;
+    public bool onDownhill;
+    public bool hasDownhill = true;
+    public bool onSliding;
+    public bool onInvincibility = false;
 
     void Awake()
     {
@@ -37,8 +41,27 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    public void PermitAction(string name, bool state = true)
+    {
+        switch (name)
+        {
+            case "jump":
+                canJump = state;
+                break;
+            case "sliding":
+                canSliding = state;
+                break;
+            case "downhill":
+                canDownhill = state;
+                break;
+        }
+    }
+
     public void Jump()
     {
+        if (!canJump)
+            return;
+
         onJump = true;
 
         thePlayerMovement.Movement_Jump();
@@ -48,28 +71,34 @@ public class PlayerController : MonoBehaviour
 
     public void Downhill()
     {
+        if (!canDownhill)
+            return;
+
         if (onDownhill)
             return;
 
         if (onSliding)
             return;
 
-        if (!canDownhill)
-            return;
+        if (hasDownhill)
+        {
+            onDownhill = true;
+            hasDownhill = false;
 
-        onDownhill = true;
-        canDownhill = false;
+            thePlayerAnimation.PlayJumpAnimation(false);
+            thePlayerMovement.Movement_Downhill(true);
+            thePlayerAnimation.PlayDownhillAnimation(onDownhill);
+            thePlayerAudio.PlaySFX_Downhill(0);
 
-        thePlayerAnimation.PlayJumpAnimation(false);
-        thePlayerMovement.Movement_Downhill(true);
-        thePlayerAnimation.PlayDownhillAnimation(onDownhill);
-        thePlayerAudio.PlaySFX_Downhill(0);
-
-        StartCoroutine(CancleDownhill());
+            StartCoroutine(CancleDownhill());
+        }
     }
 
     public void Sliding()
     {
+        if (!canSliding)
+            return;
+
         if (onSliding)
             return;
 
@@ -126,8 +155,6 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        // TODO: Play Dust Effect
-
         yield return null;
     }
 
@@ -148,7 +175,7 @@ public class PlayerController : MonoBehaviour
         if (onInvincibility)
             return;
 
-        StartCoroutine(Invincibility(0.3f, 0.5f));
+        StartCoroutine(Invincibility(0.8f, 0.5f));
         theStatus.hp -= damage;
 
         UIManager.instance.theHp.CheckHp(theStatus.hp);
@@ -160,7 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             onJump = false;
             onDownhill = false;
-            canDownhill = true;
+            hasDownhill = true;
 
             thePlayerAnimation.PlayJumpAnimation(false);
             thePlayerAnimation.PlayDownhillAnimation(false);

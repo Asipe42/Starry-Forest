@@ -16,21 +16,26 @@ public class PlayerAnimation : BaseAnimation
 
     public void PlayWalkAnimation(bool state)
     {
-        SetAnimationClip(anim, "walk", state);
+        base.SetAnimationClip(anim, "walk", state);
     }
 
     public void PlayJumpAnimation(bool state)
     {
-        SetAnimationClip(anim, "jump", state);
+        base.SetAnimationClip(anim, "jump", state);
     }
 
     public void PlayDownhillAnimation(bool state)
     {
-        SetAnimationClip(anim, "downhill", state);
+        base.SetAnimationClip(anim, "downhill", state);
     }
 
     public void PlaySlidingAnimation(bool state)
     {
-        SetAnimationClip(anim, "sliding", state);
+        base.SetAnimationClip(anim, "sliding", state);
+    }
+
+    public void SetAnimationClipSpeed(float speed)
+    {
+        base.SetAnimationClipSpeed(anim, speed);
     }
 }
