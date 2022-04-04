@@ -22,6 +22,6 @@ public class Vine : Obstacle
         onAppear = true;
         AudioManager.instance.PlaySFX(appearClip);
 
-        transform.DOMoveY(-0.3f, 0.7f).SetEase(Ease.OutSine);
+        transform.DOMoveY(-0.25f, 0.9f).SetEase(Ease.OutSine);
     }
 }

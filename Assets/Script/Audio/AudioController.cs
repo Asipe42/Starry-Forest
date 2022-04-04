@@ -13,6 +13,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] float fadeOutCooltime;
     [SerializeField] float fadeOutTargetVolume;
     [SerializeField] bool onFadeOut;
+    [SerializeField] bool onBGM;
 
     void Start()
     {
@@ -23,15 +24,20 @@ public class AudioController : MonoBehaviour
 
         if (onFadeOut)
         {
-            StartCoroutine(FadeOut());
+            StartCoroutine(FadeOut(fadeOutDelay));
+        }
+
+        if (onBGM)
+        {
+            StartCoroutine(PlayBGM());
         }
 
         // TODO: create another audio function
     }
 
-    public IEnumerator FadeOut()
+    public IEnumerator FadeOut(float delay)
     {
-        yield return new WaitForSeconds(fadeOutDelay);
+        yield return new WaitForSeconds(delay);
 
         foreach (var audio in audioSource)
         {
@@ -44,5 +50,12 @@ public class AudioController : MonoBehaviour
                 yield return new WaitForSeconds(fadeOutCooltime);
             }
         }
+    }
+
+    public IEnumerator PlayBGM()
+    {
+        yield return new WaitUntil(() => !PlayerController.instance.onTutorial);
+
+        StartCoroutine(FadeOut(0));
     }
 }

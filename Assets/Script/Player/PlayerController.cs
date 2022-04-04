@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     public bool canDash;
 
     [Space]
+    public bool onGround;
+    public bool onWalk = true;
     public bool onJump;
     public bool onDownhill;
     public bool onSliding;
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     [Space]
     public bool hasDownhill = true;
+    public bool hasDash = true;
     public bool onInvincibility = false;
 
     PlayerAnimation thePlayerAnimation;
@@ -50,6 +53,9 @@ public class PlayerController : MonoBehaviour
     PlayerParticle thePlayerParticle;
     Status theStatus;
     SpriteRenderer spriteRenderer;
+
+    IEnumerator IncreaseDashLevelCoroutine;
+    IEnumerator DecreaseDashLevelCoroutine;
 
     void Awake()
     {
@@ -61,11 +67,6 @@ public class PlayerController : MonoBehaviour
         thePlayerParticle = GetComponent<PlayerParticle>();
         theStatus = GetComponent<Status>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    void Update()
-    {
-        Debug.Log(dashLevel);
     }
 
     public void PermitAction(string name, bool state = true)
@@ -93,6 +94,7 @@ public class PlayerController : MonoBehaviour
         if (!canJump)
             return;
 
+        onWalk = false;
         onJump = true;
 
         thePlayerMovement.Movement_Jump();
@@ -160,11 +162,12 @@ public class PlayerController : MonoBehaviour
         if (onJump || onDownhill)
             return;
 
+        onWalk = false;
         onSliding = true;
 
         thePlayerAnimation.PlaySlidingAnimation(onSliding);
         thePlayerAudio.PlaySFX_Sliding(0);
-        thePlayerParticle.PlayDust(onSliding);
+        thePlayerParticle.PlaySlidingDust(onSliding);
 
         defaultCollider.enabled = false;
         slidingCollider.enabled = true;
@@ -184,7 +187,7 @@ public class PlayerController : MonoBehaviour
                 slidingCollider.enabled = false;
 
                 thePlayerAnimation.PlaySlidingAnimation(onSliding);
-                thePlayerParticle.PlayDust(onSliding);
+                thePlayerParticle.PlaySlidingDust(onSliding);
             }
 
             yield return null;
@@ -200,15 +203,25 @@ public class PlayerController : MonoBehaviour
         if (!canDash)
             return;
 
-        if (onDash)
+        if (!onGround)
             return;
 
-        onDash = true;
-        thePlayerAnimation.PlayDashAnimation(onDash);
-        thePlayerAudio.PlaySFX_Dash(0f);
+        if (hasDash)
+        {
+            onDash = true;
+            hasDash = false;
 
-        StartCoroutine(IncreaseDashLevel());
-        StartCoroutine(CancleDash());
+            thePlayerAnimation.PlayDashAnimation(onDash);
+            thePlayerAudio.PlaySFX_Dash(0f);
+
+            if (IncreaseDashLevelCoroutine != null)
+                StopCoroutine(IncreaseDashLevelCoroutine);
+
+            IncreaseDashLevelCoroutine = IncreaseDashLevel();
+            StartCoroutine(IncreaseDashLevelCoroutine);
+
+            StartCoroutine(CancleDash());
+        }
     }
 
     IEnumerator CancleDash()
@@ -218,8 +231,16 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyUp(UseKeys.dashKey))
             {
                 onDash = false;
+
                 thePlayerAnimation.PlayDashAnimation(onDash);
-                StartCoroutine(DecraseDashLevel());
+
+                Invoke("ChargeDash", 0.5f);
+
+                if (DecreaseDashLevelCoroutine != null)
+                    StopCoroutine(DecreaseDashLevelCoroutine);
+
+                DecreaseDashLevelCoroutine = DecraseDashLevel();
+                StartCoroutine(DecreaseDashLevelCoroutine);
             }
 
             yield return null;
@@ -252,30 +273,37 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DecraseDashLevel()
     {
-        while (!onDash || DashLevel.None < dashLevel)
+        while (!onDash)
         {
-            float value = 0;
-
             if (DashLevel.None < dashLevel)
             {
-                while (value < 2)
-                {
-                    value += 2;
-                    yield return new WaitForSeconds(1f);
-                }
+                float value = 0;
 
                 if (DashLevel.None < dashLevel)
-                    dashLevel--;
-            }
+                {
+                    while (value < 1)
+                    {
+                        value += 1;
+                        yield return new WaitForSeconds(0.5f);
+                    }
 
+                    if (DashLevel.None < dashLevel)
+                        dashLevel--;
+                }
+            }
             yield return null;
         }
+    }
+
+    void ChargeDash()
+    {
+        hasDash = true;
     }
     #endregion
 
     IEnumerator Invincibility(float duration, float alphaValue)
     {
-        UIManager.instance.theBlood.BloodEffect(0.8f);
+        UIManager.instance.theBlood.BloodEffect(1f);
         onInvincibility = true;
         spriteRenderer.color = new Color(1, 1, 1, alphaValue);
 
@@ -285,7 +313,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = new Color(1, 1, 1, 1f);
     }
 
-    public void OnDamaged(int damage)
+    public void OnDamaged(int damage, AudioClip clip)
     {
         if (onTutorial)
             return;
@@ -293,10 +321,26 @@ public class PlayerController : MonoBehaviour
         if (onInvincibility)
             return;
 
+        if (theStatus.hp <= 0)
+        {
+            Dead();
+        }
+
         StartCoroutine(Invincibility(0.8f, 0.5f));
         theStatus.hp -= damage;
 
+        if (!onTutorial)
+        {
+            AudioManager.instance.PlaySFX(clip);
+        }    
+
         UIManager.instance.theHp.CheckHp(theStatus.hp);
+    }
+
+    void Dead()
+    {
+        // TO-DO: Create Dead Logic
+        Loading.LoadScene("Stage_01");
     }
 
     public void TakeItem()
@@ -305,10 +349,26 @@ public class PlayerController : MonoBehaviour
         thePlayerParticle.PlayTakeItem();
     }
 
+    public void Recover(int value)
+    {
+        if (theStatus.maxHp <= theStatus.hp)
+            return;
+
+        theStatus.hp += value;
+
+        thePlayerAudio.PlaySFX_Recover();
+        thePlayerParticle.PlayRecover();
+
+        UIManager.instance.theHp.CheckHp(theStatus.hp);
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Floor")
         {
+            if (!onSliding)
+                onWalk = true;
+
             onJump = false;
             onDownhill = false;
             hasDownhill = true;
@@ -316,6 +376,22 @@ public class PlayerController : MonoBehaviour
             thePlayerAnimation.PlayJumpAnimation(false);
             thePlayerAnimation.PlayDownhillAnimation(false);
             thePlayerAnimation.PlayWalkAnimation(true);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+        {
+            onGround = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+        {
+            onGround = false;
         }
     }
 }

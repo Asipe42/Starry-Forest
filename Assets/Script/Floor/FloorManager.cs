@@ -1,33 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class FloorManager : MonoBehaviour
 {
+    [SerializeField] Text text;
     [SerializeField] FloorGenerator theFloorGenerator;
     [SerializeField] FloorTemplate[] floorSet;
 
-    int level = 0;
-    float scrollSpeed;
+    public int level = 0;
 
     void Start()
     {
         SetCandidate(level);
     }
 
-    void Update()
+    public void LevelUp()
     {
-        LevelUp();
-    }
-
-    void LevelUp()
-    {
-        // TODO: Set level up condition;
-        if (false)
-        {
-            level++;
-            SetCandidate(level);
-        }
+        text.DOColor(Color.red, 2f);
+        level++;
+        SetCandidate(level);
     }
 
     public void SetCandidate(int index)

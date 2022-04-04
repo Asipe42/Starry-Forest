@@ -166,7 +166,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -185,8 +185,8 @@ PolygonCollider2D:
       - {x: -4.3, y: 5.4}
       - {x: 4.3, y: 5.4}
       - {x: 4.5, y: 1.3}
-      - {x: 2.2, y: -1.4}
-      - {x: -1.3, y: -1.1}
+      - {x: 2.2, y: -1.5}
+      - {x: -1.3, y: -1.3}
       - {x: -4, y: 2.2}
 --- !u!82 &1873254696694291479
 AudioSource:
@@ -298,4 +298,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitClip: {fileID: 0}
   damage: 1
+  appearClip: {fileID: 0}
   onAppear: 0

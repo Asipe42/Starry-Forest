@@ -6,6 +6,7 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] Slider slider;
     [SerializeField] Image fillImage;
     [SerializeField, Range(1, 7)] int grade = 7;
+    [SerializeField] int turningPoint;
     [SerializeField] float gauge;
     [SerializeField] float gaugeMax;
     [SerializeField] float[] fillSpeed;
@@ -14,8 +15,12 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] Color[] colors;
     public bool[] changedColor;
 
+    FloorManager floorManager;
+
     void Awake()
     {
+        floorManager = GameObject.FindObjectOfType<FloorManager>().GetComponent<FloorManager>();
+
         slider.maxValue = gaugeMax;
 
         ChangeColor(colors[colors.Length - 1]);
@@ -42,6 +47,9 @@ public class ProgressBar : MonoBehaviour
 
             if (slider.maxValue / (grade + 1) * (grade - i) <= slider.value)
             {
+                if (i == turningPoint)
+                    floorManager.LevelUp();
+
                 changedColor[i] = true;
                 ChangeColor(colors[i]);
             }

@@ -10,11 +10,11 @@ public class Score : MonoBehaviour
     [Header("Score")]
     public int score;
 
-    [Space]
-    [SerializeField] float shakeDuration = 0.5f;
+    Vector3 originalScale;
 
     void Start()
     {
+        originalScale = scoreText.transform.localScale;
         CheckScore(0);
     }
 
@@ -22,6 +22,11 @@ public class Score : MonoBehaviour
     {
         this.score += score;
         scoreText.text = this.score.ToString();
-        scoreText.transform.DOShakeScale(shakeDuration);
+
+        DOTween.Sequence()
+            .Append(scoreText.transform.DOScale(new Vector3(originalScale.x + 0.2f, originalScale.y + 0.2f, originalScale.z + 0.2f), 0.05f)
+            .SetEase(Ease.Linear))
+            .Append(scoreText.transform.DOScale(originalScale, 0.1f)
+            .SetEase(Ease.Linear));
     }
 }

@@ -32,12 +32,15 @@ public class Heart : MonoBehaviour
 
     public void CheckHp(int preHp)
     {
+        if (preHp < 0 || preHp >= images.Length)
+            return;
+
         if (hp == 0)
             return;
 
         FillState state;
 
-        if (hp > preHp)
+        if (preHp < hp)
             state = FillState.Down;
         else
             state = FillState.Up;
@@ -49,16 +52,22 @@ public class Heart : MonoBehaviour
 
     IEnumerator FillHeart(int index, float cooltime, FillState state)
     {
-        while (images[index].fillAmount > 0)
+
+        if (state == FillState.Down)
         {
-            if (state == FillState.Up)
-                images[index].fillAmount += Time.deltaTime * FILL_VALUE;
-            else if (state == FillState.Down)
+            while (images[index].fillAmount > 0)
+            {
                 images[index].fillAmount -= Time.deltaTime * FILL_VALUE;
-
-            yield return new WaitForSeconds(cooltime);
+                yield return new WaitForSeconds(cooltime);
+            }
         }
-
-        yield return null;
+        else
+        {
+            while (images[index - 1].fillAmount < 0)
+            {
+                images[index - 1].fillAmount += Time.deltaTime * FILL_VALUE;
+                yield return new WaitForSeconds(cooltime);
+            }
+        }
     }
 }

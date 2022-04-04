@@ -47,6 +47,7 @@ public class EventTrigger : MonoBehaviour
             }
 
             playerAnimation.SetAnimationClipSpeed(0f);
+            playerController.onWalk = false;
 
             panel.DOColor(new Color(panelColor.r, panelColor.g, panelColor.b, alpha), duration);
             guide.DOColor(Color.white, duration);
@@ -71,6 +72,7 @@ public class EventTrigger : MonoBehaviour
                 #region Jump
                 playerController.PermitAction("jump");
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
+                guide.DOColor(Color.clear, duration);
                 GameObject.FindObjectOfType<Scroll>().GetComponent<Scroll>().canScroll = true;
                 #endregion
 
@@ -82,7 +84,6 @@ public class EventTrigger : MonoBehaviour
                 rigid.velocity = Vector2.zero;
                 rigid.gravityScale = 0f;
 
-                guide.DOColor(Color.clear, duration);
                 downhillGuide.DOColor(Color.white, duration);
 
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
@@ -114,7 +115,7 @@ public class EventTrigger : MonoBehaviour
 
         if (targetActionName == "dash")
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.8f);
             UIManager.instance.ActivateUI(UI.HUD);
             UIManager.instance.ActivateUI(UI.Popup);
         }

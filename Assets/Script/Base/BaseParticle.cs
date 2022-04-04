@@ -4,16 +4,31 @@ using UnityEngine;
 
 public class BaseParticle : MonoBehaviour
 {
-    protected void SetParticleSystem(ParticleSystem particleSystem, bool state)
+    protected void SetParticleSystem(ParticleSystem particleSystem, bool state, bool overlap = true)
     {
-        if (state)
+        if (overlap)
         {
-            if (!particleSystem.isPlaying)
+            if (state)
+            {
                 particleSystem.Play();
+            }
+            else
+            {
+                particleSystem.Stop();
+            }
         }
         else
         {
-            particleSystem.Stop();
+            if (state)
+            {
+                if (!particleSystem.isPlaying)
+                    particleSystem.Play();
+            }
+            else
+            {
+                particleSystem.Stop();
+            }
         }
+
     }
 }
