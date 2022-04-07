@@ -62,6 +62,12 @@ public class Rank : MonoBehaviour
 
     void CalculateGrade()
     {
+        if (grade == Grade.C)
+        {
+            rankFull.fillAmount = 1;
+            return;
+        }
+
         if (grade < Grade.C)
         {
             if (grade == Grade.APlus)

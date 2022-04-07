@@ -7,11 +7,13 @@ public class Guide : MonoBehaviour
 {
     MenuType menuType = MenuType.NewGame;
 
+    [Header("UI")]
     [SerializeField] Transform box;
     [SerializeField] Image panel;
     [SerializeField] TextMeshProUGUI mainText;
     [SerializeField] TextMeshProUGUI subText;
 
+    [Header("Values")]
     [SerializeField] Vector3 textPosition_NewGame;
     [SerializeField] Vector3 textPosition_Exit;
     [SerializeField] Color fadeColor;
@@ -19,7 +21,16 @@ public class Guide : MonoBehaviour
     [SerializeField] string[] Message_NewGame;
     [SerializeField] string Message_Exit;
 
+    [Space]
     [SerializeField] bool onGuide;
+
+    [Space]
+    [SerializeField] AudioClip popupClip;
+
+    void Awake()
+    {
+        popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
+    }
 
     void Update()
     {
@@ -36,6 +47,8 @@ public class Guide : MonoBehaviour
     {
         this.menuType = menuType;
         onGuide = true;
+
+        AudioManager.instance.PlaySFX(popupClip, 0, 1.2f, 0.8f);
 
         FadeInPanel(state);
         SetScaleBox(targetScale);
@@ -80,7 +93,7 @@ public class Guide : MonoBehaviour
         switch (menuType)
         {
             case MenuType.NewGame:
-                Loading.LoadScene("Stage_01");
+                Loading.LoadScene("Stage_01_Tutorial");
                 break;
             case MenuType.Exit:
 #if UNITY_EDITOR
@@ -98,6 +111,8 @@ public class Guide : MonoBehaviour
     public void Cancle()
     {
         onGuide = false;
+
+        AudioManager.instance.PlaySFX(popupClip, 0, 0.8f, 0.8f);
 
         FadeInPanel(false);
         SetScaleBox(0);

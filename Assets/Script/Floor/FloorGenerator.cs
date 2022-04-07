@@ -8,6 +8,8 @@ public class FloorGenerator : MonoBehaviour
     [SerializeField] Vector3 createPosition = new Vector3(153.6f, -0.8f, 0f);
     [SerializeField] Transform floorGroup;
 
+    public GameObject LastFloor;
+
     public GameObject CreateFloor(Vector3 position)
     {
         int _index = Random.Range(0, candidate.Length);

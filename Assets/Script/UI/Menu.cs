@@ -25,6 +25,8 @@ public class Menu : MonoBehaviour
     [SerializeField] int normalFontSize = 45;
     [SerializeField] int bigFontSize = 50;
 
+    [SerializeField] AudioClip menuClip;
+
     Dictionary<MenuType, Vector3> menuPosition;
     Dictionary<MenuType, Text> menuText;
     List<Vector3> destination;
@@ -41,7 +43,9 @@ public class Menu : MonoBehaviour
     {
         menuPosition = new Dictionary<MenuType, Vector3>();
         menuText = new Dictionary<MenuType, Text>();
-        destination = new List<Vector3>();       
+        destination = new List<Vector3>();
+
+        menuClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Menu");
     }
 
     void Start()
@@ -98,6 +102,8 @@ public class Menu : MonoBehaviour
 
     void ChangeMenu(DirectionType directionType)
     {
+        AudioManager.instance.PlaySFX(menuClip);
+
         if (directionType == DirectionType.Up)
         {
             switch (menuType)

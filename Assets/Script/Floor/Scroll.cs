@@ -17,6 +17,9 @@ public class Scroll : MonoBehaviour
 
     void Update()
     {
+        if (ProgressBar.onLast && PlayerController.instance.ReachLastFloor)
+            canScroll = false;
+
         if (canScroll)
         {
             Scrolling();
@@ -29,7 +32,7 @@ public class Scroll : MonoBehaviour
         foreach (var floor in preFloors)
             floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
 
-        foreach(var layer in backgroundLayer_01)
+        foreach (var layer in backgroundLayer_01)
             layer.Translate(Vector2.left * scrollSpeed_background[0] * Time.deltaTime);
 
         foreach (var layer in backgroundLayer_02)
@@ -38,16 +41,25 @@ public class Scroll : MonoBehaviour
 
     void Reposition()
     {
-        for (int i = 0; i < preFloors.Count; i++)
+        if (ProgressBar.onLast)
         {
-            if (preFloors[i].transform.position.x <= deadline.x)
+            if (preFloors[0].transform.position.x <= deadline.x)
+                preFloors.Add(theFloorGenerator.CreateFloor(theFloorGenerator.LastFloor.transform.localPosition));
+        }
+        else
+        {
+            for (int i = 0; i < preFloors.Count; i++)
             {
-                preFloors.Add(theFloorGenerator.CreateFloor(preFloors[i].transform.localPosition));
-                theFloorGenerator.DestroyFloor(preFloors[i]);
-                preFloors.RemoveAt(i);
+                if (preFloors[i].transform.position.x <= deadline.x)
+                {
+                    preFloors.Add(theFloorGenerator.CreateFloor(preFloors[i].transform.localPosition));
+                    theFloorGenerator.DestroyFloor(preFloors[i]);
+                    preFloors.RemoveAt(i);
+                }
             }
         }
 
+        #region Background Reposition
         foreach (var layer in backgroundLayer_01)
             if (layer.transform.position.x <= deadline.x)
                 layer.transform.position += reposition;
@@ -55,5 +67,6 @@ public class Scroll : MonoBehaviour
         foreach (var layer in backgroundLayer_02)
             if (layer.transform.position.x <= deadline.x)
                 layer.transform.position += reposition;
+        #endregion
     }
 }

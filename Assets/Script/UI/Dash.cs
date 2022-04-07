@@ -1,17 +1,32 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Dash : MonoBehaviour
 {
-    Text text;
+    [SerializeField] Image fillImage;
+
+    [Space]
+    [SerializeField] float[] fillValues;
+    [SerializeField] float duration = 0.5f;
 
     void Awake()
     {
-        text = GetComponent<Text>();
+        PlayerController.DashAction -= FillDash;
+        PlayerController.DashAction += FillDash;
+        Debug.Log("!");
     }
 
-    void Update()
+    void FillDash(DashLevel dashLevel)
     {
-        text.text = "Dash Level: " + PlayerController.instance.dashLevel;
+        float targetFillGuage = fillValues[(int)dashLevel];
+
+        DOVirtual.Float(fillImage.fillAmount, targetFillGuage, duration, DashGaugeFillValue);
+    }
+
+    void DashGaugeFillValue(float x)
+    {
+        fillImage.fillAmount = x;
     }
 }

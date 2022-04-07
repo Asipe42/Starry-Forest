@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Movement_Jump()
     {
-        rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        rigid.velocity += Vector2.up * jumpPower;
     }
 
     public void Movement_Downhill(bool state)

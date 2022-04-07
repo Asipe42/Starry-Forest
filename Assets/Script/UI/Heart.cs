@@ -32,7 +32,7 @@ public class Heart : MonoBehaviour
 
     public void CheckHp(int preHp)
     {
-        if (preHp < 0 || preHp >= images.Length)
+        if (preHp < 0 || preHp > images.Length)
             return;
 
         if (hp == 0)
@@ -63,7 +63,7 @@ public class Heart : MonoBehaviour
         }
         else
         {
-            while (images[index - 1].fillAmount < 0)
+            while (images[index - 1].fillAmount < 1)
             {
                 images[index - 1].fillAmount += Time.deltaTime * FILL_VALUE;
                 yield return new WaitForSeconds(cooltime);

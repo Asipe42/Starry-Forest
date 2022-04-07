@@ -7,14 +7,20 @@ public class EventTrigger : MonoBehaviour
 {
     [SerializeField] string targetActionName;
 
-    [Space]
+    [Space] 
     [SerializeField] Image panel;
     [SerializeField] SpriteRenderer guide;
     [SerializeField] float alpha = 0.35f;
     [SerializeField] float duration = 0.3f;
 
-    [Header("downhill")]
-    [SerializeField] SpriteRenderer downhillGuide;
+    [Space]
+    [SerializeField] AudioClip tutorialPopupClip;
+
+    [Header("Downhill")]
+    [SerializeField] GameObject downhillGuide;
+
+    [Header("Dash")]
+    [SerializeField] Animator dashAnim;
 
     Color panelColor;
 
@@ -23,6 +29,8 @@ public class EventTrigger : MonoBehaviour
     void Awake()
     {
         panelColor = panel.color;
+
+        tutorialPopupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_TutorialPopup");
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -61,15 +69,18 @@ public class EventTrigger : MonoBehaviour
         switch (targetActionName)
         {
             case "jump":
+                AudioManager.instance.PlaySFX(tutorialPopupClip, 0, 1.5f);
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
                 playerController.PermitAction(targetActionName, false);
                 break;
             case "sliding":
+                AudioManager.instance.PlaySFX(tutorialPopupClip, 0, 1.5f);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
                 playerController.PermitAction(targetActionName, false);
                 break;
             case "downhill":
                 #region Jump
+                AudioManager.instance.PlaySFX(tutorialPopupClip, 0, 1.5f);
                 playerController.PermitAction("jump");
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
                 guide.DOColor(Color.clear, duration);
@@ -84,7 +95,7 @@ public class EventTrigger : MonoBehaviour
                 rigid.velocity = Vector2.zero;
                 rigid.gravityScale = 0f;
 
-                downhillGuide.DOColor(Color.white, duration);
+                downhillGuide.SetActive(true);
 
                 yield return new WaitUntil(() => Input.GetButtonDown("Jump"));
                 rigid.gravityScale = 0.2f;
@@ -94,12 +105,15 @@ public class EventTrigger : MonoBehaviour
                 #endregion
                 break;
             case "dash":
+                AudioManager.instance.PlaySFX(tutorialPopupClip, 0, 1.5f);
+                dashAnim.enabled = true;
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
                 playerController.PermitAction("jump");
                 playerController.PermitAction("sliding");
                 playerController.PermitAction("downhill");
                 playerController.PermitAction(targetActionName);
                 playerController.onTutorial = false;
+                dashAnim.enabled = false;
                 break;
         }
 
@@ -109,13 +123,13 @@ public class EventTrigger : MonoBehaviour
         guide.DOColor(Color.clear, duration);
 
         if (downhillGuide != null)
-            downhillGuide.DOColor(Color.clear, duration);
+            downhillGuide.SetActive(false);
 
         GameObject.FindObjectOfType<Scroll>().GetComponent<Scroll>().canScroll = true;
 
         if (targetActionName == "dash")
         {
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(0.3f);
             UIManager.instance.ActivateUI(UI.HUD);
             UIManager.instance.ActivateUI(UI.Popup);
         }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public enum DashLevel
 {
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     [Space]
     public bool onTutorial = true;
+    public bool ReachLastFloor;
     public bool canJump;
     public bool canSliding;
     public bool canDownhill;
@@ -56,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator IncreaseDashLevelCoroutine;
     IEnumerator DecreaseDashLevelCoroutine;
+
+    public static event Action<DashLevel> DashAction;
 
     void Awake()
     {
@@ -211,7 +216,6 @@ public class PlayerController : MonoBehaviour
             onDash = true;
             hasDash = false;
 
-            thePlayerAnimation.PlayDashAnimation(onDash);
             thePlayerAudio.PlaySFX_Dash(0f);
 
             if (IncreaseDashLevelCoroutine != null)
@@ -231,8 +235,6 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyUp(UseKeys.dashKey))
             {
                 onDash = false;
-
-                thePlayerAnimation.PlayDashAnimation(onDash);
 
                 Invoke("ChargeDash", 0.5f);
 
@@ -264,7 +266,10 @@ public class PlayerController : MonoBehaviour
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f);
 
                 if(dashLevel < DashLevel.Max)
+                {
                     dashLevel++;
+                    DashAction.Invoke(dashLevel);
+                }
             }
 
             yield return null;
@@ -288,7 +293,10 @@ public class PlayerController : MonoBehaviour
                     }
 
                     if (DashLevel.None < dashLevel)
+                    {
                         dashLevel--;
+                        DashAction.Invoke(dashLevel);
+                    }
                 }
             }
             yield return null;
@@ -321,13 +329,20 @@ public class PlayerController : MonoBehaviour
         if (onInvincibility)
             return;
 
+        Sequence mySequence;
+
+        mySequence = DOTween.Sequence()
+            .Append(DOVirtual.Float(5.35f, 5.25f, 0.15f, CameraSize))
+            .AppendInterval(0.3f)
+            .Append(DOVirtual.Float(5.25f, 5.35f, 0.3f, CameraSize));
+
+        StartCoroutine(Invincibility(0.8f, 0.5f));
+        theStatus.hp -= damage;
+
         if (theStatus.hp <= 0)
         {
             Dead();
         }
-
-        StartCoroutine(Invincibility(0.8f, 0.5f));
-        theStatus.hp -= damage;
 
         if (!onTutorial)
         {
@@ -351,15 +366,20 @@ public class PlayerController : MonoBehaviour
 
     public void Recover(int value)
     {
+        thePlayerAudio.PlaySFX_Recover();
+        thePlayerParticle.PlayRecover();
+
         if (theStatus.maxHp <= theStatus.hp)
             return;
 
         theStatus.hp += value;
 
-        thePlayerAudio.PlaySFX_Recover();
-        thePlayerParticle.PlayRecover();
-
         UIManager.instance.theHp.CheckHp(theStatus.hp);
+    }
+
+    void CameraSize(float x)
+    {
+        Camera.main.orthographicSize = x;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

@@ -14,6 +14,14 @@ public class PlayerAnimation : BaseAnimation
         PlayWalkAnimation(true);
     }
 
+    void Update()
+    {
+        if (DashLevel.One <= PlayerController.instance.dashLevel || PlayerController.instance.onDash)
+            PlayDashAnimation(true);
+        else
+            PlayDashAnimation(false);
+    }
+
     public void PlayWalkAnimation(bool state = true)
     {
         base.SetAnimationClip(anim, "walk", state);

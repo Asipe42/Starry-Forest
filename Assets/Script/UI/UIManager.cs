@@ -33,8 +33,11 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        ActivateUI(UI.HUD, false);
-        ActivateUI(UI.Popup, false);
+        if (PlayerController.instance.onTutorial)
+        {
+            ActivateUI(UI.HUD, false);
+            ActivateUI(UI.Popup, false);
+        }
     }
 
     public void ActivateUI(UI ui, bool state = true)

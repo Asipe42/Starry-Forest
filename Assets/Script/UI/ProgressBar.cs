@@ -15,6 +15,9 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] Color[] colors;
     public bool[] changedColor;
 
+    [Space]
+    public static bool onLast;
+
     FloorManager floorManager;
 
     void Awake()
@@ -56,7 +59,14 @@ public class ProgressBar : MonoBehaviour
         }
 
         if (gauge >= slider.maxValue)
+        {
             gauge = slider.maxValue;
+            
+            if (!onLast)
+            {
+                onLast = true;
+            }
+        }
     }
 
     void ChangeColor(Color nextColor)
