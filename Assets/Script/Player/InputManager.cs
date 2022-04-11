@@ -12,7 +12,14 @@ public static class UseKeys
 
 public class InputManager : MonoBehaviour
 {
+    public static InputManager instance;
+
     public bool onLock;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Update()
     {

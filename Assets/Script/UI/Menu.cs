@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum MenuType
 {
@@ -20,6 +20,9 @@ public class Menu : MonoBehaviour
     }
 
     [SerializeField] Guide guide;
+    [SerializeField] Setting setting;
+
+    [Space]
     [SerializeField] Bar theBar;
     [SerializeField] Text[] menus;
     [SerializeField] int normalFontSize = 45;
@@ -34,6 +37,7 @@ public class Menu : MonoBehaviour
     MenuType menuType = MenuType.NewGame;
 
     public bool onEnable;
+    public bool onLock;
 
     bool onUp;
     bool onDown;
@@ -79,6 +83,9 @@ public class Menu : MonoBehaviour
     void InputKey()
     {
         if (!onEnable)
+            return;
+
+        if (onLock)
             return;
 
         onUp = Input.GetKeyDown(KeyCode.UpArrow);
@@ -180,7 +187,7 @@ public class Menu : MonoBehaviour
                 Continue();
                 break;
             case MenuType.Option:
-                Option();
+                Setting();
                 break;
             case MenuType.Exit:
                 Exit();
@@ -193,23 +200,27 @@ public class Menu : MonoBehaviour
 
     void NewGame()
     {
+        onLock = true;
         guide.PopupGuide(true, 1, MenuType.NewGame);
     }
 
     void Continue()
     {
         Debug.Log("selected \"Continue\"");
+
         // TODO: Load saved Scene
     }
 
-    void Option()
+    void Setting()
     {
-        Debug.Log("selected \"Option\"");
-        // TODO: Popup Option
+        onLock = true;
+
+        setting.PopupSetting(true, 1);
     }
 
     void Exit()
     {
+        onLock = true;
         guide.PopupGuide(true, 1, MenuType.Exit);
     }
 }

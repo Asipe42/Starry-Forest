@@ -8,12 +8,19 @@ public class FloorGenerator : MonoBehaviour
     [SerializeField] Vector3 createPosition = new Vector3(153.6f, -0.8f, 0f);
     [SerializeField] Transform floorGroup;
 
-    public GameObject LastFloor;
+    public GameObject lastFloor;
 
-    public GameObject CreateFloor(Vector3 position)
+    public GameObject CreateFloor(Vector3 position, bool last = false)
     {
-        int _index = Random.Range(0, candidate.Length);
-        return Instantiate(candidate[_index], position + createPosition, Quaternion.identity, floorGroup);
+        if (last)
+        {
+            return Instantiate(lastFloor, position + createPosition, Quaternion.identity, floorGroup);
+        }
+        else
+        {
+            int _index = Random.Range(0, candidate.Length);
+            return Instantiate(candidate[_index], position + createPosition, Quaternion.identity, floorGroup);
+        }
     }
 
     public void DestroyFloor(GameObject floor)

@@ -7,6 +7,8 @@ public class Guide : MonoBehaviour
 {
     MenuType menuType = MenuType.NewGame;
 
+    Menu menu;
+
     [Header("UI")]
     [SerializeField] Transform box;
     [SerializeField] Image panel;
@@ -29,6 +31,8 @@ public class Guide : MonoBehaviour
 
     void Awake()
     {
+        menu = FindObjectOfType<Menu>();
+
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
     }
 
@@ -45,17 +49,20 @@ public class Guide : MonoBehaviour
 
     public void PopupGuide(bool state, int targetScale, MenuType menuType)
     {
-        this.menuType = menuType;
-        onGuide = true;
+        if (!onGuide)
+        {
+            this.menuType = menuType;
+            onGuide = true;
 
-        AudioManager.instance.PlaySFX(popupClip, 0, 1.2f, 0.8f);
+            AudioManager.instance.PlaySFX(popupClip, 0, 1.2f, 0.8f);
 
-        FadeInPanel(state);
-        SetScaleBox(targetScale);
-        SetText();
+            FadeInPanel(state);
+            SetScaleBox(targetScale);
+            SetText();
+        }
     }
 
-    public void FadeInPanel(bool state)
+    void FadeInPanel(bool state)
     {
         if (state)
             panel.DOColor(fadeColor, duration).SetEase(Ease.Linear);
@@ -63,7 +70,7 @@ public class Guide : MonoBehaviour
             panel.DOColor(new Color(0f, 0f, 0f, 0f), duration).SetEase(Ease.Linear);
     }
 
-    public void SetScaleBox(int targetScale)
+    void SetScaleBox(int targetScale)
     {
         box.DOScale(targetScale, duration).SetEase(Ease.OutSine);
     }
@@ -111,6 +118,7 @@ public class Guide : MonoBehaviour
     public void Cancle()
     {
         onGuide = false;
+        menu.onLock = false;
 
         AudioManager.instance.PlaySFX(popupClip, 0, 0.8f, 0.8f);
 

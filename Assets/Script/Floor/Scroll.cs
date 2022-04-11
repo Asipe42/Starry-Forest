@@ -14,11 +14,23 @@ public class Scroll : MonoBehaviour
     [SerializeField] FloorGenerator theFloorGenerator;
 
     public bool canScroll;
+    public bool createdLastFloor;
+
+    PlayerController playerController;
+
+    void Awake()
+    {
+        playerController = FindObjectOfType<PlayerController>();
+    }
 
     void Update()
     {
         if (ProgressBar.onLast && PlayerController.instance.ReachLastFloor)
+        {
             canScroll = false;
+            playerController.StopAction();
+            UIManager.instance.theResult.gameObject.SetActive(true);
+        }
 
         if (canScroll)
         {
@@ -43,8 +55,20 @@ public class Scroll : MonoBehaviour
     {
         if (ProgressBar.onLast)
         {
-            if (preFloors[0].transform.position.x <= deadline.x)
-                preFloors.Add(theFloorGenerator.CreateFloor(theFloorGenerator.LastFloor.transform.localPosition));
+            if (createdLastFloor)
+                return;
+
+            for (int i = 0; i < preFloors.Count; i++)
+            {
+                if (preFloors[i].transform.position.x <= deadline.x)
+                {
+                    createdLastFloor = true;
+
+                    preFloors.Add(theFloorGenerator.CreateFloor(preFloors[i].transform.localPosition, true));
+                    theFloorGenerator.DestroyFloor(preFloors[i]);
+                    preFloors.RemoveAt(i);
+                }
+            }
         }
         else
         {

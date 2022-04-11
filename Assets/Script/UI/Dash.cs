@@ -15,7 +15,6 @@ public class Dash : MonoBehaviour
     {
         PlayerController.DashAction -= FillDash;
         PlayerController.DashAction += FillDash;
-        Debug.Log("!");
     }
 
     void FillDash(DashLevel dashLevel)

@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [Space]
     public bool onTutorial = true;
     public bool ReachLastFloor;
+    public bool canMove = true;
     public bool canJump;
     public bool canSliding;
     public bool canDownhill;
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
     PlayerParticle thePlayerParticle;
     Status theStatus;
     SpriteRenderer spriteRenderer;
+    Rigidbody2D rigid;
 
     IEnumerator IncreaseDashLevelCoroutine;
     IEnumerator DecreaseDashLevelCoroutine;
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         thePlayerParticle = GetComponent<PlayerParticle>();
         theStatus = GetComponent<Status>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        rigid = GetComponent<Rigidbody2D>();
     }
 
     public void PermitAction(string name, bool state = true)
@@ -96,6 +99,9 @@ public class PlayerController : MonoBehaviour
     #region Jump
     public void Jump()
     {
+        if (!canMove)
+            return;
+
         if (!canJump)
             return;
 
@@ -111,6 +117,9 @@ public class PlayerController : MonoBehaviour
     #region Downhill
     public void Downhill()
     {
+        if (!canMove)
+            return;
+
         if (!canDownhill)
             return;
 
@@ -158,6 +167,9 @@ public class PlayerController : MonoBehaviour
     #region Sliding
     public void Sliding()
     {
+        if (!canMove)
+            return;
+
         if (!canSliding)
             return;
 
@@ -205,6 +217,9 @@ public class PlayerController : MonoBehaviour
     #region Dash
     public void Dash()
     {
+        if (!canMove)
+            return;
+
         if (!canDash)
             return;
 
@@ -349,7 +364,12 @@ public class PlayerController : MonoBehaviour
             AudioManager.instance.PlaySFX(clip);
         }    
 
-        UIManager.instance.theHp.CheckHp(theStatus.hp);
+        UIManager.instance.theHeart.CheckHp(theStatus.hp);
+    }
+
+    void CameraSize(float x)
+    {
+        Camera.main.orthographicSize = x;
     }
 
     void Dead()
@@ -374,12 +394,19 @@ public class PlayerController : MonoBehaviour
 
         theStatus.hp += value;
 
-        UIManager.instance.theHp.CheckHp(theStatus.hp);
+        UIManager.instance.theHeart.CheckHp(theStatus.hp);
     }
 
-    void CameraSize(float x)
+    public void StopAction()
     {
-        Camera.main.orthographicSize = x;
+        canMove = false;
+        dashLevel = DashLevel.None;
+
+        thePlayerAnimation.PlayDownhillAnimation(false);
+        thePlayerAnimation.PlayJumpAnimation(false);
+        thePlayerAnimation.PlaySlidingAnimation(false);
+        thePlayerAnimation.PlayDashAnimation(false);
+        thePlayerAnimation.PlayWalkAnimation(false);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -389,13 +416,20 @@ public class PlayerController : MonoBehaviour
             if (!onSliding)
                 onWalk = true;
 
-            onJump = false;
+            if (rigid.velocity.y <= 0)
+                onJump = false;
+
             onDownhill = false;
             hasDownhill = true;
 
-            thePlayerAnimation.PlayJumpAnimation(false);
-            thePlayerAnimation.PlayDownhillAnimation(false);
-            thePlayerAnimation.PlayWalkAnimation(true);
+            if (canMove)
+            {
+                if (rigid.velocity.y <= 0)
+                    thePlayerAnimation.PlayJumpAnimation(false);
+
+                thePlayerAnimation.PlayDownhillAnimation(false);
+                thePlayerAnimation.PlayWalkAnimation(true);
+            }
         }
     }
 

@@ -4,7 +4,6 @@ using DG.Tweening;
 
 public class FloorManager : MonoBehaviour
 {
-    [SerializeField] Text text;
     [SerializeField] FloorGenerator theFloorGenerator;
     [SerializeField] FloorTemplate[] floorSet;
 
@@ -17,7 +16,6 @@ public class FloorManager : MonoBehaviour
 
     public void LevelUp()
     {
-        text.DOColor(Color.red, 2f);
         level++;
         SetCandidate(level);
     }
