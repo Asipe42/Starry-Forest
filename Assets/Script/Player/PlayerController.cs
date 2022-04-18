@@ -375,6 +375,9 @@ public class PlayerController : MonoBehaviour
     void Dead()
     {
         // TO-DO: Create Dead Logic
+
+        StopAllCoroutines();
+
         Loading.LoadScene("Stage_01");
     }
 
@@ -400,6 +403,7 @@ public class PlayerController : MonoBehaviour
     public void StopAction()
     {
         canMove = false;
+        onWalk = false;
         dashLevel = DashLevel.None;
 
         thePlayerAnimation.PlayDownhillAnimation(false);
@@ -413,7 +417,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            if (!onSliding)
+            if (!ReachLastFloor && !onSliding)
                 onWalk = true;
 
             if (rigid.velocity.y <= 0)

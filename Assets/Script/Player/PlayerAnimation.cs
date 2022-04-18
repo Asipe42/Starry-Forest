@@ -9,13 +9,10 @@ public class PlayerAnimation : BaseAnimation
         anim = GetComponent<Animator>();
     }
 
-    void Start()
-    {
-        PlayWalkAnimation(true);
-    }
-
     void Update()
     {
+        PlayWalkAnimation(PlayerController.instance.onWalk);
+
         if (DashLevel.One <= PlayerController.instance.dashLevel || PlayerController.instance.onDash)
             PlayDashAnimation(true);
         else

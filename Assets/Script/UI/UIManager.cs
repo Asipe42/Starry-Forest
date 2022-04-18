@@ -117,6 +117,7 @@ public class UIManager : MonoBehaviour
         {
             case Children_Popup.Result:
                 theResult.gameObject.SetActive(state);
+                StartCoroutine(theResult.ShowResult());
                 break;
             case Children_Popup.Option:
                 if (state)

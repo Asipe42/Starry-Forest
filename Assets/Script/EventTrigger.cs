@@ -55,7 +55,7 @@ public class EventTrigger : MonoBehaviour
             }
 
             playerAnimation.SetAnimationClipSpeed(0f);
-            playerController.onWalk = false;
+            //playerController.onWalk = false;
 
             panel.DOColor(new Color(panelColor.r, panelColor.g, panelColor.b, alpha), duration);
             guide.DOColor(Color.white, duration);

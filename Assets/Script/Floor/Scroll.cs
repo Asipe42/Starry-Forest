@@ -6,6 +6,8 @@ public class Scroll : MonoBehaviour
     [SerializeField] List<GameObject> preFloors;
     [SerializeField] Transform[] backgroundLayer_01;
     [SerializeField] Transform[] backgroundLayer_02;
+    [SerializeField] ParticleSystem particle;
+
 
     [SerializeField] Vector3 deadline = new Vector3(-40f, 0f, 0f);
     [SerializeField] Vector3 reposition = new Vector3(115.2f, 0f, 0f);
@@ -15,40 +17,65 @@ public class Scroll : MonoBehaviour
 
     public bool canScroll;
     public bool createdLastFloor;
+    public bool onEnd;
 
     PlayerController playerController;
 
     void Awake()
     {
         playerController = FindObjectOfType<PlayerController>();
+
+        PlayerController.DashAction -= ScrollParticle;
+        PlayerController.DashAction += ScrollParticle;
+    }
+
+    void Start()
+    {
+        ScrollParticle(DashLevel.None);
     }
 
     void Update()
     {
         if (ProgressBar.onLast && PlayerController.instance.ReachLastFloor)
         {
-            canScroll = false;
-            playerController.StopAction();
-            UIManager.instance.theResult.gameObject.SetActive(true);
+            if (!onEnd)
+            {
+                onEnd = true;
+                canScroll = false;
+
+                playerController.StopAction();
+                UIManager.instance.Activate_Popup_Children(Children_Popup.Result);
+            }
         }
 
         if (canScroll)
         {
-            Scrolling();
+            ScrollBackground();
+            ScrollFloor();
             Reposition();
         }
     }
 
-    void Scrolling()
+    void ScrollParticle(DashLevel dashLevel)
     {
-        foreach (var floor in preFloors)
-            floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
+        var temp = particle.velocityOverLifetime;
 
+        temp.xMultiplier = -1 * (1.5f * (float)dashLevel);
+    }
+
+    void ScrollBackground()
+    {       
         foreach (var layer in backgroundLayer_01)
             layer.Translate(Vector2.left * scrollSpeed_background[0] * Time.deltaTime);
 
         foreach (var layer in backgroundLayer_02)
             layer.Translate(Vector2.left * scrollSpeed_background[1] * Time.deltaTime);
+    }
+
+    void ScrollFloor()
+    {
+        foreach (var floor in preFloors)
+            floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
     }
 
     void Reposition()
