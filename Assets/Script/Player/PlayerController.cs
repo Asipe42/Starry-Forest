@@ -105,6 +105,9 @@ public class PlayerController : MonoBehaviour
         if (!canJump)
             return;
 
+        if (onSliding)
+            return;
+
         onWalk = false;
         onJump = true;
 
