@@ -13,7 +13,7 @@ public class Option : MonoBehaviour
     public void OnSetting()
     {
         gameObject.SetActive(false);
-        UIManager.instance.Activate_Popup_Children(Children_Popup.Setting);
+        //UIManager.instance.Activate_Popup_Children(Children_Popup.Setting);
     }
 
     public void GoTitle()
@@ -24,6 +24,6 @@ public class Option : MonoBehaviour
 
     public void Cancle()
     {
-        UIManager.instance.Activate_Popup_Children(Children_Popup.Option, false);
+        //UIManager.instance.Activate_Popup_Children(Children_Popup.Option, false);
     }
 }

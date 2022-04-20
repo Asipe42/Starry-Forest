@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public enum UI
 {
     HUD = 0,
+    Effect,
     Popup
 }
 
@@ -28,7 +28,11 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
+    [SerializeField] DOTweenAnimation optionPanelAnim;
+
+    [Space]
     public GameObject UI_HUD;
+    public GameObject UI_Effect;
     public GameObject UI_Popup;
 
     [Space]
@@ -67,7 +71,7 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             bool onOption = theOption.gameObject.activeSelf;
-            Activate_Popup_Children(Children_Popup.Option, !onOption);
+            ShowOption(!onOption);
         }
     }
 
@@ -86,57 +90,26 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void Activate_HUD_Children(Children_HUD children, bool state = true)
+    public void ShowOption(bool state)
     {
-        if (!UI_HUD.activeSelf)
-            return;
+        optionPanelAnim.DOPlay();
 
-        switch (children)
+        if (state)
         {
-            case Children_HUD.Heart:
-                theHeart.gameObject.SetActive(state);
-                break;
-            case Children_HUD.Blood:
-                theBlood.gameObject.SetActive(state);
-                break;
-            case Children_HUD.Rank:
-                theRank.gameObject.SetActive(state);
-                break;
-            case Children_HUD.Score:
-                theScore.gameObject.SetActive(state);
-                break;
+            InputManager.instance.onLock = true;
+            Time.timeScale = 0f;
         }
+        else
+        {
+            InputManager.instance.onLock = false;
+            Time.timeScale = 1f;
+        }
+
+        theOption.gameObject.SetActive(state);
     }
 
-    public void Activate_Popup_Children(Children_Popup children, bool state = true)
+    public void ShowResult(bool state)
     {
-        if (!UI_Popup.activeSelf)
-            return;
-
-        switch (children)
-        {
-            case Children_Popup.Result:
-                theResult.gameObject.SetActive(state);
-                StartCoroutine(theResult.ShowResult());
-                break;
-            case Children_Popup.Option:
-                if (state)
-                {
-                    InputManager.instance.onLock = true;
-                    Time.timeScale = 0f;
-                }
-                else
-                {
-                    InputManager.instance.onLock = false;
-                    Time.timeScale = 1f;
-                }
-                theOption.gameObject.SetActive(state);
-                break;
-            case Children_Popup.Setting:
-                theSetting.gameObject.SetActive(state);
-                break;
-            default:
-                break;
-        }
+        theResult.gameObject.SetActive(state);
     }
 }

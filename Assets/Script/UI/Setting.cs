@@ -89,7 +89,7 @@ public class Setting : MonoBehaviour
                 break;
             case State.InGame:
                 gameObject.SetActive(false);
-                UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
+                //UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
                 break;
         }
     }
@@ -103,7 +103,7 @@ public class Setting : MonoBehaviour
                 break;
             case State.InGame:
                 gameObject.SetActive(false);
-                UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
+                //UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
                 break;
         }
     }

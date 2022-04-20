@@ -894,6 +894,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3955853587913369075}
     m_Modifications:
+    - target: {fileID: 4948211843298355690, guid: 950777fbe772d264aacccf553a06ae42, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.15
+      objectReference: {fileID: 0}
     - target: {fileID: 5732277761355039953, guid: 950777fbe772d264aacccf553a06ae42, type: 3}
       propertyPath: m_Name
       value: Obstacle_03
@@ -904,7 +908,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5732277761355039964, guid: 950777fbe772d264aacccf553a06ae42, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.95
+      value: -1.3
       objectReference: {fileID: 0}
     - target: {fileID: 5732277761355039964, guid: 950777fbe772d264aacccf553a06ae42, type: 3}
       propertyPath: m_LocalPosition.y

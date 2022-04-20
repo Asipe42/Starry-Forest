@@ -31,6 +31,8 @@ public class Scroll : MonoBehaviour
 
     void Start()
     {
+        particle = GameObject.FindGameObjectWithTag("FieldParticle").GetComponent<ParticleSystem>();
+
         ScrollParticle(DashLevel.None);
     }
 
@@ -44,7 +46,7 @@ public class Scroll : MonoBehaviour
                 canScroll = false;
 
                 playerController.StopAction();
-                UIManager.instance.Activate_Popup_Children(Children_Popup.Result);
+                UIManager.instance.ShowResult(true);
             }
         }
 
