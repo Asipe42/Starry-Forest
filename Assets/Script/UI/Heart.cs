@@ -15,7 +15,7 @@ public class Heart : MonoBehaviour
 
     Status theStatus;
 
-    const float FILL_VALUE = 2f;
+    const float FILL_VALUE = 5f;
 
     int hp;
 
@@ -52,7 +52,6 @@ public class Heart : MonoBehaviour
 
     IEnumerator FillHeart(int index, float cooltime, FillState state)
     {
-
         if (state == FillState.Down)
         {
             while (images[index].fillAmount > 0)

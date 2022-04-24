@@ -8,12 +8,16 @@ public class AudioController : MonoBehaviour
 
     [Header("Fade")]
     [SerializeField] float defaultVolume = 0;
-    [SerializeField] float fadeOutDelay;
-    [SerializeField] float fadeOutSpeed;
-    [SerializeField] float fadeOutCooltime;
-    [SerializeField] float fadeOutTargetVolume;
+    [SerializeField] float fadeDelay;
+    [SerializeField] float fadeSpeed;
+    [SerializeField] float fadeCooltime;
+    [SerializeField] float fadeTargetVolume;
     [SerializeField] bool onFadeOut;
+    [SerializeField] bool onFadeIn;
     [SerializeField] bool onBGM;
+
+    Coroutine FadeOutCoroutine;
+    Coroutine FadeInCoroutine;
 
     void Start()
     {
@@ -24,7 +28,12 @@ public class AudioController : MonoBehaviour
 
         if (onFadeOut)
         {
-            StartCoroutine(FadeOut(fadeOutDelay));
+            FadeOut(fadeDelay);
+        }
+
+        if (onFadeIn)
+        {
+            FadeIn(fadeDelay);
         }
 
         if (onBGM)
@@ -35,7 +44,23 @@ public class AudioController : MonoBehaviour
         // TODO: create another audio function
     }
 
-    public IEnumerator FadeOut(float delay)
+    public void FadeOut(float delay)
+    {
+        if (FadeInCoroutine != null)
+            StopCoroutine(FadeInCoroutine);
+
+        FadeOutCoroutine = StartCoroutine(FadeOutLogic(delay));
+    }
+
+    public void FadeIn(float delay)
+    {
+        if (FadeOutCoroutine != null)
+            StopCoroutine(FadeOutCoroutine);
+
+        FadeInCoroutine = StartCoroutine(FadeInLogic(delay));
+    }
+
+    IEnumerator FadeOutLogic(float delay)
     {
         yield return new WaitForSeconds(delay);
 
@@ -44,11 +69,27 @@ public class AudioController : MonoBehaviour
             if (!audio.isPlaying)
                 audio.Play();
 
-            while (audio.volume <= fadeOutTargetVolume)
+            while (audio.volume <= fadeTargetVolume)
             {
-                audio.volume += fadeOutSpeed * Time.deltaTime;
-                yield return new WaitForSeconds(fadeOutCooltime);
+                audio.volume += fadeSpeed * Time.unscaledDeltaTime;
+                yield return new WaitForSecondsRealtime(fadeCooltime);
             }
+        }
+    }
+
+    IEnumerator FadeInLogic(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        foreach (var audio in audioSource)
+        {
+            while (audio.volume > 0)
+            {
+                audio.volume -= fadeSpeed * Time.unscaledDeltaTime;
+                yield return new WaitForSecondsRealtime(fadeCooltime);
+            }
+            
+            audio.Pause();
         }
     }
 
@@ -56,6 +97,6 @@ public class AudioController : MonoBehaviour
     {
         yield return new WaitUntil(() => !PlayerController.instance.onTutorial);
 
-        StartCoroutine(FadeOut(0));
+        StartCoroutine(FadeOutLogic(1));
     }
 }

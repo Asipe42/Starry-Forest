@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class Option : MonoBehaviour
 {
+    Setting setting;
+
     [SerializeField] string currentSceneName;
+
+    void Awake()
+    {
+        setting = FindObjectOfType<Setting>();
+    }
 
     public void Restart()
     {
@@ -13,7 +20,8 @@ public class Option : MonoBehaviour
     public void OnSetting()
     {
         gameObject.SetActive(false);
-        //UIManager.instance.Activate_Popup_Children(Children_Popup.Setting);
+        UIManager.instance.onSetting = true;
+        setting.gameObject.SetActive(true);
     }
 
     public void GoTitle()
@@ -24,6 +32,6 @@ public class Option : MonoBehaviour
 
     public void Cancle()
     {
-        //UIManager.instance.Activate_Popup_Children(Children_Popup.Option, false);
+        UIManager.instance.ShowOption(false);
     }
 }

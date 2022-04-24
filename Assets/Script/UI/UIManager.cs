@@ -44,6 +44,12 @@ public class UIManager : MonoBehaviour
     public Option theOption;
     public Setting theSetting;
 
+    AudioController audioController;
+
+    public bool canOption;
+    public bool onOption;
+    public bool onSetting;
+
     void Awake()
     {
         instance = this;
@@ -55,6 +61,8 @@ public class UIManager : MonoBehaviour
         theResult = GameObject.FindObjectOfType<Result>().GetComponent<Result>();
         theOption = GameObject.FindObjectOfType<Option>().GetComponent<Option>();
         theSetting = GameObject.FindObjectOfType<Setting>().GetComponent<Setting>();
+
+        audioController = FindObjectOfType<AudioController>();
     }
 
     void Start()
@@ -64,6 +72,13 @@ public class UIManager : MonoBehaviour
             ActivateUI(UI.HUD, false);
             ActivateUI(UI.Popup, false);
         }
+
+        Invoke("OnOption", 4f);
+    }
+
+    void OnOption()
+    {
+        canOption = true;
     }
 
     void Update()
@@ -85,22 +100,33 @@ public class UIManager : MonoBehaviour
             case UI.Popup:
                 UI_Popup.SetActive(state);
                 break;
-            default:
-                break;
         }
     }
 
     public void ShowOption(bool state)
     {
-        optionPanelAnim.DOPlay();
+        if (!canOption)
+            return;
+
+        if (onSetting)
+            return;
+
+        onOption = state;
+
 
         if (state)
         {
+            optionPanelAnim.DOPlay();
+            audioController.FadeIn(0);
+            PlayerController.instance.onWalk = false;
             InputManager.instance.onLock = true;
             Time.timeScale = 0f;
         }
         else
         {
+            optionPanelAnim.DORewind();
+            audioController.FadeOut(0);
+            PlayerController.instance.onWalk = true;
             InputManager.instance.onLock = false;
             Time.timeScale = 1f;
         }
@@ -111,5 +137,6 @@ public class UIManager : MonoBehaviour
     public void ShowResult(bool state)
     {
         theResult.gameObject.SetActive(state);
+        StartCoroutine(theResult.ShowResult());
     }
 }

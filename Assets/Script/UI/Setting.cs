@@ -12,19 +12,23 @@ public class Setting : MonoBehaviour
 
     [SerializeField] State state = State.Title;
     [SerializeField] Menu menu;
+    [SerializeField] Option option;
     [SerializeField] GameObject sound;
     [SerializeField] GameObject control;
     [SerializeField] Image panel;
     [SerializeField] Color fadeColor;
     [SerializeField] float duration;
 
+
     public bool onSetting;  
 
     AudioClip popupClip;
+    AudioClip tapClip;
 
     void Awake()
     {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
+        tapClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Tap");
     }
 
     void Update()
@@ -71,10 +75,12 @@ public class Setting : MonoBehaviour
             case "sound":
                 sound.SetActive(true);
                 control.SetActive(false);
+                AudioManager.instance.PlaySFX(tapClip);
                 break;
             case "control":
                 sound.SetActive(false);
                 control.SetActive(true);
+                AudioManager.instance.PlaySFX(tapClip);
                 break;
         }
     }
@@ -88,8 +94,9 @@ public class Setting : MonoBehaviour
                 //TO-DO
                 break;
             case State.InGame:
+                UIManager.instance.onSetting = false;
                 gameObject.SetActive(false);
-                //UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
+                option.gameObject.SetActive(true);
                 break;
         }
     }
@@ -102,8 +109,9 @@ public class Setting : MonoBehaviour
                 Exit();
                 break;
             case State.InGame:
+                UIManager.instance.onSetting = false;
                 gameObject.SetActive(false);
-                //UIManager.instance.Activate_Popup_Children(Children_Popup.Option);
+                option.gameObject.SetActive(true);
                 break;
         }
     }
