@@ -105,6 +105,9 @@ public class UIManager : MonoBehaviour
 
     public void ShowOption(bool state)
     {
+        if (PlayerController.instance.onTutorial)
+            return;
+
         if (!canOption)
             return;
 

@@ -27,7 +27,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] Image messageBox;
     [SerializeField] TextMeshProUGUI name;
     [SerializeField] TextMeshProUGUI message;
-    [SerializeField] GameObject arrow;
+    [SerializeField] Image arrow;
 
     [SerializeField] int stage;
     [SerializeField] int branch;
@@ -45,6 +45,8 @@ public class DialogSystem : MonoBehaviour
     AudioClip messageClip;
 
     AudioSource audioSource;
+
+    IEnumerator typingCoroutine;
 
     void Awake()
     {
@@ -119,9 +121,12 @@ public class DialogSystem : MonoBehaviour
             {
                 onTyping = false;
 
-                StopCoroutine(TypingMessage());
+                audioSource.Stop();
+                StopCoroutine("TypingMessage");
+
                 message.text = dialogs[currentDialogIndex].message;
-                arrow.SetActive(true);
+                arrow.DOKill();
+                arrow.DOFade(1f, 0.75f).SetLoops(-1, LoopType.Yoyo);
 
                 return false;
             }
@@ -132,10 +137,7 @@ public class DialogSystem : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < speakers.Length; i++)
-                {
-                    SetActivateObjects(false);
-                }
+                SetActivateObjects(false);
 
                 return true;
             }
@@ -163,12 +165,14 @@ public class DialogSystem : MonoBehaviour
         onTyping = false;
         audioSource.Stop();
 
-        arrow.SetActive(true);
+        arrow.DOKill();
+        arrow.DOFade(1f, 0.75f).SetLoops(-1, LoopType.Yoyo);
     }
 
     void SetNextDialog()
     {
-        arrow.gameObject.SetActive(false);
+        arrow.DOKill();
+        arrow.DOFade(0f, 0.25f);
 
         currentDialogIndex++;
         currentSpeakerIndex = dialogs[currentDialogIndex].speakerIndex;
@@ -186,22 +190,23 @@ public class DialogSystem : MonoBehaviour
 
         name.text = dialogs[currentDialogIndex].name;
         message.text = dialogs[currentDialogIndex].message;
-        StartCoroutine(TypingMessage());
+
+        StartCoroutine("TypingMessage");
     }
 
     IEnumerator FadePortrait()
     {
-        portrait.DOFade(0f, 0.25f);
-        yield return new WaitForSeconds(0.25f);
+        portrait.DOFade(0f, 0.2f);
+        yield return new WaitForSeconds(0.1f);
         portrait.sprite = speakers[currentSpeakerIndex].portraitSprite;
-        portrait.DOFade(1f, 0.25f);
+        portrait.DOFade(1f, 0.2f);
     }
     
     void SetActivateObjects(bool visible)
     {
         if (visible)
         {
-            Panel.DOFade(1f, 1f);
+            Panel.DOFade(1f, 0.75f);
             messageBox.DOFade(1f, 0.5f);
             portrait.DOFade(1f, 0.5f);
             name.DOFade(1f, 0.5f);
@@ -210,11 +215,11 @@ public class DialogSystem : MonoBehaviour
        
         if (!visible)
         {
-            Panel.DOFade(0f, 1f);
-            messageBox.DOFade(0f, 0.5f);
-            portrait.DOFade(0f, 0.5f);
-            name.DOFade(0f, 0.5f);
-            message.DOFade(0f, 0.5f);
+            Panel.DOFade(0f, 0.5f);
+            messageBox.DOFade(0f, 0.25f);
+            portrait.DOFade(0f, 0.25f);
+            name.DOFade(0f, 0.25f);
+            message.DOFade(0f, 0.25f);
         }
     }
 }

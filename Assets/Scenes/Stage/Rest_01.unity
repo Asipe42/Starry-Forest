@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 4.5
+    OrthographicSize: 4
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -265,7 +265,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 121179205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44, y: -0.02050006, z: -10}
+  m_LocalPosition: {x: 43.5, y: -0.02050006, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1486622910}
@@ -680,6 +680,88 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &317892669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 317892670}
+  - component: {fileID: 317892671}
+  m_Layer: 0
+  m_Name: Emotion3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &317892670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317892669}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1020335280}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &317892671
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317892669}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1897831107
+  m_SortingLayer: 3
+  m_SortingOrder: 20
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &371438382
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,8 +831,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1897831107
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_Sprite: {fileID: -3896696309162182690, guid: eea785435ec85a44bb9a4aea6ac9a43b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -895,6 +977,7 @@ GameObject:
   - component: {fileID: 474927117}
   - component: {fileID: 474927119}
   - component: {fileID: 474927118}
+  - component: {fileID: 474927121}
   - component: {fileID: 474927120}
   m_Layer: 5
   m_Name: Arrow
@@ -967,7 +1050,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 474927116}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
   m_Name: 
@@ -1038,7 +1121,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -1046,9 +1129,9 @@ MonoBehaviour:
   animationType: 7
   targetType: 3
   forcedTargetType: 0
-  autoPlay: 1
+  autoPlay: 0
   useTargetAsV3: 0
-  endValueFloat: 0
+  endValueFloat: 1
   endValueV3: {x: 0, y: 0, z: 0}
   endValueV2: {x: 0, y: 0}
   endValueColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1067,6 +1150,21 @@ MonoBehaviour:
   optionalRotationMode: 0
   optionalScrambleMode: 0
   optionalString: 
+--- !u!114 &474927121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474927116}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 40306178, guid: aa0b1eebb5db27a419fa4564bbe5c9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: 0
+  onEnableBehaviour: 2
+  onDisableBehaviour: 2
 --- !u!1 &540051399
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,7 +1405,7 @@ MonoBehaviour:
   messageBox: {fileID: 178325665}
   name: {fileID: 1051020547}
   message: {fileID: 1447610068}
-  arrow: {fileID: 474927116}
+  arrow: {fileID: 474927118}
   stage: 1
   branch: 2
   dialogDB: {fileID: 11400000, guid: 8a2bfb88855e55e4caffe9464b6323cf, type: 2}
@@ -1317,7 +1415,7 @@ MonoBehaviour:
   - portraitSprite: {fileID: 21300000, guid: 4fa9779ed979f564aa596b4a5c8a4cf5, type: 3}
     portraitScale: {x: -1, y: 1, z: 1}
   dialogs: []
-  typingSpeed: 0.01
+  typingSpeed: 0.025
   onStart: 1
 --- !u!1 &582774125
 GameObject:
@@ -1579,6 +1677,12 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: -6466710416933482875, guid: d3b50e239c6c1c746933db61315981ff, type: 2}
     value: {fileID: 755318706}
+  - key: {fileID: 3851901252534249144, guid: d3b50e239c6c1c746933db61315981ff, type: 2}
+    value: {fileID: 1088914691}
+  - key: {fileID: 2519428155467851790, guid: d3b50e239c6c1c746933db61315981ff, type: 2}
+    value: {fileID: 1881084251}
+  - key: {fileID: 519392547469048009, guid: d3b50e239c6c1c746933db61315981ff, type: 2}
+    value: {fileID: 371438385}
   m_ExposedReferences:
     m_References:
     - cadd404af8155634bb0d6a88c0a77c64: {fileID: 121179206}
@@ -1666,7 +1770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717936852}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 48, y: -0.75, z: 0}
+  m_LocalPosition: {x: 48.25, y: -0.75, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 540051400}
@@ -1709,9 +1813,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 404927651
-  m_SortingLayer: 2
-  m_SortingOrder: 10
+  m_SortingLayerID: 1897831107
+  m_SortingLayer: 3
+  m_SortingOrder: 20
   m_Sprite: {fileID: 4296193443984631328, guid: b6291dcd0e3721044aaea40a97756fc0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1899,7 +2003,7 @@ MonoBehaviour:
   messageBox: {fileID: 178325665}
   name: {fileID: 1051020547}
   message: {fileID: 1447610068}
-  arrow: {fileID: 474927116}
+  arrow: {fileID: 474927118}
   stage: 1
   branch: 3
   dialogDB: {fileID: 11400000, guid: 8a2bfb88855e55e4caffe9464b6323cf, type: 2}
@@ -1909,7 +2013,7 @@ MonoBehaviour:
   - portraitSprite: {fileID: 21300000, guid: 4fa9779ed979f564aa596b4a5c8a4cf5, type: 3}
     portraitScale: {x: -1, y: 1, z: 1}
   dialogs: []
-  typingSpeed: 0.01
+  typingSpeed: 0.025
   onStart: 1
 --- !u!1 &833805416
 GameObject:
@@ -2130,7 +2234,7 @@ MonoBehaviour:
   messageBox: {fileID: 178325665}
   name: {fileID: 1051020547}
   message: {fileID: 1447610068}
-  arrow: {fileID: 474927116}
+  arrow: {fileID: 474927118}
   stage: 1
   branch: 1
   dialogDB: {fileID: 11400000, guid: 8a2bfb88855e55e4caffe9464b6323cf, type: 2}
@@ -2140,7 +2244,7 @@ MonoBehaviour:
   - portraitSprite: {fileID: 21300000, guid: 4fa9779ed979f564aa596b4a5c8a4cf5, type: 3}
     portraitScale: {x: -1, y: 1, z: 1}
   dialogs: []
-  typingSpeed: 0.01
+  typingSpeed: 0.025
   onStart: 1
 --- !u!114 &982572950
 MonoBehaviour:
@@ -2298,6 +2402,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1779499430}
+  - {fileID: 1080746480}
+  - {fileID: 317892670}
   m_Father: {fileID: 1143459303}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2505,6 +2611,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1051020545}
   m_CullTransparentMesh: 1
+--- !u!1 &1080746479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1080746480}
+  - component: {fileID: 1080746481}
+  m_Layer: 0
+  m_Name: Emotion2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1080746480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080746479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1020335280}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1080746481
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080746479}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1897831107
+  m_SortingLayer: 3
+  m_SortingOrder: 20
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1088914688
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,7 +2869,7 @@ MonoBehaviour:
   messageBox: {fileID: 178325665}
   name: {fileID: 1051020547}
   message: {fileID: 1447610068}
-  arrow: {fileID: 474927116}
+  arrow: {fileID: 474927118}
   stage: 1
   branch: 4
   dialogDB: {fileID: 11400000, guid: 8a2bfb88855e55e4caffe9464b6323cf, type: 2}
@@ -2691,7 +2879,7 @@ MonoBehaviour:
   - portraitSprite: {fileID: 21300000, guid: 4fa9779ed979f564aa596b4a5c8a4cf5, type: 3}
     portraitScale: {x: -1, y: 1, z: 1}
   dialogs: []
-  typingSpeed: 0.01
+  typingSpeed: 0.025
   onStart: 1
 --- !u!1 &1118493816
 GameObject:
@@ -2852,7 +3040,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.35
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2876,7 +3064,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119507967}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44, y: -0.02050006, z: -10}
+  m_LocalPosition: {x: 39.75, y: -0.02050006, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4105,9 +4293,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b137ad1596cb1204c8fe543d0f5308bd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.75
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -4296,7 +4484,7 @@ GameObject:
   - component: {fileID: 1779499430}
   - component: {fileID: 1779499431}
   m_Layer: 0
-  m_Name: Emotion
+  m_Name: Emotion1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4364,7 +4552,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1787774827
@@ -4735,7 +4923,7 @@ MonoBehaviour:
   messageBox: {fileID: 178325665}
   name: {fileID: 1051020547}
   message: {fileID: 1447610068}
-  arrow: {fileID: 474927116}
+  arrow: {fileID: 474927118}
   stage: 1
   branch: 5
   dialogDB: {fileID: 11400000, guid: 8a2bfb88855e55e4caffe9464b6323cf, type: 2}
@@ -4745,7 +4933,7 @@ MonoBehaviour:
   - portraitSprite: {fileID: 21300000, guid: 4fa9779ed979f564aa596b4a5c8a4cf5, type: 3}
     portraitScale: {x: -1, y: 1, z: 1}
   dialogs: []
-  typingSpeed: 0.01
+  typingSpeed: 0.025
   onStart: 1
 --- !u!1 &1886561253
 GameObject:

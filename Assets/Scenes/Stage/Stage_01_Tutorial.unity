@@ -1756,8 +1756,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultVolume: 0
   delay: 0
-  duration: 0
-  target: 0
+  duration: 10
+  target: 0.5
 --- !u!1 &679922553
 GameObject:
   m_ObjectHideFlags: 0
