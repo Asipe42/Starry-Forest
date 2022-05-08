@@ -1,27 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using DG.Tweening;
 
 public class Setting : MonoBehaviour
 {
-    enum Version
-    {
-        Title = 0,
-        InGame
-    }
-
     enum Tap
     {
         Sound = 0,
         Control
     }
 
-    [SerializeField] Menu menu;
+    public event Action<bool> onSettingEvent;
+
     [SerializeField] Option option;
 
-    [Space]
+    [Header("Taps")]
     [SerializeField] GameObject sound;
     [SerializeField] GameObject control;
+
+    [Header("UI")]
+    [SerializeField] Transform box;
     [SerializeField] Image soundTapButtonImage;
     [SerializeField] Image controlTapButtonImage;
     [SerializeField] Image panel;
@@ -29,7 +29,15 @@ public class Setting : MonoBehaviour
     [SerializeField] Color selectedColor;
     [SerializeField] float duration;
 
-    Version version = Version.Title;
+    [Header("Sound")]
+    [SerializeField] AudioMixer mixer;
+    [SerializeField] Slider BGMSlider;
+    [SerializeField] Slider SFXSlider;
+
+    public const string MIXER_BGM = "BGMVolume";
+    public const string MIXER_SFX = "SFXVolume";
+
+    SceneType sceneType = SceneType.Title;
     Tap tap = Tap.Sound;
 
     bool onSetting;  
@@ -41,6 +49,12 @@ public class Setting : MonoBehaviour
     {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
         tapClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Tap");
+    }
+
+    void Start()
+    {
+        BGMSlider.onValueChanged.AddListener(SetBGMVolume);
+        SFXSlider.onValueChanged.AddListener(SetSFXVolume);
     }
 
     void Update()
@@ -74,12 +88,12 @@ public class Setting : MonoBehaviour
         if (state)
             panel.DOColor(fadeColor, duration).SetEase(Ease.Linear);
         else
-            panel.DOColor(new Color(0f, 0f, 0f, 0f), duration).SetEase(Ease.Linear);
+            panel.DOColor(Color.clear, duration).SetEase(Ease.Linear);
     }
 
     void SetScaleBox(int targetScale)
     {
-        transform.DOScale(targetScale, duration).SetEase(Ease.OutCubic);
+        box.transform.DOScale(targetScale, duration).SetEase(Ease.OutCubic);
     }
     #endregion
 
@@ -124,13 +138,13 @@ public class Setting : MonoBehaviour
     #region Button Function
     public void Apply()
     {
-        switch (version)
+        switch (sceneType)
         {
-            case Version.Title:
+            case SceneType.Title:
                 Exit();
                 //TO-DO
                 break;
-            case Version.InGame:
+            case SceneType.InGame:
                 UIManager.instance.onSetting = false;
                 gameObject.SetActive(false);
                 option.gameObject.SetActive(true);
@@ -140,12 +154,12 @@ public class Setting : MonoBehaviour
 
     public void Cancle()
     {
-        switch (version)
+        switch (sceneType)
         {
-            case Version.Title:
+            case SceneType.Title:
                 Exit();
                 break;
-            case Version.InGame:
+            case SceneType.InGame:
                 UIManager.instance.onSetting = false;
                 gameObject.SetActive(false);
                 option.gameObject.SetActive(true);
@@ -155,12 +169,12 @@ public class Setting : MonoBehaviour
 
     void Exit()
     {
-        switch (version)
+        switch (sceneType)
         {
-            case Version.Title:
-                menu.onLock = false;
+            case SceneType.Title:
+                onSettingEvent.Invoke(false);
                 break;
-            case Version.InGame:
+            case SceneType.InGame:
                 break;
             default:
                 break;
@@ -170,8 +184,25 @@ public class Setting : MonoBehaviour
 
         SFXController.instance.PlaySFX(popupClip, 0, 0.8f, 0.8f);
 
+        this.tap = Tap.Sound;
+        ShowSelected(this.tap);
+        sound.SetActive(true);
+        control.SetActive(false);
+
         FadeInPanel(false);
         SetScaleBox(0);
+    }
+    #endregion
+
+    #region Volume Setting
+    void SetBGMVolume(float value)
+    {
+        mixer.SetFloat(MIXER_BGM, Mathf.Log10(value) * 20);
+    }
+
+    void SetSFXVolume(float value)
+    {
+        mixer.SetFloat(MIXER_SFX, Mathf.Log10(value) * 20);
     }
     #endregion
 }

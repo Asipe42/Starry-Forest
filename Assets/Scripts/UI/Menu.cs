@@ -10,6 +10,12 @@ public enum MenuType
     Exit
 }
 
+public enum SceneType
+{
+    Title = 0,
+    InGame
+}
+
 public class Menu : MonoBehaviour
 {
     enum DirectionType
@@ -48,6 +54,12 @@ public class Menu : MonoBehaviour
         menuText = new Dictionary<MenuType, Text>();
         destination = new List<Vector3>();
 
+        FadeScreen.FadeEvent -= SetEnable;
+        FadeScreen.FadeEvent += SetEnable;
+
+        setting.onSettingEvent -= SetLock;
+        setting.onSettingEvent += SetLock;
+
         menuClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Menu");
     }
 
@@ -58,10 +70,14 @@ public class Menu : MonoBehaviour
         Invoke("Unlock", 2f);
     }
 
-    void Unlock()
+    void SetLock(bool state)
     {
-        onEnable = true;
-        onLock = false;
+        onLock = state;
+    }
+
+    void SetEnable(bool state)
+    {
+        onEnable = state;
     }
 
     void SetDestination()
@@ -221,7 +237,6 @@ public class Menu : MonoBehaviour
     void Setting()
     {
         onLock = true;
-
         setting.PopupSetting(true, 1);
     }
 
