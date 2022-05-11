@@ -30,7 +30,7 @@ public class PlayerAudio : MonoBehaviour
 
     void Update()
     {
-        if (PlayerController.instance.onWalk)
+        if (PlayerController.instance.onGround && !PlayerController.instance.onPause)
         {
             if (!audioSource.isPlaying)
             {
@@ -43,38 +43,38 @@ public class PlayerAudio : MonoBehaviour
         }
     }
 
-    public void PlaySFX_Jump(float delay = 0f)
+    public void PlaySFX_Jump(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(jumpClip, delay);
+        SFXController.instance.PlaySFX(jumpClip, delay, pitch, volume);
     }
 
-    public void PlaySFX_Downhill(float delay = 0f)
+    public void PlaySFX_Downhill(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(downhillClip, delay);
+        SFXController.instance.PlaySFX(downhillClip, delay, pitch, volume);
     }
 
-    public void PlaySFX_Sliding(float delay = 0f)
+    public void PlaySFX_Sliding(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(slidingClip, delay);
+        SFXController.instance.PlaySFX(slidingClip, delay, pitch, volume);
     }
 
-    public void PlaySFX_Dash(float delay = 0f)
+    public void PlaySFX_Dash(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(dashClip, delay);
+        SFXController.instance.PlaySFX(dashClip, delay, pitch, volume);
     }
     
-    public void PlaySFX_DashLevelup(float delay = 0f, float pitch = 1f)
+    public void PlaySFX_DashLevelup(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(dashLevelUpClip, delay, pitch);
+        SFXController.instance.PlaySFX(dashLevelUpClip, delay, pitch, volume);
     }
 
-    public void PlaySFX_TakeItem(float delay = 0f)
+    public void PlaySFX_TakeItem(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(takeItemClip, delay);
+        SFXController.instance.PlaySFX(takeItemClip, delay, pitch, volume);
     }
 
-    public void PlaySFX_Recover(float delay = 0f)
+    public void PlaySFX_Recover(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
-        SFXController.instance.PlaySFX(recoverClip, delay);
+        SFXController.instance.PlaySFX(recoverClip, delay, pitch, volume);
     }
 }

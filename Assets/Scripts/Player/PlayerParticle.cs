@@ -24,6 +24,6 @@ public class PlayerParticle : BaseParticle
 
     void Update()
     {
-        SetParticleSystem(walkDust, PlayerController.instance.onWalk, false);
+        SetParticleSystem(walkDust, PlayerController.instance.onGround && !PlayerController.instance.onPause, false);
     }
 }

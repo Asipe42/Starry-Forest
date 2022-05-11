@@ -72,9 +72,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -369474503
-  m_SortingLayer: -1
-  m_SortingOrder: 2
+  m_SortingLayerID: 404927651
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 16a5d4528b5778547a8e6776d61bb87a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -164,7 +164,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5520298403149409353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.9, y: -1.2, z: 0}
+  m_LocalPosition: {x: -3, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8002372232961285533}
@@ -211,8 +211,8 @@ MonoBehaviour:
   targetActionName: jump
   panel: {fileID: 0}
   guide: {fileID: 6287226498129431106}
-  alpha: 0.3
-  duration: 0.2
+  duration: 0.3
+  lastEvent: 0
 --- !u!1 &6368304426709776012
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 293844033865190653}
   - component: {fileID: 6287226498129431106}
   m_Layer: 0
-  m_Name: Tutorial_01
+  m_Name: Guide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,12 +284,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: dab3e96a4adab5c449d663c74956daa3, type: 3}
+  m_Sprite: {fileID: -4707387703819941259, guid: dab3e96a4adab5c449d663c74956daa3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.12, y: 2.56}
+  m_Size: {x: 3.04, y: 1.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

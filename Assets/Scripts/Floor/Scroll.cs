@@ -25,6 +25,9 @@ public class Scroll : MonoBehaviour
     {
         playerController = FindObjectOfType<PlayerController>();
 
+        TutorialEvent.OnTutorialEvent -= CanScroll;
+        TutorialEvent.OnTutorialEvent += CanScroll;
+
         PlayerController.DashAction -= ScrollParticle;
         PlayerController.DashAction += ScrollParticle;
     }
@@ -38,7 +41,7 @@ public class Scroll : MonoBehaviour
 
     void Update()
     {
-        if (ProgressBar.onLast && PlayerController.instance.ReachLastFloor)
+        if (ProgressBar.onLast && PlayerController.instance.reachLastFloor)
         {
             if (!onEnd)
             {
@@ -58,16 +61,18 @@ public class Scroll : MonoBehaviour
         }
     }
 
-    #region Particle
+    void CanScroll(bool state)
+    {
+        this.canScroll = state; 
+    }
+
     void ScrollParticle(DashLevel dashLevel)
     {
         var temp = particle.velocityOverLifetime;
 
         temp.xMultiplier = -1 * (1.5f * (float)dashLevel);
     }
-    #endregion
 
-    #region Background
     void ScrollBackground()
     {       
         foreach (var layer in backgroundLayer_01)
@@ -76,15 +81,12 @@ public class Scroll : MonoBehaviour
         foreach (var layer in backgroundLayer_02)
             layer.Translate(Vector2.left * scrollSpeed_background[1] * Time.deltaTime);
     }
-    #endregion
 
-    #region Floor
     void ScrollFloor()
     {
         foreach (var floor in preFloors)
             floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
     }
-    #endregion
 
     void Reposition()
     {

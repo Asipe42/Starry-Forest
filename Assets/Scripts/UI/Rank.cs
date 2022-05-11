@@ -28,8 +28,7 @@ public class Rank : MonoBehaviour
     [SerializeField] float[] timeLimit;
     [SerializeField] bool[] onRank;
 
-    [Space]
-    [SerializeField] AudioClip changeClip;
+    AudioClip changeClip;
 
     Vector3 originalScale_rankFull;
     Vector3 originalScale_rankEmpty;

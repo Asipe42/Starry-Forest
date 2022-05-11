@@ -6,7 +6,7 @@ public class LastFloor : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<PlayerController>().ReachLastFloor = true;
+            collision.GetComponent<PlayerController>().reachLastFloor = true;
         }
     }
 }

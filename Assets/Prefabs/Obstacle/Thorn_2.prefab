@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1873254696694291479}
   - component: {fileID: 5732277761355039954}
   m_Layer: 0
-  m_Name: Obstacle_02
+  m_Name: Thorn_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

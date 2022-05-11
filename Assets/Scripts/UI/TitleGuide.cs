@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
-public class Guide : MonoBehaviour
+public class TitleGuide : MonoBehaviour
 {
     MenuType menuType = MenuType.NewGame;
 

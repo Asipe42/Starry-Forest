@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 6118018950812994150}
   - component: {fileID: 456972820364546043}
   m_Layer: 0
-  m_Name: Floor_Last_01
+  m_Name: Floor_Last
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

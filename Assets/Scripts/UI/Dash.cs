@@ -4,6 +4,7 @@ using DG.Tweening;
 
 public class Dash : MonoBehaviour
 {
+    [SerializeField] Image frameImage;
     [SerializeField] Image fillImage;
 
     [Space]
@@ -16,6 +17,18 @@ public class Dash : MonoBehaviour
         PlayerController.DashAction += FillDash;
     }
 
+    void Update()
+    {
+        if (PlayerController.instance.onDash)
+        {
+            ChangeFrameColor();
+        }
+        else
+        {
+            ResetFrameColor();
+        }
+    }
+
     void FillDash(DashLevel dashLevel)
     {
         float targetFillGuage = fillValues[(int)dashLevel];
@@ -26,5 +39,21 @@ public class Dash : MonoBehaviour
     void DashGaugeFillValue(float x)
     {
         fillImage.fillAmount = x;
+    }
+
+    void ChangeFrameColor()
+    {
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(frameImage.DOColor(Color.yellow, 0.5f)
+                .SetLoops(-1, LoopType.Yoyo))
+                .Append(frameImage.DOFillAmount(0f, 0.25f)
+                .SetEase(Ease.OutQuad)
+                .SetLoops(-1, LoopType.Restart));
+    }
+
+    void ResetFrameColor()
+    {
+        frameImage.DOColor(Color.white, 0.5f);
     }
 }

@@ -14,14 +14,14 @@ public class Setting : MonoBehaviour
 
     public event Action<bool> onSettingEvent;
 
-    [SerializeField] Option option;
+    [SerializeField] SceneType sceneType = SceneType.Title;
 
     [Header("Taps")]
     [SerializeField] GameObject sound;
     [SerializeField] GameObject control;
 
     [Header("UI")]
-    [SerializeField] Transform box;
+    [SerializeField] RectTransform box;
     [SerializeField] Image soundTapButtonImage;
     [SerializeField] Image controlTapButtonImage;
     [SerializeField] Image panel;
@@ -37,7 +37,6 @@ public class Setting : MonoBehaviour
     public const string MIXER_BGM = "BGMVolume";
     public const string MIXER_SFX = "SFXVolume";
 
-    SceneType sceneType = SceneType.Title;
     Tap tap = Tap.Sound;
 
     bool onSetting;  
@@ -69,31 +68,42 @@ public class Setting : MonoBehaviour
     }
 
     #region Popup
-    public void PopupSetting(bool state, int targetScale)
+    public void SetActivation(bool state)
     {
-        if (!onSetting)
+        onSetting = state;
+
+        if (state)
         {
-            onSetting = true;
+            SFXController.instance.PlaySFX(
+                    clip: popupClip,
+                    delay: 0,
+                    pitch: 1.25f,
+                    volume: 0.75f);
 
-            SFXController.instance.PlaySFX(popupClip, 0, 1.2f, 0.8f);
+            if (sceneType == SceneType.Title)
+            {
+                panel.DOFade(0.3f, 0.3f);
+            }
 
-            FadeInPanel(state);
-            SetScaleBox(targetScale);
+            box.DOScale(1f, 0.5f).SetEase(Ease.InBounce);
+
             ShowSelected(tap);
         }
-    }
-
-    void FadeInPanel(bool state)
-    {
-        if (state)
-            panel.DOColor(fadeColor, duration).SetEase(Ease.Linear);
         else
-            panel.DOColor(Color.clear, duration).SetEase(Ease.Linear);
-    }
+        {
+            SFXController.instance.PlaySFX(
+                    clip: popupClip,
+                    delay: 0,
+                    pitch: 0.75f,
+                    volume: 0.75f);
 
-    void SetScaleBox(int targetScale)
-    {
-        box.transform.DOScale(targetScale, duration).SetEase(Ease.OutCubic);
+            if (sceneType == SceneType.Title)
+            {
+                panel.DOFade(0, 0.3f);
+            }
+
+            box.DOScale(0f, 0.5f).SetEase(Ease.InBounce);
+        }
     }
     #endregion
 
@@ -138,61 +148,34 @@ public class Setting : MonoBehaviour
     #region Button Function
     public void Apply()
     {
-        switch (sceneType)
-        {
-            case SceneType.Title:
-                Exit();
-                //TO-DO
-                break;
-            case SceneType.InGame:
-                UIManager.instance.onSetting = false;
-                gameObject.SetActive(false);
-                option.gameObject.SetActive(true);
-                break;
-        }
+        Exit();
     }
 
     public void Cancle()
     {
-        switch (sceneType)
-        {
-            case SceneType.Title:
-                Exit();
-                break;
-            case SceneType.InGame:
-                UIManager.instance.onSetting = false;
-                gameObject.SetActive(false);
-                option.gameObject.SetActive(true);
-                break;
-        }
+        Exit();
     }
+    #endregion
 
     void Exit()
     {
-        switch (sceneType)
-        {
-            case SceneType.Title:
-                onSettingEvent.Invoke(false);
-                break;
-            case SceneType.InGame:
-                break;
-            default:
-                break;
-        }
+        if (sceneType == SceneType.Title)
+            onSettingEvent.Invoke(false);
 
         onSetting = false;
 
-        SFXController.instance.PlaySFX(popupClip, 0, 0.8f, 0.8f);
+        Initlaize();
 
+        SetActivation(false);
+    }
+
+    void Initlaize()
+    {
         this.tap = Tap.Sound;
         ShowSelected(this.tap);
         sound.SetActive(true);
         control.SetActive(false);
-
-        FadeInPanel(false);
-        SetScaleBox(0);
     }
-    #endregion
 
     #region Volume Setting
     void SetBGMVolume(float value)

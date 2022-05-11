@@ -1,66 +1,41 @@
+using System.Collections;
 using UnityEngine;
-using DG.Tweening;
-
-public enum UI
-{
-    HUD = 0,
-    Effect,
-    Popup
-}
-
-public enum Children_HUD
-{
-    Heart = 0,
-    Blood,
-    Rank,
-    Score,
-    
-}
-
-public enum Children_Popup
-{
-    Result = 0,
-    Option,
-    Setting,
-}
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    [SerializeField] DOTweenAnimation optionPanelAnim;
+    [SerializeField] SignTemplate[] signTemplate; // 0: Tutorial, 1: Normal
 
-    [Space]
     public GameObject UI_HUD;
-    public GameObject UI_Effect;
     public GameObject UI_Popup;
+    public GameObject UI_ScreenEffect;
 
-    [Space]
-    public Heart theHeart;
-    public Blood theBlood;
-    public Rank theRank;
-    public Score theScore;
-    public Result theResult;
-    public Option theOption;
-    public Setting theSetting;
+    public Sign sign { get; private set; }
+    public Heart heart { get; private set; }
+    public BloodScreen bloodScreen { get; private set; }
+    public Rank rank { get; private set; }
+    public Score score { get; private set; }
+    public Result result { get; private set; }
+    public Option option { get; private set; }
+    public Setting setting { get; private set; }
 
     BGMController theBGMController;
 
-    public bool canOption;
-    public bool onOption;
-    public bool onSetting;
+    bool onOption;
 
     void Awake()
     {
         instance = this;
 
-        theHeart = GameObject.FindObjectOfType<Heart>().GetComponent<Heart>();
-        theBlood = GameObject.FindObjectOfType<Blood>().GetComponent<Blood>();
-        theRank = GameObject.FindObjectOfType<Rank>().GetComponent<Rank>();
-        theScore =  GameObject.FindObjectOfType<Score>().GetComponent<Score>();
-        theResult = GameObject.FindObjectOfType<Result>().GetComponent<Result>();
-        theOption = GameObject.FindObjectOfType<Option>().GetComponent<Option>();
-        theSetting = GameObject.FindObjectOfType<Setting>().GetComponent<Setting>();
+        sign = GameObject.FindObjectOfType<Sign>();
+        heart = GameObject.FindObjectOfType<Heart>();
+        bloodScreen = GameObject.FindObjectOfType<BloodScreen>();
+        rank = GameObject.FindObjectOfType<Rank>();
+        score = GameObject.FindObjectOfType<Score>();
+        result = GameObject.FindObjectOfType<Result>();
+        option = GameObject.FindObjectOfType<Option>();
+        setting = GameObject.FindObjectOfType<Setting>();
 
         theBGMController = FindObjectOfType<BGMController>();
     }
@@ -68,78 +43,68 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         if (PlayerController.instance.onTutorial)
-        {
-            ActivateUI(UI.HUD, false);
-            ActivateUI(UI.Popup, false);
-        }
+            UI_HUD.SetActive(false);
 
-        Invoke("OnOption", 4f);
-    }
-
-    void OnOption()
-    {
-        canOption = true;
+        StartCoroutine(ShowSign(1f, 0));
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            bool onOption = theOption.gameObject.activeSelf;
-            ShowOption(!onOption);
+            if (PlayerController.instance.onTutorial)
+                return;
+
+            if (onOption)
+            {
+                HideOption();
+            }
+            else
+            {
+                ShowOption();
+            }
         }
     }
 
-    public void ActivateUI(UI ui, bool state = true)
+    public IEnumerator ShowHUD(float delay)
     {
-        switch (ui)
-        {
-            case UI.HUD:
-                UI_HUD.SetActive(state);
-                break;
-            case UI.Popup:
-                UI_Popup.SetActive(state);
-                break;
-        }
+        yield return new WaitForSeconds(delay);
+
+        UI_HUD.SetActive(true);
     }
 
-    public void ShowOption(bool state)
+    public IEnumerator ShowSign(float delay, int index)
     {
-        if (PlayerController.instance.onTutorial)
-            return;
+        yield return new WaitForSeconds(delay);
 
-        if (!canOption)
-            return;
-
-        if (onSetting)
-            return;
-
-        onOption = state;
-
-
-        if (state)
-        {
-            optionPanelAnim.DOPlay();
-            theBGMController.Fade(0);
-            PlayerController.instance.onWalk = false;
-            InputManager.instance.onLock = true;
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            optionPanelAnim.DORewind();
-            theBGMController.Fade(0.5f);
-            PlayerController.instance.onWalk = true;
-            InputManager.instance.onLock = false;
-            Time.timeScale = 1f;
-        }
-
-        theOption.gameObject.SetActive(state);
+        sign.Initialize(signTemplate[index]);
+        sign.Popup();
     }
+
+    public void HideOption()
+    {
+        onOption = false;
+        theBGMController.Fade(0.5f);
+
+        option.SetActivation(onOption);
+    }
+
+    public void ShowOption()
+    {
+        onOption = true;
+        theBGMController.Fade(0f);
+
+        option.SetActivation(onOption);
+    }
+
+    public void ShowSetting(bool state)
+    {
+        setting.SetActivation(state);
+    }
+
 
     public void ShowResult(bool state)
     {
-        theResult.gameObject.SetActive(state);
-        StartCoroutine(theResult.ShowResult());
+
     }
 }

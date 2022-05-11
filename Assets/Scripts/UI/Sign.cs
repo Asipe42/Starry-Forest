@@ -4,38 +4,35 @@ using DG.Tweening;
 
 public class Sign : MonoBehaviour
 {
-    [SerializeField] Text stageText;
-    [SerializeField] AudioClip popupClip;
-    [SerializeField] string stageTitle;
-    [SerializeField] float startDelay = 1.5f;
-    [SerializeField] float endDelay = 4f;
+    [SerializeField] RectTransform box;
+    [SerializeField] Text text;
+    [SerializeField] float delay = 4f;
     [SerializeField] float defaultPosY = 900f;
     [SerializeField] float targetPosY = 350f;
     [SerializeField] float duration = 3f;
+    [SerializeField] Ease startEase = Ease.OutBounce;
+    [SerializeField] Ease endEase;
 
-    RectTransform rectTransform;
-    AudioSource audioSource;
+    AudioClip popupClip;
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
-        rectTransform = GetComponent<RectTransform>();
-
-        stageText.text = stageTitle;
-        audioSource.clip = popupClip;
+        popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
     }
 
-    void Start()
+    public void Popup()
     {
-        Invoke("Popup", startDelay);
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(box.DOAnchorPosY(targetPosY, duration).SetEase(startEase))
+                .OnStart(() => SFXController.instance.PlaySFX(popupClip, 0.5f, 1f, 1f))
+                .AppendInterval(delay)
+                .OnComplete(() => box.DOAnchorPosY(defaultPosY, duration / 2f).SetEase(endEase));
     }
 
-    void Popup()
+    public void Initialize(SignTemplate signTemplate)
     {
-        Sequence mySequence = DOTween.Sequence();
-
-        rectTransform.DOAnchorPosY(targetPosY, duration).SetEase(Ease.OutBounce);
-        audioSource.PlayDelayed(0.4f);
-        rectTransform.DOAnchorPosY(defaultPosY, duration / 2).SetDelay(endDelay);
+        this.text.text = signTemplate.message;
+        this.text.fontSize = signTemplate.fontSize;
     }
 }

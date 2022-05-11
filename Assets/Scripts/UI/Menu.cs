@@ -24,7 +24,7 @@ public class Menu : MonoBehaviour
         Down
     }
 
-    [SerializeField] Guide guide;
+    [SerializeField] TitleGuide guide;
     [SerializeField] Setting setting;
 
     [Space]
@@ -237,7 +237,7 @@ public class Menu : MonoBehaviour
     void Setting()
     {
         onLock = true;
-        setting.PopupSetting(true, 1);
+        setting.SetActivation(true);
     }
 
     void Exit()

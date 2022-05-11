@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Floors", menuName = "Floor/FloorTemplate")]
+[CreateAssetMenu(fileName = "New Floors", menuName = "Floor/Floor Template")]
 public class FloorTemplate : ScriptableObject
 {
     public GameObject[] floor;

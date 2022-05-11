@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -22,15 +23,17 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
 
     [Header("Colliders")]
-    [SerializeField] CapsuleCollider2D defaultCollider;
-    [SerializeField] CapsuleCollider2D slidingCollider;
+    [SerializeField] CapsuleCollider2D theCollider;
 
     [Header("Dash")]
     public DashLevel dashLevel = DashLevel.None;
     [SerializeField] float[] dashTime;
+    [SerializeField] float[] dashCameraSize;
 
     public bool onTutorial = true;
-    public bool ReachLastFloor;
+    public bool onPause;
+    public bool onFix;
+    public bool reachLastFloor;
     public bool canMove = true;
     public bool canJump;
     public bool canSliding;
@@ -44,18 +47,21 @@ public class PlayerController : MonoBehaviour
     public bool onDash;
     public bool hasDownhill = true;
     public bool hasDash = true;
-    public bool onInvincibility = false;
+    public bool onInvincibility;
 
     PlayerAnimation thePlayerAnimation;
     PlayerAudio thePlayerAudio;
     PlayerMovement thePlayerMovement;
     PlayerParticle thePlayerParticle;
     Status theStatus;
+
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
 
     IEnumerator IncreaseDashLevelCoroutine;
     IEnumerator DecreaseDashLevelCoroutine;
+
+    List<string> actionList = new List<string>();
 
     public static event Action<DashLevel> DashAction;
 
@@ -70,6 +76,11 @@ public class PlayerController : MonoBehaviour
         theStatus = GetComponent<Status>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
+
+        actionList.Add("jump");
+        actionList.Add("sliding");
+        actionList.Add("downhill");
+        actionList.Add("dash");
     }
 
     public void PermitAction(string name, bool state = true)
@@ -88,6 +99,14 @@ public class PlayerController : MonoBehaviour
             case "dash":
                 canDash = state;
                 break;
+        }
+    }
+
+    public void PermitEveryAction(bool state)
+    {
+        foreach (var action in actionList)
+        {
+            PermitAction(action, state);
         }
     }
 
@@ -145,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         while (onDownhill)
         {
-            if (Input.GetKeyUp(UseKeys.jumpKey))
+            if ((!onFix && onTutorial) ||(Input.GetKeyUp(UseKeys.jumpKey) && !onFix))
             {
                 onDownhill = false;
 
@@ -154,9 +173,6 @@ public class PlayerController : MonoBehaviour
 
             yield return null;
         }
-
-        onDownhill = false;
-        thePlayerMovement.Movement_Downhill(onDownhill);
 
         yield return null;
     }
@@ -184,8 +200,8 @@ public class PlayerController : MonoBehaviour
         thePlayerAudio.PlaySFX_Sliding(0);
         thePlayerParticle.PlaySlidingDust(onSliding);
 
-        defaultCollider.enabled = false;
-        slidingCollider.enabled = true;
+        theCollider.size = new Vector2(theCollider.size.x, 1f);
+        theCollider.offset = new Vector2(theCollider.offset.x, -0.65f);
 
         StartCoroutine(CancleSliding());
     }
@@ -194,12 +210,13 @@ public class PlayerController : MonoBehaviour
     {
         while (onSliding)
         {
-            if (Input.GetKeyUp(UseKeys.SlidingKey))
+            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.SlidingKey) && !onFix))
             {
+                onWalk = true;
                 onSliding = false;
 
-                defaultCollider.enabled = true;
-                slidingCollider.enabled = false;
+                theCollider.size = new Vector2(theCollider.size.x, 2f);
+                theCollider.offset = new Vector2(theCollider.offset.x, -0.2f);
 
                 thePlayerAnimation.PlaySlidingAnimation(onSliding);
                 thePlayerParticle.PlaySlidingDust(onSliding);
@@ -245,11 +262,11 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetKeyUp(UseKeys.dashKey))
+            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.dashKey) && !onFix))
             {
                 onDash = false;
 
-                Invoke("ChargeDash", 0.5f);
+                StartCoroutine(ChargeDash());
 
                 if (DecreaseDashLevelCoroutine != null)
                     StopCoroutine(DecreaseDashLevelCoroutine);
@@ -266,23 +283,15 @@ public class PlayerController : MonoBehaviour
     {
         while (onDash)
         {
-            float value = 0;
-
             if (dashLevel < DashLevel.Max)
             {
-                while (value < dashTime[(int)dashLevel])
-                {
-                    value += 1;
-                    yield return new WaitForSeconds(1f);
-                }
+                yield return new WaitForSeconds(dashTime[(int)dashLevel]);
 
-                thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f);
-
-                if(dashLevel < DashLevel.Max)
-                {
-                    dashLevel++;
-                    DashAction.Invoke(dashLevel);
-                }
+                dashLevel++;
+                DashAction.Invoke(dashLevel);
+                thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
+                Camera.main.DOKill();
+                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.75f).SetEase(Ease.OutQuad);
             }
 
             yield return null;
@@ -293,31 +302,26 @@ public class PlayerController : MonoBehaviour
     {
         while (!onDash)
         {
-            if (DashLevel.None < dashLevel)
+            if (dashLevel > DashLevel.None)
             {
-                float value = 0;
-
-                if (DashLevel.None < dashLevel)
-                {
-                    while (value < 1)
-                    {
-                        value += 1;
-                        yield return new WaitForSeconds(0.5f);
-                    }
-
-                    if (DashLevel.None < dashLevel)
-                    {
-                        dashLevel--;
-                        DashAction.Invoke(dashLevel);
-                    }
-                }
+                yield return new WaitForSeconds(0.15f);
+                dashLevel--;
+                DashAction.Invoke(dashLevel);
+                Camera.main.DOKill();
+                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.1f).SetEase(Ease.InCubic);
             }
+
             yield return null;
         }
     }
 
-    void ChargeDash()
+    IEnumerator ChargeDash()
     {
+        while (dashLevel > DashLevel.None)
+        {
+            yield return null;
+        }
+
         hasDash = true;
     }
     #endregion
@@ -325,7 +329,7 @@ public class PlayerController : MonoBehaviour
     #region Damaged
     IEnumerator Invincibility(float duration, float alphaValue)
     {
-        UIManager.instance.theBlood.BloodEffect(1f);
+        UIManager.instance.bloodScreen.BlooeScreenLogic(0.25f, 0.75f);
         onInvincibility = true;
         spriteRenderer.color = new Color(1, 1, 1, alphaValue);
 
@@ -343,12 +347,14 @@ public class PlayerController : MonoBehaviour
         if (onInvincibility)
             return;
 
-        Sequence mySequence;
+        Sequence mySequence = DOTween.Sequence();
 
-        mySequence = DOTween.Sequence()
-            .Append(DOVirtual.Float(5.35f, 5.25f, 0.15f, CameraSize))
-            .AppendInterval(0.3f)
-            .Append(DOVirtual.Float(5.25f, 5.35f, 0.3f, CameraSize));
+        mySequence.Append(Camera.main.DOShakePosition(
+                       duration: 0.5f,
+                       new Vector3(0.5f, 0f, 0f),
+                       vibrato: 5,
+                       randomness: 90))
+                   .SetEase(Ease.OutQuad);
 
         StartCoroutine(Invincibility(0.8f, 0.5f));
         theStatus.hp -= damage;
@@ -363,7 +369,7 @@ public class PlayerController : MonoBehaviour
             SFXController.instance.PlaySFX(clip);
         }    
 
-        UIManager.instance.theHeart.CheckHp(theStatus.hp);
+        UIManager.instance.heart.CheckHp(theStatus.hp);
     }
 
     void CameraSize(float x)
@@ -373,7 +379,7 @@ public class PlayerController : MonoBehaviour
 
     void Dead()
     {
-        // TO-DO: Create Dead Logic
+        //TO-DO: Create Dead Logic
 
         StopAllCoroutines();
 
@@ -384,7 +390,7 @@ public class PlayerController : MonoBehaviour
     #region Take Item
     public void TakeItem(int score)
     {
-        UIManager.instance.theScore.CheckScore(score);
+        UIManager.instance.score.CheckScore(score);
         thePlayerAudio.PlaySFX_TakeItem();
         thePlayerParticle.PlayTakeItem();
     }
@@ -399,7 +405,7 @@ public class PlayerController : MonoBehaviour
 
         theStatus.hp += value;
 
-        UIManager.instance.theHeart.CheckHp(theStatus.hp);
+        UIManager.instance.heart.CheckHp(theStatus.hp);
     }
     #endregion
 
@@ -420,7 +426,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            if (!ReachLastFloor && !onSliding)
+            if (!reachLastFloor && !onSliding)
                 onWalk = true;
 
             if (rigid.velocity.y <= 0)
