@@ -3,16 +3,15 @@ using UnityEngine;
 public class PlayerAudio : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip walkClip;
 
-    [Space]
-    [SerializeField] AudioClip jumpClip;
-    [SerializeField] AudioClip downhillClip;
-    [SerializeField] AudioClip slidingClip;
-    [SerializeField] AudioClip dashClip;
-    [SerializeField] AudioClip dashLevelUpClip;
-    [SerializeField] AudioClip takeItemClip;
-    [SerializeField] AudioClip recoverClip;
+    AudioClip walkClip;  
+    AudioClip jumpClip;
+    AudioClip downhillClip;
+    AudioClip slidingClip;
+    AudioClip dashClip;
+    AudioClip dashLevelUpClip;
+    AudioClip takeItemClip;
+    AudioClip recoverClip;
 
     void Awake()
     {

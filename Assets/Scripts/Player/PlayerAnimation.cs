@@ -13,7 +13,7 @@ public class PlayerAnimation : BaseAnimation
     {
         PlayWalkAnimation(PlayerController.instance.onWalk);
 
-        if (DashLevel.One <= PlayerController.instance.dashLevel || PlayerController.instance.onDash)
+        if (PlayerController.instance.dashLevel > DashLevel.None)
             PlayDashAnimation(true);
         else
             PlayDashAnimation(false);

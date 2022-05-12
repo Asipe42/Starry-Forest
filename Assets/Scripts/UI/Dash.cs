@@ -47,7 +47,7 @@ public class Dash : MonoBehaviour
 
         sequence.Append(frameImage.DOColor(Color.yellow, 0.5f)
                 .SetLoops(-1, LoopType.Yoyo))
-                .Append(frameImage.DOFillAmount(0f, 0.25f)
+                .Append(frameImage.DOFillAmount(1f, 0.25f)
                 .SetEase(Ease.OutQuad)
                 .SetLoops(-1, LoopType.Restart));
     }

@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
 
     [Header("Colliders")]
-    [SerializeField] CapsuleCollider2D theCollider;
+    [SerializeField] BoxCollider2D theCollider;
 
     [Header("Dash")]
     public DashLevel dashLevel = DashLevel.None;
@@ -200,8 +200,8 @@ public class PlayerController : MonoBehaviour
         thePlayerAudio.PlaySFX_Sliding(0);
         thePlayerParticle.PlaySlidingDust(onSliding);
 
-        theCollider.size = new Vector2(theCollider.size.x, 1f);
-        theCollider.offset = new Vector2(theCollider.offset.x, -0.65f);
+        theCollider.size = new Vector2(theCollider.size.x, 0.75f);
+        theCollider.offset = new Vector2(theCollider.offset.x, -0.8f);
 
         StartCoroutine(CancleSliding());
     }
@@ -215,7 +215,7 @@ public class PlayerController : MonoBehaviour
                 onWalk = true;
                 onSliding = false;
 
-                theCollider.size = new Vector2(theCollider.size.x, 2f);
+                theCollider.size = new Vector2(theCollider.size.x, 1.9f);
                 theCollider.offset = new Vector2(theCollider.offset.x, -0.2f);
 
                 thePlayerAnimation.PlaySlidingAnimation(onSliding);
@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.dashKey) && !onFix))
+            if (Input.GetKeyUp(UseKeys.dashKey))
             {
                 onDash = false;
 
@@ -291,7 +291,7 @@ public class PlayerController : MonoBehaviour
                 DashAction.Invoke(dashLevel);
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
                 Camera.main.DOKill();
-                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.75f).SetEase(Ease.OutQuad);
+                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
             }
 
             yield return null;
@@ -305,10 +305,11 @@ public class PlayerController : MonoBehaviour
             if (dashLevel > DashLevel.None)
             {
                 yield return new WaitForSeconds(0.15f);
+
                 dashLevel--;
                 DashAction.Invoke(dashLevel);
                 Camera.main.DOKill();
-                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.1f).SetEase(Ease.InCubic);
+                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
             }
 
             yield return null;
@@ -350,11 +351,11 @@ public class PlayerController : MonoBehaviour
         Sequence mySequence = DOTween.Sequence();
 
         mySequence.Append(Camera.main.DOShakePosition(
-                       duration: 0.5f,
-                       new Vector3(0.5f, 0f, 0f),
-                       vibrato: 5,
-                       randomness: 90))
-                   .SetEase(Ease.OutQuad);
+                                        duration: 0.75f,
+                                        new Vector3(0.3f, 0f, 0f),
+                                        vibrato: 5,
+                                        randomness: 90))
+                                      .SetEase(Ease.OutQuad);
 
         StartCoroutine(Invincibility(0.8f, 0.5f));
         theStatus.hp -= damage;
