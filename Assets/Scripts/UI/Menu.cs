@@ -66,8 +66,6 @@ public class Menu : MonoBehaviour
     void Start()
     {
         SetDestination();
-
-        Invoke("Unlock", 2f);
     }
 
     void SetLock(bool state)
@@ -183,6 +181,44 @@ public class Menu : MonoBehaviour
         Debug.Log("now selected menu type is: " + menuType);
     }
 
+    public void ChangeMenu(string menuName)
+    {
+        if (!onEnable)
+            return;
+
+        if (onLock)
+            return;
+
+        MenuType temp = menuType;
+
+
+        switch (menuName)
+        {
+            case "newGame":
+                menuType = MenuType.NewGame;
+                break;
+            case "continue":
+                menuType = MenuType.Continue;
+                break;
+            case "option":
+                menuType = MenuType.Option;
+                break;
+            case "exit":
+                menuType = MenuType.Exit;
+                break;
+        }
+
+        if (temp == menuType)
+            return;
+
+        StopAllCoroutines();
+        StartCoroutine(theBar.MoveBar(menuPosition[menuType]));
+        ChangeFontSize(menuText[menuType]);
+        ChangeFontStyle(menuText[menuType]);
+
+        Debug.Log("now selected menu type is: " + menuType);
+    }
+
     void ChangeFontSize(Text selectedMenu)
     {
         foreach (var menu in menus)
@@ -202,6 +238,28 @@ public class Menu : MonoBehaviour
     void Select(MenuType type)
     {
         switch (type)
+        {
+            case MenuType.NewGame:
+                NewGame();
+                break;
+            case MenuType.Continue:
+                Continue();
+                break;
+            case MenuType.Option:
+                Setting();
+                break;
+            case MenuType.Exit:
+                Exit();
+                break;
+            default:
+                Debug.LogWarning("Selected menu is incorrect");
+                break;
+        }
+    }
+
+    public void Select()
+    {
+        switch (menuType)
         {
             case MenuType.NewGame:
                 NewGame();

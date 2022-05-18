@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(UseKeys.jumpKey))
         {
-            if (PlayerController.instance.onJump)
+            if (PlayerController.instance.onJump && !PlayerController.instance.onGround)
                 PlayerController.instance.Downhill();
             else
                 PlayerController.instance.Jump();

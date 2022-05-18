@@ -3,11 +3,15 @@ using UnityEngine;
 public class Recover : MonoBehaviour
 {
     [SerializeField] int recoverValue = 1;
+    [SerializeField] bool onRandom = true;
 
     #region Set Random Activation
     void Start()
     {
-        SetRandomActivation();
+        if (onRandom)
+        {
+            SetRandomActivation();
+        }
     }
 
     void SetRandomActivation()

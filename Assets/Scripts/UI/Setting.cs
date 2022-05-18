@@ -85,7 +85,7 @@ public class Setting : MonoBehaviour
                 panel.DOFade(0.3f, 0.3f);
             }
 
-            box.DOScale(1f, 0.5f).SetEase(Ease.InBounce);
+            box.DOScale(1f, 0.2f).SetEase(Ease.OutQuad);
 
             ShowSelected(tap);
         }
@@ -102,7 +102,7 @@ public class Setting : MonoBehaviour
                 panel.DOFade(0, 0.3f);
             }
 
-            box.DOScale(0f, 0.5f).SetEase(Ease.InBounce);
+            box.DOScale(0f, 0.2f).SetEase(Ease.OutQuad);
         }
     }
     #endregion

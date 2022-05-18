@@ -101,12 +101,19 @@ public class TutorialEvent : MonoBehaviour
         panel.DOFade(0, duration);
 
         #region Exception Case
-        if (targetActionName == "downhill")
+        if (targetActionName == "jump")
+        {
+            UIManager.instance.hud.ShowHeartBox(1f);
+            guide.DOKill();
+            guide.DOFade(0f, 0.25f);
+        }
+        else if (targetActionName == "downhill")
         {
             guide.gameObject.SetActive(false);
         }
         else if (targetActionName == "dash")
         {
+            UIManager.instance.hud.ShowPDBox(1f);
             guide.gameObject.SetActive(false);
         }
         else
@@ -123,7 +130,7 @@ public class TutorialEvent : MonoBehaviour
             playerInfo.pc.onTutorial = false;
             playerInfo.pc.PermitEveryAction(true);
 
-            StartCoroutine(UIManager.instance.ShowHUD(0.5f));
+            UIManager.instance.hud.ShowRSBox(1f);
             StartCoroutine(UIManager.instance.ShowSign(0.5f, 1));
         }
     }

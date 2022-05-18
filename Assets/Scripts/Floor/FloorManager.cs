@@ -12,17 +12,24 @@ public class FloorManager : MonoBehaviour
         SetCandidate(level);
     }
 
+    /// <summary>
+    /// ÇÃ·§Æû ³­ÀÌµµ¸¦ ¿Ã¸°´Ù.
+    /// </summary>
     public void LevelUp()
     {
         level++;
         SetCandidate(level);
     }
 
+    /// <summary>
+    /// ÇÃ·§Æû ±×·ìÀ» ±³Ã¼ÇÑ´Ù.
+    /// </summary>
+    /// <param name="index"></param>
     public void SetCandidate(int index)
     {
-        if (index < 0 && index > floorSet.Length)
+        if (index < 0 || index >= floorSet.Length)
         {
-            Debug.LogError("out of range");
+            Debug.LogWarning("out of range");
             return;
         }
 

@@ -38,14 +38,14 @@ public class Heart : MonoBehaviour
         if (currentHp < 0)
             return;
 
-        if (currentHp >= theStatus.maxHp)
+        if (currentHp > theStatus.maxHp)
             return;
 
-        if (hp < currentHp)
+        if (hp < currentHp) // recover
         {
             FillHeart(currentHp, this.duration, FillState.Up);
-        }
-        else
+        } 
+        else // take damage
         {
             FillHeart(currentHp, this.duration, FillState.Down);
         }
@@ -57,8 +57,8 @@ public class Heart : MonoBehaviour
     {
         if (state == FillState.Up)
         {
-            heartImages[index].fillAmount = 0f;
-            heartImages[index].DOFillAmount(1f, duration);
+            heartImages[index - 1].fillAmount = 0f;
+            heartImages[index - 1].DOFillAmount(1f, duration);
         }
         else
         {

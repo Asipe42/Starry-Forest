@@ -19,14 +19,16 @@ public class Dash : MonoBehaviour
 
     void Update()
     {
-        if (PlayerController.instance.onDash)
-        {
-            ChangeFrameColor();
-        }
-        else
-        {
-            ResetFrameColor();
-        }
+        // TO-DO: Create Dash Effect
+        
+        //if (PlayerController.instance.onDash)
+        //{
+        //    ChangeFrameColor();
+        //}
+        //else
+        //{
+        //    ResetFrameColor();
+        //}
     }
 
     void FillDash(DashLevel dashLevel)

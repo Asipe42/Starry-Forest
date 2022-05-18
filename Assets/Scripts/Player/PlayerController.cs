@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetKeyUp(UseKeys.dashKey))
+            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.dashKey) && !onFix))
             {
                 onDash = false;
 
@@ -342,9 +342,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnDamaged(int damage, AudioClip clip)
     {
-        if (onTutorial)
-            return;
-
         if (onInvincibility)
             return;
 
@@ -365,10 +362,7 @@ public class PlayerController : MonoBehaviour
             Dead();
         }
 
-        if (!onTutorial)
-        {
-            SFXController.instance.PlaySFX(clip);
-        }    
+        SFXController.instance.PlaySFX(clip); 
 
         UIManager.instance.heart.CheckHp(theStatus.hp);
     }
@@ -384,14 +378,14 @@ public class PlayerController : MonoBehaviour
 
         StopAllCoroutines();
 
-        Loading.LoadScene("Stage_01");
+        Loading.LoadScene("Stage_01_Tutorial");
     }
     #endregion
 
     #region Take Item
     public void TakeItem(int score)
     {
-        UIManager.instance.score.CheckScore(score);
+        UIManager.instance.score?.CheckScore(score);
         thePlayerAudio.PlaySFX_TakeItem();
         thePlayerParticle.PlayTakeItem();
     }
@@ -414,6 +408,10 @@ public class PlayerController : MonoBehaviour
     {
         canMove = false;
         onWalk = false;
+
+        if (IncreaseDashLevelCoroutine != null)
+            StopCoroutine(IncreaseDashLevelCoroutine);
+
         dashLevel = DashLevel.None;
 
         thePlayerAnimation.PlayDownhillAnimation(false);
@@ -435,6 +433,7 @@ public class PlayerController : MonoBehaviour
 
             onDownhill = false;
             hasDownhill = true;
+            rigid.gravityScale = 2f;
 
             if (canMove)
             {

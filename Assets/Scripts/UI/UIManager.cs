@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject UI_Popup;
     public GameObject UI_ScreenEffect;
 
+    public HUD hud { get; private set; }
     public Sign sign { get; private set; }
     public Heart heart { get; private set; }
     public BloodScreen bloodScreen { get; private set; }
@@ -28,6 +29,8 @@ public class UIManager : MonoBehaviour
     {
         instance = this;
 
+        hud = UI_HUD.GetComponent<HUD>();
+
         sign = GameObject.FindObjectOfType<Sign>();
         heart = GameObject.FindObjectOfType<Heart>();
         bloodScreen = GameObject.FindObjectOfType<BloodScreen>();
@@ -42,9 +45,6 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        if (PlayerController.instance.onTutorial)
-            UI_HUD.SetActive(false);
-
         StartCoroutine(ShowSign(1f, 0));
     }
 
@@ -64,13 +64,6 @@ public class UIManager : MonoBehaviour
                 ShowOption();
             }
         }
-    }
-
-    public IEnumerator ShowHUD(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        UI_HUD.SetActive(true);
     }
 
     public IEnumerator ShowSign(float delay, int index)
@@ -102,9 +95,8 @@ public class UIManager : MonoBehaviour
         setting.SetActivation(state);
     }
 
-
     public void ShowResult(bool state)
     {
-
+        //TO-DO: Show Result Animation
     }
 }
