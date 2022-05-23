@@ -5,6 +5,8 @@ public class StageButton : MonoBehaviour
     [SerializeField] Color unlockColor;
     [SerializeField] Color lockColor;
 
+    public StageTemplate stageTemplate;
+
     public bool onLock;
 
     SpriteRenderer spriteRenderer;

@@ -3,15 +3,16 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
+public enum Grade
+{
+    None = 0,
+    APlus, A,
+    BPlus, B,
+    CPlus, C
+}
+
 public class Rank : MonoBehaviour
 {
-    public enum Grade
-    {
-        APlus, A,
-        BPlus, B,
-        CPlus, C
-    }
-
     public Grade grade = Grade.APlus;
 
     [Header("Image/Text")]
