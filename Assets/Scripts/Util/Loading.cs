@@ -7,7 +7,10 @@ public class Loading : MonoBehaviour
 {
     static string nextScene;
 
+    const float LOAD_VALUE = 0.2f;
+
     Slider loadingBar;
+
 
     public static void LoadScene(string sceneName)
     {
@@ -32,7 +35,6 @@ public class Loading : MonoBehaviour
         op.allowSceneActivation = false;
 
         float timer = 0f;
-        const float LOAD_VALUE = 0.2f;
 
         while (!op.isDone)
         {
@@ -44,7 +46,7 @@ public class Loading : MonoBehaviour
             }
             else
             {
-                timer += Time.deltaTime;
+                timer += Time.unscaledDeltaTime;
                 loadingBar.value = Mathf.Lerp(LOAD_VALUE, 1.0f, timer);
 
                 if (loadingBar.value >= 1.0f)

@@ -29,11 +29,13 @@ public class PlayerController : MonoBehaviour
     public DashLevel dashLevel = DashLevel.None;
     [SerializeField] float[] dashTime;
     [SerializeField] float[] dashCameraSize;
+    [SerializeField] float[] dashCameraPosition;
 
     public bool onTutorial = true;
     public bool onPause;
     public bool onFix;
     public bool reachLastFloor;
+    public bool endStage;
     public bool canMove = true;
     public bool canJump;
     public bool canSliding;
@@ -48,6 +50,8 @@ public class PlayerController : MonoBehaviour
     public bool hasDownhill = true;
     public bool hasDash = true;
     public bool onInvincibility;
+
+    [SerializeField] Transform targetTransform;
 
     PlayerAnimation thePlayerAnimation;
     PlayerAudio thePlayerAudio;
@@ -292,6 +296,7 @@ public class PlayerController : MonoBehaviour
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
+                Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
             }
 
             yield return null;
@@ -310,6 +315,7 @@ public class PlayerController : MonoBehaviour
                 DashAction.Invoke(dashLevel);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
+                Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], 0.75f).SetEase(Ease.OutCubic);
             }
 
             yield return null;
@@ -404,21 +410,45 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    public void StopAction()
+    public IEnumerator StopAction(LastFloorState lastFloorState)
     {
+        yield return new WaitUntil(() => onGround);
+
         canMove = false;
-        onWalk = false;
 
         if (IncreaseDashLevelCoroutine != null)
             StopCoroutine(IncreaseDashLevelCoroutine);
 
-        dashLevel = DashLevel.None;
+        UIManager.instance.DarkenScreen(alpha: 0.4f, duration: 1f);
+        UIManager.instance.hud.HideHeartBox(1f);
+        UIManager.instance.hud.HidePDBox(1f);
+        UIManager.instance.hud.HideRSBox(1f);
 
-        thePlayerAnimation.PlayDownhillAnimation(false);
-        thePlayerAnimation.PlayJumpAnimation(false);
-        thePlayerAnimation.PlaySlidingAnimation(false);
-        thePlayerAnimation.PlayDashAnimation(false);
-        thePlayerAnimation.PlayWalkAnimation(false);
+        switch (lastFloorState)
+        {
+            case LastFloorState.Tutorial:
+            case LastFloorState.Normal:
+                onWalk = true;
+                transform.DOMoveX(targetTransform.position.x, 3f)
+                         .OnComplete(() => 
+                         { 
+                             endStage = true;
+                             dashLevel = DashLevel.None;
+                         });
+                break;
+            case LastFloorState.Bornfire:
+                onWalk = false;
+                thePlayerAnimation.PlayDownhillAnimation(false);
+                thePlayerAnimation.PlayJumpAnimation(false);
+                thePlayerAnimation.PlaySlidingAnimation(false);
+                thePlayerAnimation.PlayDashAnimation(false);
+                thePlayerAnimation.PlayWalkAnimation(false);
+                break;
+            default:
+                Debug.LogError("argument is wrong");
+                break;
+        }
+
     }
 
     void OnCollisionEnter2D(Collision2D collision)

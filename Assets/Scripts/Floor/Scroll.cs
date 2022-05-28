@@ -9,8 +9,8 @@ public class Scroll : MonoBehaviour
     [SerializeField] ParticleSystem particle;
 
     [Space]
-    [SerializeField] Vector3 deadline = new Vector3(-40f, 0f, 0f);
-    [SerializeField] Vector3 reposition = new Vector3(115.2f, 0f, 0f);
+    [SerializeField] Vector3 deadline = new Vector3(-60f, 0f, 0f);
+    [SerializeField] Vector3 reposition = new Vector3(188f, 0f, 0f);
     [SerializeField] float[] scrollSpeed_background;
     [SerializeField] float[] scrollSpeed_floor;
     [SerializeField] FloorGenerator theFloorGenerator;
@@ -47,9 +47,6 @@ public class Scroll : MonoBehaviour
             {
                 onEnd = true;
                 canScroll = false;
-
-                playerController.StopAction();
-                UIManager.instance.ShowResult(true);
             }
         }
 

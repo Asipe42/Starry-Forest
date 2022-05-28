@@ -20,7 +20,7 @@ public class FadeScreen : MonoBehaviour
         Fade(this.target, this.duration, this.delay);
     }
 
-    void Fade(float target, float duration = 1f, float delay = 0f)
+    public void Fade(float target, float duration = 1f, float delay = 0f)
     {
         if (sceneType == SceneType.Title)
         {

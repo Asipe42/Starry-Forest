@@ -107,7 +107,7 @@ public class TitleGuide : MonoBehaviour
         switch (menuType)
         {
             case MenuType.NewGame:
-                Loading.LoadScene("Stage_01_Tutorial");
+                Loading.LoadScene("Map");
                 break;
             case MenuType.Exit:
 #if UNITY_EDITOR

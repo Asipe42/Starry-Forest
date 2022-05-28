@@ -1,12 +1,15 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField] Slider slider;
     [SerializeField] Image fillImage;
-    [SerializeField] GameObject message;
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TextMeshProUGUI message;
     [SerializeField, Range(1, 7)] int grade = 7;
     [SerializeField] int turningPoint;
     [SerializeField] float gauge;
@@ -23,11 +26,21 @@ public class ProgressBar : MonoBehaviour
 
     FloorManager floorManager;
 
+    AudioSource audioSource;
+
+    AudioClip notificationClip;
+    AudioClip messageClip;
+
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+
         floorManager = GameObject.FindObjectOfType<FloorManager>().GetComponent<FloorManager>();
 
         slider.maxValue = gaugeMax;
+
+        notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
+        messageClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Message");
 
         ChangeColor(colors[colors.Length - 1]);
     }
@@ -81,12 +94,7 @@ public class ProgressBar : MonoBehaviour
             {
                 onLast = true;
 
-                var sequence = DOTween.Sequence();
-
-                sequence.Append(message.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBounce))
-                        .AppendInterval(2f)
-                        .Append(message.GetComponent<Image>().DOFade(0f, 1f))
-                        .Append(message.GetComponentInChildren<Text>().DOFade(0f, 1f));       
+                ShowMessage();
             }
         }
     }
@@ -94,5 +102,45 @@ public class ProgressBar : MonoBehaviour
     void ChangeColor(Color nextColor)
     {
         fillImage.color = nextColor;
+    }
+
+    void ShowMessage()
+    {
+        SFXController.instance.PlaySFX(notificationClip, 0.25f);
+
+        var seqeunce = DOTween.Sequence();
+
+        speechBubble.transform.DOLocalRotate(new Vector3(0, 0, 360), 1.5f).SetEase(Ease.OutBounce, overshoot: 1.25f)
+                              .OnComplete(() => message.DOText("거의 다 왔어요!", 0.5f)
+                                                       .OnUpdate(() =>
+                                                       {
+                                                           if (!audioSource.isPlaying)
+                                                           {
+                                                               audioSource.pitch = 0.8f;
+                                                               audioSource.clip = messageClip;
+                                                               audioSource.Play();
+                                                           }
+                                                       })
+                                                       .OnComplete(() =>
+                                                       {
+                                                           audioSource.Stop();
+                                                           message.text = "";
+                                                           message.DOText("조금만 힘을 내요!", 0.5f)
+                                                                                .OnUpdate(() =>
+                                                                                {
+                                                                                    if (!audioSource.isPlaying)
+                                                                                    {
+                                                                                        audioSource.pitch = 0.8f;
+                                                                                        audioSource.clip = messageClip;
+                                                                                        audioSource.Play();
+                                                                                    }
+                                                                                })
+                                                                                .OnComplete(() =>
+                                                                                {
+                                                                                    audioSource.Stop();
+                                                                                    speechBubble.GetComponent<Image>().DOFade(0f, 1f);
+                                                                                    message.DOFade(0f, 1f);
+                                                                                });
+                                                       }));
     }
 }

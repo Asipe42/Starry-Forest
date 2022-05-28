@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 using TMPro;
 
 public class StageManager : MonoBehaviour
@@ -10,21 +12,65 @@ public class StageManager : MonoBehaviour
         Left
     }
 
-    [SerializeField] StageButton[] stages;
-    [SerializeField] TextMeshProUGUI chpater;
-    [SerializeField] TextMeshProUGUI stage;
+    [SerializeField] TextMeshProUGUI chapterText;
+    [SerializeField] TextMeshProUGUI stageText;
     [SerializeField] Image rankBox;
     [SerializeField] Image rank;
     [SerializeField] Sprite[] rankSprites;
     [SerializeField] GameObject offset;
+    [SerializeField] GameObject emotion;
 
+    public StageButton[] stages;
+
+    Stage stage;
     StageButton currentStageButton;
+    FadeScreen fadeScreen;
 
+    int currnetStageIndex = 0;
+    int maxStageIndex = 10;
     bool onRight, onLeft, onSelect;
+    bool onLoading;
+    bool onLock;
+    bool endFade;
+
+    AudioClip notificationClip;
+
+    void Awake()
+    {
+        stage = GameObject.FindObjectOfType<Stage>();
+        fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
+
+        notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
+
+        FadeScreen.FadeEvent -= EndFade;
+        FadeScreen.FadeEvent += EndFade;
+
+        GetCurrentStageButton();
+    }
+
+    void Start()
+    {
+        StartCoroutine(EnableStage());
+    }
+
+    void GetCurrentStageButton()
+    {
+        currentStageButton = offset.transform.parent.GetComponent<StageButton>();
+    }
+
+    void EndFade(bool state)
+    {
+        endFade = state;
+    }
 
     void Update()
     {
-        InputKey();
+        Debug.Log(onLock);
+
+        if (!onLock)
+        {
+            InputKey();
+        }
     }
 
     void InputKey()
@@ -44,33 +90,74 @@ public class StageManager : MonoBehaviour
 
         if (onSelect)
         {
-            Select();
+            if (!onLoading)
+            {
+                onLoading = true;
+                StartCoroutine(Select());
+            }
         }
     }
 
     void ChangeStage(DirectionType directionType)
     {
-
-    }
-
-    void Select()
-    {
-        
-    }
-
-    void SetStageName()
-    {
-        //this.chpater.text;
-        //this.stage.text
-    }
-
-    void SetStageInfo(string chapter, string stage, Grade grade)
-    {
-        this.chpater.text = chapter;
-        this.stage.text = stage;
-
-        switch (grade)
+        if (directionType == DirectionType.Left)
         {
+            if (currnetStageIndex < 1)
+                return;
+
+            if (!stages[currnetStageIndex - 1].onLock)
+            {
+                DisableStage();
+                currnetStageIndex--;
+                MoveToStageButton(currnetStageIndex);
+                GetCurrentStageButton();
+                SetStageInfo(currentStageButton.stageTemplate);
+            }
+        }
+
+        if (directionType == DirectionType.Right)
+        {
+            if (currnetStageIndex > maxStageIndex - 1)
+                return;
+
+            if (!stages[currnetStageIndex + 1].onLock)
+            {
+                DisableStage();
+                currnetStageIndex++;
+                MoveToStageButton(currnetStageIndex);
+                GetCurrentStageButton();
+                SetStageInfo(currentStageButton.stageTemplate);
+            }
+        }
+    }
+
+    void MoveToStageButton(int index)
+    {
+        offset.transform.parent = stages[index].transform;
+        offset.transform.DOMove(offset.transform.parent.transform.position, 0.5f).OnComplete(() => StartCoroutine(EnableStage()));
+    }
+
+    IEnumerator Select()
+    {
+        DisableStage();
+        fadeScreen.Fade(1f, 0.5f, 1f);
+
+        SFXController.instance.PlaySFX(notificationClip);
+        emotion.transform.DOScale(0.5f, 0.5f).SetEase(Ease.OutBounce);
+
+        yield return new WaitForSeconds(2f);
+        Loading.LoadScene(currentStageButton.stageTemplate.sceneName);
+    }
+
+    void SetStageInfo(StageTemplate stageTemplate)
+    {
+        this.chapterText.text = stageTemplate.chapterName;
+        this.stageText.text = stageTemplate.stageName;
+
+        switch (stageTemplate.clearGrade)
+        {
+            case Grade.None:
+                break;
             case Grade.APlus:
                 rank.sprite = rankSprites[0];
                 break;
@@ -90,5 +177,26 @@ public class StageManager : MonoBehaviour
                 rank.sprite = rankSprites[5];
                 break;
         }
+    }
+
+    IEnumerator EnableStage()
+    {
+        onLock = true;
+        yield return new WaitUntil(() => endFade);
+
+        stage.ShowStageInfo(0.25f);
+        stage.ShowStartGuide(0.25f);
+        stage.ShowAlbumGuide(0.25f);
+
+        yield return new WaitForSeconds(1f);
+        onLock = false;
+    }
+
+    void DisableStage()
+    {
+        onLock = true;
+        stage.HideStageInfo(0.25f);
+        stage.HideStartGuide(0.25f);
+        stage.HideAlbumGuide(0.25f);
     }
 }

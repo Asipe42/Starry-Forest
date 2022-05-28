@@ -109,8 +109,8 @@ public class Menu : MonoBehaviour
         if (onLock)
             return;
 
-        onUp = Input.GetKeyDown(KeyCode.UpArrow);
-        onDown = Input.GetKeyDown(KeyCode.DownArrow);
+        onUp = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
+        onDown = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
         onSelect = Input.GetButtonDown("Submit");
 
         if (onUp && !onDown)

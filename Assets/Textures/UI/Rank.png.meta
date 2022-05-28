@@ -1,43 +1,43 @@
 fileFormatVersion: 2
-guid: 3c0e8bcb875348a40b2a6188f7181215
+guid: d8e3cd275b8388c43aecf04a5d66c48f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3511996523978390141
-    second: Rank_0
+      213: 3538360785577209650
+    second: A_Full
   - first:
-      213: -2261305175963411493
-    second: Rank_1
+      213: 466070410141221110
+    second: A_Plus_Full
   - first:
-      213: 617603048062758181
-    second: Rank_2
+      213: -4007060523229605047
+    second: A_Plus_Empty
   - first:
-      213: 3452093454667083448
-    second: Rank_3
+      213: -8196176853455016856
+    second: A_Empty
   - first:
-      213: 3173584283160508882
-    second: Rank_4
+      213: -6689667101289197558
+    second: B_Full
   - first:
-      213: 166422559232659144
-    second: Rank_5
+      213: 5957929142581462292
+    second: B_Plus_Full
   - first:
-      213: -8277944437088134005
-    second: Rank_6
+      213: -4240217018074902585
+    second: B_Plus_Empty
   - first:
-      213: 3559515457512599280
-    second: Rank_7
+      213: 6222688544141085916
+    second: B_Empty
   - first:
-      213: 8109854217852864694
-    second: Rank_8
+      213: 6903870569998280136
+    second: C_Full
   - first:
-      213: 8831277627142835406
-    second: Rank_9
+      213: -3897443475604966918
+    second: C_Plus_Full
   - first:
-      213: 6916494102344939985
-    second: Rank_10
+      213: 1058907189947853398
+    second: C_Plus_Empty
   - first:
-      213: 1921014744415982970
-    second: Rank_11
+      213: 7719666842517203557
+    second: C_Empty
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -151,7 +151,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rank_0
+      name: A_Full
       rect:
         serializedVersion: 2
         x: 0
@@ -165,14 +165,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7a73203b3e1db030800000000000000
-      internalID: 3511996523978390141
+      spriteID: 23f608f2368ca1130800000000000000
+      internalID: 3538360785577209650
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_1
+      name: A_Plus_Full
       rect:
         serializedVersion: 2
         x: 72
@@ -186,14 +186,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bdbd2f16cea3e90e0800000000000000
-      internalID: -2261305175963411493
+      spriteID: 6f0c9c49190d77600800000000000000
+      internalID: 466070410141221110
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_2
+      name: A_Plus_Empty
       rect:
         serializedVersion: 2
         x: 144
@@ -207,14 +207,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 52daaf333ba229800800000000000000
-      internalID: 617603048062758181
+      spriteID: 94398673faf0468c0800000000000000
+      internalID: -4007060523229605047
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_3
+      name: A_Empty
       rect:
         serializedVersion: 2
         x: 216
@@ -228,14 +228,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bee1e005bc48ef20800000000000000
-      internalID: 3452093454667083448
+      spriteID: 86ce885b394514e80800000000000000
+      internalID: -8196176853455016856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_4
+      name: B_Full
       rect:
         serializedVersion: 2
         x: 288
@@ -249,14 +249,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d97b865716da0c20800000000000000
-      internalID: 3173584283160508882
+      spriteID: a005a0af6378923a0800000000000000
+      internalID: -6689667101289197558
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_5
+      name: B_Plus_Full
       rect:
         serializedVersion: 2
         x: 360
@@ -270,14 +270,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ce8ca59f604f4200800000000000000
-      internalID: 166422559232659144
+      spriteID: 415048c1df0dea250800000000000000
+      internalID: 5957929142581462292
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_6
+      name: B_Plus_Empty
       rect:
         serializedVersion: 2
         x: 432
@@ -291,14 +291,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b8cd0f49465de1d80800000000000000
-      internalID: -8277944437088134005
+      spriteID: 7cf44137619b725c0800000000000000
+      internalID: -4240217018074902585
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_7
+      name: B_Empty
       rect:
         serializedVersion: 2
         x: 504
@@ -312,14 +312,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0feec811370f56130800000000000000
-      internalID: 3559515457512599280
+      spriteID: cdc0c6df24e6b5650800000000000000
+      internalID: 6222688544141085916
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_8
+      name: C_Full
       rect:
         serializedVersion: 2
         x: 576
@@ -333,17 +333,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b8c25b717dfb8070800000000000000
-      internalID: 8109854217852864694
+      spriteID: 8c5650484b97fcf50800000000000000
+      internalID: 6903870569998280136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_9
+      name: C_Plus_Full
       rect:
         serializedVersion: 2
-        x: 648
+        x: 647
         y: 0
         width: 72
         height: 72
@@ -354,14 +354,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ecc04b636300f8a70800000000000000
-      internalID: 8831277627142835406
+      spriteID: af1f668fecf79e9c0800000000000000
+      internalID: -3897443475604966918
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_10
+      name: C_Plus_Empty
       rect:
         serializedVersion: 2
         x: 720
@@ -375,29 +375,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1d9ba5dadb25cff50800000000000000
-      internalID: 6916494102344939985
+      spriteID: 65ae2fa9a7ef1be00800000000000000
+      internalID: 1058907189947853398
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rank_11
+      name: C_Empty
       rect:
         serializedVersion: 2
-        x: 790
+        x: 792
         y: 0
-        width: 68
+        width: 72
         height: 72
-      alignment: 9
+      alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a75d3396bb0d8aa10800000000000000
-      internalID: 1921014744415982970
+      spriteID: 56a699cb714c12b60800000000000000
+      internalID: 7719666842517203557
       vertices: []
       indices: 
       edges: []
