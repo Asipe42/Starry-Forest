@@ -50,10 +50,21 @@ public class DialogSystem : MonoBehaviour
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        Initialize();
+        GetAudioClip();
+    }
 
+    #region Initial Setting
+    void Initialize()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void GetAudioClip()
+    {
         messageClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Message");
     }
+    #endregion
 
     void Start()
     {

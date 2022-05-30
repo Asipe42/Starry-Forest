@@ -10,48 +10,54 @@ public class UIManager : MonoBehaviour
     [SerializeField] SignTemplate[] signTemplate; // 0: Tutorial, 1: Normal
     [SerializeField] Image panel;
 
-    public GameObject UI_HUD;
-    public GameObject UI_Popup;
-    public GameObject UI_ScreenEffect;
-
+    #region HUD Components
     public HUD hud { get; private set; }
-    public Stage stage { get; private set; }
-    public Sign sign { get; private set; }
     public Heart heart { get; private set; }
-    public Rank rank { get; private set; }
     public Score score { get; private set; }
-    public Result result { get; private set; }
-    public Option option { get; private set; }
-    public Setting setting { get; private set; }
-    public Goal goal { get; private set; }
+    public Rank rank { get; private set; }
+    public Dash dash { get; private set; }
+    public ProgressBar progressBar { get; private set; }
+    #endregion
 
+    #region Popup Components
+    public PauseMenu pauseMenu { get; private set; }
+    public Setting setting { get; private set; }
+    public Sign sign { get; private set; }
+    public Result result { get; private set; }
+    public Goal goal { get; private set; }
+    #endregion
+
+    #region ScreenEffect Components
     public BloodScreen bloodScreen { get; private set; }
     public FadeScreen fadeScreen { get; private set; }
-
-    BGMController theBGMController;
+    #endregion
 
     bool onOption;
 
     void Awake()
     {
+        Initialize();
+    }
+
+    void Initialize()
+    {
         instance = this;
 
-        hud = UI_HUD.GetComponent<HUD>();
-
-        stage = GameObject.FindObjectOfType<Stage>();
-        sign = GameObject.FindObjectOfType<Sign>();
+        hud = GameObject.FindObjectOfType<HUD>();
         heart = GameObject.FindObjectOfType<Heart>();
-        rank = GameObject.FindObjectOfType<Rank>();
         score = GameObject.FindObjectOfType<Score>();
-        result = GameObject.FindObjectOfType<Result>();
-        option = GameObject.FindObjectOfType<Option>();
+        rank = GameObject.FindObjectOfType<Rank>();
+        dash = GameObject.FindObjectOfType<Dash>();
+        progressBar = GameObject.FindObjectOfType<ProgressBar>();
+
+        pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
         setting = GameObject.FindObjectOfType<Setting>();
+        sign = GameObject.FindObjectOfType<Sign>();
+        result = GameObject.FindObjectOfType<Result>();
         goal = GameObject.FindObjectOfType<Goal>();
 
         bloodScreen = GameObject.FindObjectOfType<BloodScreen>();
         fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
-
-        theBGMController = FindObjectOfType<BGMController>();
     }
 
     void Start()
@@ -88,27 +94,22 @@ public class UIManager : MonoBehaviour
     public void HideOption()
     {
         onOption = false;
-        theBGMController.Fade(0.5f);
+        BGMController.instance.FadeVolume(0.5f);
 
-        option.SetActivation(onOption);
+        pauseMenu.SetActivation(onOption);
     }
 
     public void ShowOption()
     {
         onOption = true;
-        theBGMController.Fade(0f);
+        BGMController.instance.FadeVolume(0f);
 
-        option.SetActivation(onOption);
+        pauseMenu.SetActivation(onOption);
     }
 
     public void ShowSetting(bool state)
     {
         setting.SetActivation(state);
-    }
-
-    public void ShowResult(bool state)
-    {
-        //TO-DO: Show Result Animation
     }
 
     public void DarkenScreen(float alpha, float duration)

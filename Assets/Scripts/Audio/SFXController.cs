@@ -8,20 +8,15 @@ public class SFXController : MonoBehaviour
 
     void Awake()
     {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
+    {
         instance = this;
     }
-
-    AudioSource FindChannel()
-    {
-        foreach (var channel in audioSources)
-        {
-            if (!channel.isPlaying)
-                return channel;
-        }
-
-        Debug.LogWarning("all channel is streaming");
-        return null;
-    }
+    #endregion
 
     public void PlaySFX(AudioClip clip, float delay = 0f, float pitch = 1f, float volume = 1)
     {
@@ -34,5 +29,15 @@ public class SFXController : MonoBehaviour
             channel.volume = volume;
             channel.PlayDelayed(delay);
         }
+    }
+
+    AudioSource FindChannel()
+    {
+        foreach (var channel in audioSources)
+        {
+            if (!channel.isPlaying)
+                return channel;
+        }
+        return null;
     }
 }

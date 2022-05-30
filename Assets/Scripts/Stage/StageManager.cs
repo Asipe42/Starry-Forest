@@ -1,202 +1,64 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
-using TMPro;
 
 public class StageManager : MonoBehaviour
 {
-    enum DirectionType
-    {
-        Right,
-        Left
-    }
-
-    [SerializeField] TextMeshProUGUI chapterText;
-    [SerializeField] TextMeshProUGUI stageText;
-    [SerializeField] Image rankBox;
-    [SerializeField] Image rank;
-    [SerializeField] Sprite[] rankSprites;
-    [SerializeField] GameObject offset;
-    [SerializeField] GameObject emotion;
-
-    public StageButton[] stages;
-
-    Stage stage;
-    StageButton currentStageButton;
-    FadeScreen fadeScreen;
-
-    int currnetStageIndex = 0;
-    int maxStageIndex = 10;
-    bool onRight, onLeft, onSelect;
-    bool onLoading;
-    bool onLock;
-    bool endFade;
-
-    AudioClip notificationClip;
+    public static StageManager instance;
 
     void Awake()
     {
-        stage = GameObject.FindObjectOfType<Stage>();
-        fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
-
-        notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
-
-        FadeScreen.FadeEvent -= EndFade;
-        FadeScreen.FadeEvent += EndFade;
-
-        GetCurrentStageButton();
+        instance = this;
     }
 
-    void Start()
+    public StageTemplate stageTemplate;
+
+    #region Finish Stage
+    public IEnumerator FinishStage(LastFloorState lastFloorState)
     {
-        StartCoroutine(EnableStage());
+        PlayerController.instance.reachLastFloor = true;
+
+        StartCoroutine(WaitGoal(lastFloorState));
+        yield return null;
     }
 
-    void GetCurrentStageButton()
+    IEnumerator WaitGoal(LastFloorState lastFloorState)
     {
-        currentStageButton = offset.transform.parent.GetComponent<StageButton>();
+        StartCoroutine(PlayerController.instance.StopAction(lastFloorState));
+        yield return new WaitUntil(() => PlayerController.instance.onGoal);
+
+        StartCoroutine(PlayGoalDirecting(lastFloorState));
     }
 
-    void EndFade(bool state)
+    IEnumerator PlayGoalDirecting(LastFloorState lastFloorState)
     {
-        endFade = state;
-    }
+        float duration = 1f;
 
-    void Update()
-    {
-        Debug.Log(onLock);
+        UIManager.instance.goal.ShowGoal("완주 성공");
+        yield return new WaitUntil(() => UIManager.instance.goal.endDirecting);
 
-        if (!onLock)
+        UIManager.instance.fadeScreen.FadeScreenEffect(1, duration);
+        yield return new WaitForSeconds(duration * 2);
+
+        if (lastFloorState == LastFloorState.Normal)
         {
-            InputKey();
+            PlayResultDirecting();
+        }
+
+        if (lastFloorState == LastFloorState.Tutorial)
+        {
+            LoadMapScene(stageTemplate.currentStageIndex + 1);
         }
     }
 
-    void InputKey()
+    void PlayResultDirecting()
     {
-        onRight = Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
-        onLeft = Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A);
-        onSelect = Input.GetButtonDown("Submit");
-
-        if (onRight && !onLeft)
-        {
-            ChangeStage(DirectionType.Right);
-        }
-        else if (!onRight && onLeft)
-        {
-            ChangeStage(DirectionType.Left);
-        }
-
-        if (onSelect)
-        {
-            if (!onLoading)
-            {
-                onLoading = true;
-                StartCoroutine(Select());
-            }
-        }
+        UIManager.instance.result.PlayResultDirecting();
     }
 
-    void ChangeStage(DirectionType directionType)
+    void LoadMapScene(int index)
     {
-        if (directionType == DirectionType.Left)
-        {
-            if (currnetStageIndex < 1)
-                return;
-
-            if (!stages[currnetStageIndex - 1].onLock)
-            {
-                DisableStage();
-                currnetStageIndex--;
-                MoveToStageButton(currnetStageIndex);
-                GetCurrentStageButton();
-                SetStageInfo(currentStageButton.stageTemplate);
-            }
-        }
-
-        if (directionType == DirectionType.Right)
-        {
-            if (currnetStageIndex > maxStageIndex - 1)
-                return;
-
-            if (!stages[currnetStageIndex + 1].onLock)
-            {
-                DisableStage();
-                currnetStageIndex++;
-                MoveToStageButton(currnetStageIndex);
-                GetCurrentStageButton();
-                SetStageInfo(currentStageButton.stageTemplate);
-            }
-        }
+        GameManager.instance.UnlockStage(index);
+        Loading.LoadScene("Map");
     }
-
-    void MoveToStageButton(int index)
-    {
-        offset.transform.parent = stages[index].transform;
-        offset.transform.DOMove(offset.transform.parent.transform.position, 0.5f).OnComplete(() => StartCoroutine(EnableStage()));
-    }
-
-    IEnumerator Select()
-    {
-        DisableStage();
-        fadeScreen.Fade(1f, 0.5f, 1f);
-
-        SFXController.instance.PlaySFX(notificationClip);
-        emotion.transform.DOScale(0.5f, 0.5f).SetEase(Ease.OutBounce);
-
-        yield return new WaitForSeconds(2f);
-        Loading.LoadScene(currentStageButton.stageTemplate.sceneName);
-    }
-
-    void SetStageInfo(StageTemplate stageTemplate)
-    {
-        this.chapterText.text = stageTemplate.chapterName;
-        this.stageText.text = stageTemplate.stageName;
-
-        switch (stageTemplate.clearGrade)
-        {
-            case Grade.None:
-                break;
-            case Grade.APlus:
-                rank.sprite = rankSprites[0];
-                break;
-            case Grade.A:
-                rank.sprite = rankSprites[1];
-                break;
-            case Grade.BPlus:
-                rank.sprite = rankSprites[2];
-                break;
-            case Grade.B:
-                rank.sprite = rankSprites[3];
-                break;
-            case Grade.CPlus:
-                rank.sprite = rankSprites[4];
-                break;
-            case Grade.C:
-                rank.sprite = rankSprites[5];
-                break;
-        }
-    }
-
-    IEnumerator EnableStage()
-    {
-        onLock = true;
-        yield return new WaitUntil(() => endFade);
-
-        stage.ShowStageInfo(0.25f);
-        stage.ShowStartGuide(0.25f);
-        stage.ShowAlbumGuide(0.25f);
-
-        yield return new WaitForSeconds(1f);
-        onLock = false;
-    }
-
-    void DisableStage()
-    {
-        onLock = true;
-        stage.HideStageInfo(0.25f);
-        stage.HideStartGuide(0.25f);
-        stage.HideAlbumGuide(0.25f);
-    }
+    #endregion
 }

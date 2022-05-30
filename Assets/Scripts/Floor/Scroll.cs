@@ -25,23 +25,24 @@ public class Scroll : MonoBehaviour
     {
         playerController = FindObjectOfType<PlayerController>();
 
-        TutorialEvent.OnTutorialEvent -= CanScroll;
-        TutorialEvent.OnTutorialEvent += CanScroll;
+        TutorialEvent.OnTutorialEvent -= SetCanScroll;
+        TutorialEvent.OnTutorialEvent += SetCanScroll;
 
-        PlayerController.DashAction -= ScrollParticle;
-        PlayerController.DashAction += ScrollParticle;
+        PlayerController.deadEvent -= SetCanScroll;
+        PlayerController.deadEvent += SetCanScroll;
+
+        PlayerController.DashEvent -= ScrollParticle;
+        PlayerController.DashEvent += ScrollParticle;
     }
 
     void Start()
     {
-        particle = GameObject.FindGameObjectWithTag("FieldParticle").GetComponent<ParticleSystem>();
-
         ScrollParticle(DashLevel.None);
     }
 
     void Update()
     {
-        if (ProgressBar.onLast && PlayerController.instance.reachLastFloor)
+        if (FloorManager.instance.gaugeIsFull && PlayerController.instance.reachLastFloor)
         {
             if (!onEnd)
             {
@@ -58,9 +59,9 @@ public class Scroll : MonoBehaviour
         }
     }
 
-    void CanScroll(bool state)
+    void SetCanScroll(bool state)
     {
-        this.canScroll = state; 
+        canScroll = state; 
     }
 
     void ScrollParticle(DashLevel dashLevel)
@@ -87,7 +88,7 @@ public class Scroll : MonoBehaviour
 
     void Reposition()
     {
-        if (ProgressBar.onLast) // Last Floor
+        if (FloorManager.instance.gaugeIsFull) // Last Floor
 
         {
             if (createdLastFloor)

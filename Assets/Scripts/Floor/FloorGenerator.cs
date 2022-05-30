@@ -2,18 +2,16 @@ using UnityEngine;
 
 public class FloorGenerator : MonoBehaviour
 {
-    public GameObject[] candidate;
-
-    [SerializeField] Vector3 createPosition = new Vector3(153.6f, -0.8f, 0f);
     [SerializeField] Transform floorGroup;
+    [SerializeField] Vector3 createPosition = new Vector3(153.6f, -0.8f, 0f);
 
-    public GameObject lastFloor;
+    public GameObject[] candidate;
 
     public GameObject CreateFloor(Vector3 position, bool last = false)
     {
         if (last)
         {
-            return Instantiate(lastFloor, position + createPosition, Quaternion.identity, floorGroup);
+            return Instantiate(FloorManager.instance.stageTemplate.lastFloor, position + createPosition, Quaternion.identity, floorGroup);
         }
         else
         {

@@ -10,25 +10,50 @@ public enum LastFloorState
 
 public class FloorManager : MonoBehaviour
 {
+    public static FloorManager instance;
+
     [SerializeField] FloorGenerator theFloorGenerator;
     [SerializeField] FloorTemplate[] floorSet;
 
-    public int level = 0;
-    public int nextStageIndex;
+    public StageTemplate stageTemplate;
 
-    void Start()
+    public int level = 0;
+    public int totalItemCount;
+    public bool gaugeIsFull;
+
+    void Awake()
     {
+        Initialize();
+        SubscribeEvent();
         SetCandidate(level);
     }
 
-    /// <summary>
-    /// 플랫폼 난이도를 올린다.
-    /// </summary>
-    public void LevelUp()
+    #region Initial Setting
+    void Initialize()
+    {
+        instance = this;
+    }
+
+    void SubscribeEvent()
+    {
+        ProgressBar.levelUpEvent -= LevelUp;
+        ProgressBar.levelUpEvent += LevelUp;
+
+        ProgressBar.fullGaugeEvent -= GaugeFull;
+        ProgressBar.fullGaugeEvent += GaugeFull;
+    }
+
+    void LevelUp()
     {
         level++;
         SetCandidate(level);
     }
+
+    void GaugeFull(bool state)
+    {
+        gaugeIsFull = state;
+    }
+    #endregion
 
     /// <summary>
     /// 플랫폼 그룹을 교체한다.
@@ -37,45 +62,8 @@ public class FloorManager : MonoBehaviour
     public void SetCandidate(int index)
     {
         if (index < 0 || index >= floorSet.Length)
-        {
-            Debug.LogWarning("out of range");
             return;
-        }
 
         theFloorGenerator.candidate = floorSet[index].floor;
-    }
-
-    public IEnumerator EndStage(LastFloorState lastFloorState)
-    {
-        PlayerController.instance.reachLastFloor = true;
-
-        switch (lastFloorState)
-        {
-            case LastFloorState.Tutorial:
-                StartCoroutine(PlayerController.instance.StopAction(lastFloorState));
-                yield return new WaitUntil(() => PlayerController.instance.endStage);
-                UIManager.instance.goal.ShowGoal();
-                yield return new WaitUntil(() => UIManager.instance.goal.endGoal);
-                UIManager.instance.fadeScreen.Fade(1, 1f);
-                yield return new WaitForSeconds(2f);
-                Loading.LoadScene("Map");
-                GameManager.instance.UnlockStage(nextStageIndex);
-                break;
-            case LastFloorState.Normal:
-                StartCoroutine(PlayerController.instance.StopAction(lastFloorState));
-                yield return new WaitUntil(() => PlayerController.instance.endStage);
-                UIManager.instance.goal.ShowGoal();
-                // 결과로 전환
-                break;
-            case LastFloorState.Bornfire:
-                // 플레이어 멈춤
-                // 기다렸다가
-                // 결과
-                // 모닥불 씬으로 이동
-                break;
-            default:
-                Debug.LogError("argument is wrong");
-                break;
-        }
     }
 }

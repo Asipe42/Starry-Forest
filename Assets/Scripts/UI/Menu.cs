@@ -28,7 +28,7 @@ public class Menu : MonoBehaviour
     [SerializeField] Setting setting;
 
     [Space]
-    [SerializeField] Bar theBar;
+    [SerializeField] MenuBar theBar;
     [SerializeField] Text[] menus;
     [SerializeField] int normalFontSize = 45;
     [SerializeField] int bigFontSize = 50;

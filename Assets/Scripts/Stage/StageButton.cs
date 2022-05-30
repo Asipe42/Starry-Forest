@@ -6,7 +6,7 @@ public class StageButton : MonoBehaviour
     [SerializeField] Color lockColor;
     [SerializeField] int index;
 
-    public StageTemplate stageTemplate;
+    public StageButtonTemplate stageTemplate;
 
     public bool onLock;
 
@@ -20,6 +20,9 @@ public class StageButton : MonoBehaviour
     void Start()
     {
         onLock = GameManager.instance.isLockedStage[index];
+
+        if (stageTemplate.clearGrade > GameManager.instance.highGrade[index])
+            stageTemplate.clearGrade = GameManager.instance.highGrade[index];
 
         ChangeColor(onLock);
     }

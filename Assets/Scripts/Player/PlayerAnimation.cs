@@ -44,6 +44,11 @@ public class PlayerAnimation : BaseAnimation
         base.SetAnimationClip(anim, "dash", state);
     }
 
+    public void PlayDeadAnimation(bool state = true)
+    {
+        base.SetAnimationClip(anim, "dead", state);
+    }
+
     public void SetAnimationClipSpeed(float speed)
     {
         base.SetAnimationClipSpeed(anim, speed);

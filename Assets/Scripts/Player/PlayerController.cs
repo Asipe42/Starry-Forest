@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     public bool onPause;
     public bool onFix;
     public bool reachLastFloor;
-    public bool endStage;
+    public bool onGoal;
     public bool canMove = true;
     public bool canJump;
     public bool canSliding;
@@ -53,11 +53,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Transform targetTransform;
 
-    PlayerAnimation thePlayerAnimation;
-    PlayerAudio thePlayerAudio;
-    PlayerMovement thePlayerMovement;
-    PlayerParticle thePlayerParticle;
-    Status theStatus;
+    public PlayerAnimation thePlayerAnimation { get; private set; }
+    public PlayerAudio thePlayerAudio { get; private set; }
+    public PlayerMovement thePlayerMovement { get; private set; }
+    public PlayerParticle thePlayerParticle { get; private set; }
+    public Status theStatus { get; private set; }
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
@@ -67,7 +67,8 @@ public class PlayerController : MonoBehaviour
 
     List<string> actionList = new List<string>();
 
-    public static event Action<DashLevel> DashAction;
+    public static event Action<DashLevel> DashEvent;
+    public static event Action<bool> deadEvent;
 
     void Awake()
     {
@@ -292,7 +293,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForSeconds(dashTime[(int)dashLevel]);
 
                 dashLevel++;
-                DashAction.Invoke(dashLevel);
+                DashEvent.Invoke(dashLevel);
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
@@ -312,7 +313,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForSeconds(0.15f);
 
                 dashLevel--;
-                DashAction.Invoke(dashLevel);
+                DashEvent.Invoke(dashLevel);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
                 Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], 0.75f).SetEase(Ease.OutCubic);
@@ -336,7 +337,7 @@ public class PlayerController : MonoBehaviour
     #region Damaged
     IEnumerator Invincibility(float duration, float alphaValue)
     {
-        UIManager.instance.bloodScreen.BlooeScreenLogic(0.25f, 0.75f);
+        UIManager.instance.bloodScreen.BloodScreenEffect(0.25f, 0.75f);
         onInvincibility = true;
         spriteRenderer.color = new Color(1, 1, 1, alphaValue);
 
@@ -361,16 +362,16 @@ public class PlayerController : MonoBehaviour
                                       .SetEase(Ease.OutQuad);
 
         StartCoroutine(Invincibility(0.8f, 0.5f));
-        theStatus.hp -= damage;
+        theStatus.currentHp -= damage;
 
-        if (theStatus.hp <= 0)
+        if (theStatus.currentHp <= 0)
         {
-            Dead();
+            StartCoroutine(Dead());
         }
 
         SFXController.instance.PlaySFX(clip); 
 
-        UIManager.instance.heart.CheckHp(theStatus.hp);
+        UIManager.instance.heart.CheckHp(theStatus.currentHp);
     }
 
     void CameraSize(float x)
@@ -378,13 +379,26 @@ public class PlayerController : MonoBehaviour
         Camera.main.orthographicSize = x;
     }
 
-    void Dead()
+    IEnumerator Dead()
     {
-        //TO-DO: Create Dead Logic
+        InputManager.instance.onLock = true;
+        canMove = false;
+        deadEvent.Invoke(false);
 
-        StopAllCoroutines();
+        thePlayerAnimation.PlayDeadAnimation();
+        rigid.AddForce(new Vector2(-1f, 0.75f) * 2f, ForceMode2D.Impulse);
+        UIManager.instance.DarkenScreen(1, 2f);
 
-        Loading.LoadScene("Stage_01_Tutorial");
+        UIManager.instance.hud.HideHeartBox(0.5f);
+        UIManager.instance.hud.HidePDBox(0.5f);
+        UIManager.instance.hud.HideRSBox(0.5f);
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("!");
+        UIManager.instance.goal.ShowGoal("완주 실패");
+        GameManager.instance.life--;
+
+        yield return new WaitForSeconds(3f);
+        Loading.LoadScene("Map");
     }
     #endregion
 
@@ -401,12 +415,12 @@ public class PlayerController : MonoBehaviour
         thePlayerAudio.PlaySFX_Recover();
         thePlayerParticle.PlayRecover();
 
-        if (theStatus.maxHp <= theStatus.hp)
+        if (theStatus.maxHp <= theStatus.currentHp)
             return;
 
-        theStatus.hp += value;
+        theStatus.currentHp += value;
 
-        UIManager.instance.heart.CheckHp(theStatus.hp);
+        UIManager.instance.heart.CheckHp(theStatus.currentHp);
     }
     #endregion
 
@@ -432,7 +446,7 @@ public class PlayerController : MonoBehaviour
                 transform.DOMoveX(targetTransform.position.x, 3f)
                          .OnComplete(() => 
                          { 
-                             endStage = true;
+                             onGoal = true;
                              dashLevel = DashLevel.None;
                          });
                 break;
@@ -448,7 +462,6 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("argument is wrong");
                 break;
         }
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)

@@ -8,7 +8,7 @@ public class LastFloor : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            StartCoroutine(GameObject.FindObjectOfType<FloorManager>().GetComponent<FloorManager>().EndStage(state));
+            StartCoroutine(StageManager.instance.FinishStage(state));
         }
     }
 }

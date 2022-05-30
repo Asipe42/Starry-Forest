@@ -4,9 +4,12 @@ using DG.Tweening;
 
 public class BGMController : MonoBehaviour
 {
+    public static BGMController instance;
+
     enum SceneState
     {
         Title = 0,
+        Map,
         Stage
     }
 
@@ -20,25 +23,44 @@ public class BGMController : MonoBehaviour
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        Initialize();
     }
+
+    #region Initial Setting
+    void Initialize()
+    {
+        instance = this;
+
+        audioSource = GetComponent<AudioSource>();
+
+        audioSource.volume = defaultVolume;
+    }
+    #endregion
 
     void Start()
     {
-        audioSource.volume = defaultVolume;
-
         StartCoroutine(WaitPlayBGM(this.delay));
     }
 
-    public void Fade(float target = 1f, float duration = 1f)
+    /// <summary>
+    /// volume을 duration에 걸쳐 target만큼 조정합니다.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="duration"></param>
+    public void FadeVolume(float target = 1f, float duration = 1f)
     {
-        audioSource.DOFade(target, duration).SetDelay(delay);
+        audioSource.DOFade(target, duration);
         audioSource.Play();
     }
 
+    /// <summary>
+    /// FadeVolume을 delay초 이후에 실행합니다.
+    /// </summary>
+    /// <param name="delay"></param>
+    /// <returns></returns>
     public IEnumerator WaitPlayBGM(float delay = 0f)
     {
-        if (sceneState == SceneState.Title)
+        if (sceneState == SceneState.Title || sceneState == SceneState.Map)
         {
             yield return new WaitForSeconds(delay);
         }
@@ -47,6 +69,6 @@ public class BGMController : MonoBehaviour
             yield return new WaitUntil(() => !PlayerController.instance.onTutorial);
         }
 
-        Fade(this.target, this.duration);
+        FadeVolume(this.target, this.duration);
     }
 }
