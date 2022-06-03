@@ -15,6 +15,12 @@ public class PlayerAudio : MonoBehaviour
 
     void Awake()
     {
+        GetAudioClip();
+    }
+
+    #region Initial Setting
+    void GetAudioClip()
+    {
         walkClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Walk");
         jumpClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Jump");
         downhillClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Downhill");
@@ -26,8 +32,14 @@ public class PlayerAudio : MonoBehaviour
 
         audioSource.clip = walkClip;
     }
+    #endregion
 
     void Update()
+    {
+        PlaySFX_Walk();
+    }
+
+    void PlaySFX_Walk()
     {
         if (PlayerController.instance.onGround && !PlayerController.instance.onPause)
         {

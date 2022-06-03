@@ -13,6 +13,7 @@ public enum MenuType
 public enum SceneType
 {
     Title = 0,
+    Map,
     InGame
 }
 
@@ -24,17 +25,17 @@ public class Menu : MonoBehaviour
         Down
     }
 
-    [SerializeField] TitleGuide guide;
+    [SerializeField] Guide guide;
     [SerializeField] Setting setting;
-
-    [Space]
     [SerializeField] MenuBar theBar;
+    public FadeScreen fadeScreen;
+    
+    [Header("UI")]
     [SerializeField] Text[] menus;
     [SerializeField] int normalFontSize = 45;
     [SerializeField] int bigFontSize = 50;
 
-    [SerializeField] AudioClip menuClip;
-
+    AudioClip menuClip;
     Dictionary<MenuType, Vector3> menuPosition;
     Dictionary<MenuType, Text> menuText;
     List<Vector3> destination;
@@ -50,33 +51,21 @@ public class Menu : MonoBehaviour
 
     void Awake()
     {
+        Initialize();
+        SetDestination();
+        SetFontColor();
+        SubscribeEvent();
+        GetAudioClip();
+    }
+
+    #region Initial Setting
+    void Initialize()
+    {
         menuPosition = new Dictionary<MenuType, Vector3>();
         menuText = new Dictionary<MenuType, Text>();
         destination = new List<Vector3>();
-
-        FadeScreen.FadeEvent -= SetEnable;
-        FadeScreen.FadeEvent += SetEnable;
-
-        setting.onSettingEvent -= SetLock;
-        setting.onSettingEvent += SetLock;
-
-        menuClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Menu");
     }
 
-    void Start()
-    {
-        SetDestination();
-    }
-
-    void SetLock(bool state)
-    {
-        onLock = state;
-    }
-
-    void SetEnable(bool state)
-    {
-        onEnable = state;
-    }
 
     void SetDestination()
     {
@@ -90,10 +79,43 @@ public class Menu : MonoBehaviour
         menuPosition.Add(MenuType.Option, destination[2]);
         menuPosition.Add(MenuType.Exit, destination[3]);
 
-        menuText.Add(MenuType.NewGame, menus[0]) ;
+        menuText.Add(MenuType.NewGame, menus[0]);
         menuText.Add(MenuType.Continue, menus[1]);
         menuText.Add(MenuType.Option, menus[2]);
         menuText.Add(MenuType.Exit, menus[3]);
+    }
+
+    void SetFontColor()
+    {
+        menuText[MenuType.Continue].color = Color.gray;
+    }
+
+    void SubscribeEvent()
+    {
+        FadeScreen.fadeEvent -= SetEnable;
+        FadeScreen.fadeEvent += SetEnable;
+
+        setting.onSettingEvent -= SetLock;
+        setting.onSettingEvent += SetLock;
+
+        Guide.cancleGuideEvent -= SetLock;
+        Guide.cancleGuideEvent += SetLock;
+    }
+
+    void GetAudioClip()
+    {
+        menuClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Menu");
+    }
+    #endregion
+
+    void SetLock(bool state)
+    {
+        onLock = state;
+    }
+
+    void SetEnable(bool state)
+    {
+        onEnable = state;
     }
 
     void Update()
@@ -177,8 +199,6 @@ public class Menu : MonoBehaviour
         StartCoroutine(theBar.MoveBar(menuPosition[menuType]));
         ChangeFontSize(menuText[menuType]);
         ChangeFontStyle(menuText[menuType]);
-
-        Debug.Log("now selected menu type is: " + menuType);
     }
 
     public void ChangeMenu(string menuName)
@@ -215,8 +235,6 @@ public class Menu : MonoBehaviour
         StartCoroutine(theBar.MoveBar(menuPosition[menuType]));
         ChangeFontSize(menuText[menuType]);
         ChangeFontStyle(menuText[menuType]);
-
-        Debug.Log("now selected menu type is: " + menuType);
     }
 
     void ChangeFontSize(Text selectedMenu)
@@ -251,9 +269,6 @@ public class Menu : MonoBehaviour
             case MenuType.Exit:
                 Exit();
                 break;
-            default:
-                Debug.LogWarning("Selected menu is incorrect");
-                break;
         }
     }
 
@@ -273,9 +288,6 @@ public class Menu : MonoBehaviour
             case MenuType.Exit:
                 Exit();
                 break;
-            default:
-                Debug.LogWarning("Selected menu is incorrect");
-                break;
         }
     }
 
@@ -287,8 +299,6 @@ public class Menu : MonoBehaviour
 
     void Continue()
     {
-        Debug.Log("selected \"Continue\"");
-
         // TODO: Load saved Scene
     }
 

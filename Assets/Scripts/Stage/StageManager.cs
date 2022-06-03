@@ -1,16 +1,30 @@
 using System.Collections;
 using UnityEngine;
 
+public enum LastFloorState
+{
+    Tutorial,
+    Normal,
+    Bornfire
+}
+
 public class StageManager : MonoBehaviour
 {
     public static StageManager instance;
 
+    public StageTemplate stageTemplate;
+
     void Awake()
+    {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
     {
         instance = this;
     }
-
-    public StageTemplate stageTemplate;
+    #endregion
 
     #region Finish Stage
     public IEnumerator FinishStage(LastFloorState lastFloorState)
@@ -23,7 +37,7 @@ public class StageManager : MonoBehaviour
 
     IEnumerator WaitGoal(LastFloorState lastFloorState)
     {
-        StartCoroutine(PlayerController.instance.StopAction(lastFloorState));
+        StartCoroutine(PlayerController.instance.GoalAction(lastFloorState));
         yield return new WaitUntil(() => PlayerController.instance.onGoal);
 
         StartCoroutine(PlayGoalDirecting(lastFloorState));
@@ -33,8 +47,8 @@ public class StageManager : MonoBehaviour
     {
         float duration = 1f;
 
-        UIManager.instance.goal.ShowGoal("肯林 己傍");
-        yield return new WaitUntil(() => UIManager.instance.goal.endDirecting);
+        UIManager.instance.resultSign.ShowResultSign("肯林 己傍");
+        yield return new WaitUntil(() => UIManager.instance.resultSign.endDirecting);
 
         UIManager.instance.fadeScreen.FadeScreenEffect(1, duration);
         yield return new WaitForSeconds(duration * 2);
@@ -57,7 +71,7 @@ public class StageManager : MonoBehaviour
 
     void LoadMapScene(int index)
     {
-        GameManager.instance.UnlockStage(index);
+        GameManager.UnlockStage(index);
         Loading.LoadScene("Map");
     }
     #endregion

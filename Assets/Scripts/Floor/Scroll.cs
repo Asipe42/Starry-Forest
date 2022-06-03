@@ -6,27 +6,37 @@ public class Scroll : MonoBehaviour
     [SerializeField] List<GameObject> preFloors;
     [SerializeField] Transform[] backgroundLayer_01;
     [SerializeField] Transform[] backgroundLayer_02;
-    [SerializeField] ParticleSystem particle;
+    [SerializeField] ParticleSystem screenParticle;
 
-    [Space]
+    [Header("Values")]
     [SerializeField] Vector3 deadline = new Vector3(-60f, 0f, 0f);
     [SerializeField] Vector3 reposition = new Vector3(188f, 0f, 0f);
     [SerializeField] float[] scrollSpeed_background;
     [SerializeField] float[] scrollSpeed_floor;
-    [SerializeField] FloorGenerator theFloorGenerator;
+
+    ParticleSystem.VelocityOverLifetimeModule screenParticleModule;
 
     public bool canScroll;
     public bool createdLastFloor;
     public bool onEnd;
 
-    PlayerController playerController;
-
     void Awake()
     {
-        playerController = FindObjectOfType<PlayerController>();
+        Initialize();
+        SubscribeEvent();
+    }
 
-        TutorialEvent.OnTutorialEvent -= SetCanScroll;
-        TutorialEvent.OnTutorialEvent += SetCanScroll;
+    #region Initial Setting
+    void Initialize()
+    {
+        screenParticleModule = new ParticleSystem.VelocityOverLifetimeModule();
+        screenParticleModule = screenParticle.velocityOverLifetime;
+    }
+
+    void SubscribeEvent()
+    {
+        TutorialEvent.tutorialEvent -= SetCanScroll;
+        TutorialEvent.tutorialEvent += SetCanScroll;
 
         PlayerController.deadEvent -= SetCanScroll;
         PlayerController.deadEvent += SetCanScroll;
@@ -34,13 +44,36 @@ public class Scroll : MonoBehaviour
         PlayerController.DashEvent -= ScrollParticle;
         PlayerController.DashEvent += ScrollParticle;
     }
+    #endregion
 
     void Start()
     {
         ScrollParticle(DashLevel.None);
     }
 
+    void SetCanScroll(bool state)
+    {
+        canScroll = state;
+    }
+
+    void ScrollParticle(DashLevel dashLevel)
+    {
+        screenParticleModule.xMultiplier = -1 * (1.5f * (float)dashLevel);
+    }
+
     void Update()
+    {
+        CheckStop();
+
+        if (canScroll)
+        {
+            ScrollBackground();
+            ScrollFloor();
+            Reposition();
+        }
+    }
+
+    void CheckStop()
     {
         if (FloorManager.instance.gaugeIsFull && PlayerController.instance.reachLastFloor)
         {
@@ -51,26 +84,9 @@ public class Scroll : MonoBehaviour
             }
         }
 
-        if (canScroll)
-        {
-            ScrollBackground();
-            ScrollFloor();
-            Reposition();
-        }
     }
 
-    void SetCanScroll(bool state)
-    {
-        canScroll = state; 
-    }
-
-    void ScrollParticle(DashLevel dashLevel)
-    {
-        var temp = particle.velocityOverLifetime;
-
-        temp.xMultiplier = -1 * (1.5f * (float)dashLevel);
-    }
-
+    #region Scrolling
     void ScrollBackground()
     {       
         foreach (var layer in backgroundLayer_01)
@@ -100,8 +116,8 @@ public class Scroll : MonoBehaviour
                 {
                     createdLastFloor = true;
 
-                    preFloors.Add(theFloorGenerator.CreateFloor(preFloors[i].transform.localPosition, true));
-                    theFloorGenerator.DestroyFloor(preFloors[i]);
+                    preFloors.Add(FloorManager.instance.floorGenerator.CreateFloor(preFloors[i].transform.localPosition, true));
+                    FloorManager.instance.floorGenerator.DestroyFloor(preFloors[i]);
                     preFloors.RemoveAt(i);
                 }
             }
@@ -112,8 +128,8 @@ public class Scroll : MonoBehaviour
             {
                 if (preFloors[i].transform.position.x <= deadline.x)
                 {
-                    preFloors.Add(theFloorGenerator.CreateFloor(preFloors[i].transform.localPosition));
-                    theFloorGenerator.DestroyFloor(preFloors[i]);
+                    preFloors.Add(FloorManager.instance.floorGenerator.CreateFloor(preFloors[i].transform.localPosition));
+                    FloorManager.instance.floorGenerator.DestroyFloor(preFloors[i]);
                     preFloors.RemoveAt(i);
                 }
             }
@@ -130,4 +146,5 @@ public class Scroll : MonoBehaviour
                     layer.transform.position += reposition;
         }
     }
+    #endregion
 }

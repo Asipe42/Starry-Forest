@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] PlayerAnimation thePlayerAnimation;
     [SerializeField] float jumpPower;
     [SerializeField] float defaultGravityScale;
     [SerializeField] float downhillGravityScale;
@@ -11,10 +10,17 @@ public class PlayerMovement : MonoBehaviour
     
     void Awake()
     {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
+    {
         rigid = GetComponent<Rigidbody2D>();
 
         defaultGravityScale = rigid.gravityScale;
     }
+    #endregion
 
     public void Movement_Jump()
     {

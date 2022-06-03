@@ -31,24 +31,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float[] dashCameraSize;
     [SerializeField] float[] dashCameraPosition;
 
-    public bool onTutorial = true;
+    public bool onTutorial;
     public bool onPause;
     public bool onFix;
     public bool reachLastFloor;
     public bool onGoal;
-    public bool canMove = true;
+    public bool canMove;
     public bool canJump;
     public bool canSliding;
     public bool canDownhill;
     public bool canDash;
     public bool onGround;
-    public bool onWalk = true;
+    public bool onWalk;
     public bool onJump;
     public bool onDownhill;
     public bool onSliding;
     public bool onDash;
-    public bool hasDownhill = true;
-    public bool hasDash = true;
+    public bool hasDownhill;
+    public bool hasDash;
     public bool onInvincibility;
 
     [SerializeField] Transform targetTransform;
@@ -72,22 +72,35 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
+    {
         instance = this;
 
         thePlayerAnimation = GetComponent<PlayerAnimation>();
         thePlayerAudio = GetComponent<PlayerAudio>();
         thePlayerMovement = GetComponent<PlayerMovement>();
         thePlayerParticle = GetComponent<PlayerParticle>();
-        theStatus = GetComponent<Status>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
+
+        theStatus = new Status();
 
         actionList.Add("jump");
         actionList.Add("sliding");
         actionList.Add("downhill");
         actionList.Add("dash");
     }
+    #endregion
 
+    /// <summary>
+    /// name 행동의 제어 상태를 state로 바꾼다
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="state"></param>
     public void PermitAction(string name, bool state = true)
     {
         switch (name)
@@ -107,6 +120,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 모든 행동 상태를 제어할 수 있도록 허가한다.
+    /// </summary>
+    /// <param name="state"></param>
     public void PermitEveryAction(bool state)
     {
         foreach (var action in actionList)
@@ -293,6 +310,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForSeconds(dashTime[(int)dashLevel]);
 
                 dashLevel++;
+                dashLevel = dashLevel > DashLevel.Max ? DashLevel.Max : dashLevel;
                 DashEvent.Invoke(dashLevel);
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
                 Camera.main.DOKill();
@@ -313,6 +331,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForSeconds(0.15f);
 
                 dashLevel--;
+                dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
                 DashEvent.Invoke(dashLevel);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
@@ -334,6 +353,18 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Knockback
+    /// <summary>
+    /// force만큼 direction으로 힘을 가한다.
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="force"></param>
+    public void Knockback(Vector2 direction, float force)
+    {
+        rigid.AddForce(new Vector2(-1f, 0.75f) * 2f, ForceMode2D.Impulse);
+    }
+    #endregion
+
     #region Damaged
     IEnumerator Invincibility(float duration, float alphaValue)
     {
@@ -352,16 +383,6 @@ public class PlayerController : MonoBehaviour
         if (onInvincibility)
             return;
 
-        Sequence mySequence = DOTween.Sequence();
-
-        mySequence.Append(Camera.main.DOShakePosition(
-                                        duration: 0.75f,
-                                        new Vector3(0.3f, 0f, 0f),
-                                        vibrato: 5,
-                                        randomness: 90))
-                                      .SetEase(Ease.OutQuad);
-
-        StartCoroutine(Invincibility(0.8f, 0.5f));
         theStatus.currentHp -= damage;
 
         if (theStatus.currentHp <= 0)
@@ -369,38 +390,67 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Dead());
         }
 
-        SFXController.instance.PlaySFX(clip); 
+        StartCoroutine(Invincibility(0.8f, 0.5f));
 
+        SFXController.instance.PlaySFX(clip);
         UIManager.instance.heart.CheckHp(theStatus.currentHp);
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Append(Camera.main.DOShakePosition(
+                                        duration: 0.75f,
+                                        new Vector3(0.3f, 0f, 0f),
+                                        vibrato: 5,
+                                        randomness: 90))
+                                     .SetEase(Ease.OutQuad);
     }
 
     void CameraSize(float x)
     {
         Camera.main.orthographicSize = x;
     }
+    #endregion
 
-    IEnumerator Dead()
+    #region Dead
+    public IEnumerator Dead()
     {
-        InputManager.instance.onLock = true;
-        canMove = false;
+        float duration = 8f;
+
         deadEvent.Invoke(false);
-
         thePlayerAnimation.PlayDeadAnimation();
-        rigid.AddForce(new Vector2(-1f, 0.75f) * 2f, ForceMode2D.Impulse);
-        UIManager.instance.DarkenScreen(1, 2f);
 
+        StopAction();
+        StartCoroutine(DeadDirection());
+        yield return new WaitForSeconds(duration);
+        DeadLogic();
+    }
+    #endregion
+
+    IEnumerator DeadDirection()
+    {
+        Vector2 knockbackDirection = new Vector2(-1f, 0.75f);
+        float knockbackForce = 2f;
+        float duration = 2f;
+
+        Knockback(knockbackDirection, knockbackForce);
+
+        UIManager.instance.darkenScreen.DarkenScreenEffect(1, duration);
         UIManager.instance.hud.HideHeartBox(0.5f);
         UIManager.instance.hud.HidePDBox(0.5f);
         UIManager.instance.hud.HideRSBox(0.5f);
-        yield return new WaitForSeconds(1.5f);
-        Debug.Log("!");
-        UIManager.instance.goal.ShowGoal("완주 실패");
-        GameManager.instance.life--;
+        yield return new WaitForSeconds(duration + 0.5f);
 
-        yield return new WaitForSeconds(3f);
+        UIManager.instance.resultSign.ShowResultSign("완주 실패");
+    }
+
+    void DeadLogic()
+    {
+        DecreaseLife();
         Loading.LoadScene("Map");
     }
-    #endregion
+
+    void DecreaseLife()
+    {
+        GameManager.life--;
+    }
 
     #region Take Item
     public void TakeItem(int score)
@@ -424,7 +474,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    public IEnumerator StopAction(LastFloorState lastFloorState)
+    public IEnumerator GoalAction(LastFloorState lastFloorState)
     {
         yield return new WaitUntil(() => onGround);
 
@@ -433,7 +483,7 @@ public class PlayerController : MonoBehaviour
         if (IncreaseDashLevelCoroutine != null)
             StopCoroutine(IncreaseDashLevelCoroutine);
 
-        UIManager.instance.DarkenScreen(alpha: 0.4f, duration: 1f);
+        UIManager.instance.darkenScreen.DarkenScreenEffect(0.4f, 1f);
         UIManager.instance.hud.HideHeartBox(1f);
         UIManager.instance.hud.HidePDBox(1f);
         UIManager.instance.hud.HideRSBox(1f);
@@ -458,10 +508,16 @@ public class PlayerController : MonoBehaviour
                 thePlayerAnimation.PlayDashAnimation(false);
                 thePlayerAnimation.PlayWalkAnimation(false);
                 break;
-            default:
-                Debug.LogError("argument is wrong");
-                break;
         }
+    }
+
+    /// <summary>
+    /// 입력과 움직임을 차단한다.
+    /// </summary>
+    public void StopAction()
+    {
+        InputManager.instance.onLock = true;
+        canMove = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

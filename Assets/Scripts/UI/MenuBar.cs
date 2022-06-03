@@ -12,9 +12,21 @@ public class MenuBar : MonoBehaviour
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        Initialize();
     }
 
+    #region Initial Setting
+    void Initialize()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+    #endregion
+
+    /// <summary>
+    /// Title 씬의 메뉴 바를 움직입니다.
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <returns></returns>
     public IEnumerator MoveBar(Vector3 destination)
     {
         this.destination = destination;
@@ -26,7 +38,5 @@ public class MenuBar : MonoBehaviour
 
             yield return null;
         }
-
-        Debug.Log("bar moving is done");
     }
 }

@@ -11,13 +11,16 @@ public class PauseMenu : MonoBehaviour
 
     void Awake()
     {
+        GetAudioClip();
+    }
+
+    void GetAudioClip()
+    {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
     }
 
     public void SetActivation(bool state)
     {
-        Debug.Log("!");
-
         if (state)
         {
             InputManager.instance.onLock = true;
@@ -47,27 +50,38 @@ public class PauseMenu : MonoBehaviour
 
             panel.DOFade(0, 0.3f);
             box.DOScale(0f, 0.25f)
-                .SetEase(Ease.OutQuad);
+               .SetEase(Ease.OutQuad);
         }
     }
-
+    /// <summary>
+    /// 해당 스테이지를 다시 시작합니다.
+    /// </summary>
     public void Restart()
     {
         Time.timeScale = 1f;
 
-        Loading.LoadScene(FloorManager.instance.stageTemplate.currentSceneName);
+        Loading.LoadScene(StageManager.instance.stageTemplate.currentSceneName);
     }
 
+    /// <summary>
+    /// 세팅 UI를 엽니다.
+    /// </summary>
     public void GoSetting()
     {
         UIManager.instance.ShowSetting(true);
     }
 
+    /// <summary>
+    /// 타이틀 씬으로 돌아갑니다.
+    /// </summary>
     public void GoTitle()
     {
         Loading.LoadScene("Title");
     }
 
+    /// <summary>
+    /// 게임을 재개합니다.
+    /// </summary>
     public void Cancle()
     {
         UIManager.instance.HideOption();

@@ -1,23 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public enum LastFloorState
-{
-    Tutorial,
-    Normal,
-    Bornfire
-}
-
 public class FloorManager : MonoBehaviour
 {
     public static FloorManager instance;
 
-    [SerializeField] FloorGenerator theFloorGenerator;
+    public FloorGenerator floorGenerator;
+
     [SerializeField] FloorTemplate[] floorSet;
 
-    public StageTemplate stageTemplate;
-
-    public int level = 0;
+    public int level = 0; // 0 == easy, 1 == hard
     public int totalItemCount;
     public bool gaugeIsFull;
 
@@ -64,6 +56,6 @@ public class FloorManager : MonoBehaviour
         if (index < 0 || index >= floorSet.Length)
             return;
 
-        theFloorGenerator.candidate = floorSet[index].floor;
+        floorGenerator.candidate = floorSet[index].floor;
     }
 }

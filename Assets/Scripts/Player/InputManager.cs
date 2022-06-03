@@ -15,6 +15,11 @@ public class InputManager : MonoBehaviour
 
     void Awake()
     {
+        Initialize();
+    }
+
+    void Initialize()
+    {
         instance = this;
     }
 

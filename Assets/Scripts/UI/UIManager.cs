@@ -1,14 +1,8 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-
-    [SerializeField] SignTemplate[] signTemplate; // 0: Tutorial, 1: Normal
-    [SerializeField] Image panel;
 
     #region HUD Components
     public HUD hud { get; private set; }
@@ -22,14 +16,15 @@ public class UIManager : MonoBehaviour
     #region Popup Components
     public PauseMenu pauseMenu { get; private set; }
     public Setting setting { get; private set; }
-    public Sign sign { get; private set; }
+    public StartSign startSign { get; private set; }
     public Result result { get; private set; }
-    public Goal goal { get; private set; }
+    public ResultSign resultSign { get; private set; }
     #endregion
 
     #region ScreenEffect Components
     public BloodScreen bloodScreen { get; private set; }
     public FadeScreen fadeScreen { get; private set; }
+    public DarkenScreen darkenScreen { get; private set; }
     #endregion
 
     bool onOption;
@@ -52,20 +47,21 @@ public class UIManager : MonoBehaviour
 
         pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
         setting = GameObject.FindObjectOfType<Setting>();
-        sign = GameObject.FindObjectOfType<Sign>();
+        startSign = GameObject.FindObjectOfType<StartSign>();
         result = GameObject.FindObjectOfType<Result>();
-        goal = GameObject.FindObjectOfType<Goal>();
+        resultSign = GameObject.FindObjectOfType<ResultSign>();
 
         bloodScreen = GameObject.FindObjectOfType<BloodScreen>();
         fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
-    }
-
-    void Start()
-    {
-        StartCoroutine(ShowSign(1f, 0));
+        darkenScreen = GameObject.FindObjectOfType<DarkenScreen>();
     }
 
     void Update()
+    {
+        InputKey();
+    }
+
+    void InputKey()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -81,14 +77,6 @@ public class UIManager : MonoBehaviour
                 ShowOption();
             }
         }
-    }
-
-    public IEnumerator ShowSign(float delay, int index)
-    {
-        yield return new WaitForSeconds(delay);
-
-        sign.Initialize(signTemplate[index]);
-        sign.Popup();
     }
 
     public void HideOption()
@@ -110,10 +98,5 @@ public class UIManager : MonoBehaviour
     public void ShowSetting(bool state)
     {
         setting.SetActivation(state);
-    }
-
-    public void DarkenScreen(float alpha, float duration)
-    {
-        panel.DOFade(alpha, duration);
     }
 }

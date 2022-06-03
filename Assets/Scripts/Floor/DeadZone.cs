@@ -6,7 +6,7 @@ public class DeadZone : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Loading.LoadScene(FloorManager.instance.stageTemplate.currentSceneName);
+            StartCoroutine(PlayerController.instance.Dead());
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Blink : MonoBehaviour
 {
-    // Warning: This is Legacy
+    // NOTICE: This is Legacy
 
     enum VisualType
     {
@@ -19,6 +19,11 @@ public class Blink : MonoBehaviour
     SpriteRenderer spriteRenderer;
 
     void Awake()
+    {
+        Initialize();
+    }
+
+    void Initialize()
     {
         switch (type)
         {

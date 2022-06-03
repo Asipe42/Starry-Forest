@@ -6,19 +6,38 @@ public class PlayerAnimation : BaseAnimation
 
     void Awake()
     {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
+    {
         anim = GetComponent<Animator>();
     }
+    #endregion
 
     void Update()
     {
-        PlayWalkAnimation(PlayerController.instance.onWalk);
+        CheckWalkAnimation();
+        CheckDashAnimation();
+    }
 
+    #region Check Animation
+    void CheckWalkAnimation()
+    {
+        PlayWalkAnimation(PlayerController.instance.onWalk);
+    }
+
+    void CheckDashAnimation()
+    {
         if (PlayerController.instance.dashLevel > DashLevel.None)
             PlayDashAnimation(true);
         else
             PlayDashAnimation(false);
     }
+    #endregion
 
+    #region Play Animation
     public void PlayWalkAnimation(bool state = true)
     {
         base.SetAnimationClip(anim, "walk", state);
@@ -48,9 +67,14 @@ public class PlayerAnimation : BaseAnimation
     {
         base.SetAnimationClip(anim, "dead", state);
     }
+    #endregion
 
-    public void SetAnimationClipSpeed(float speed)
+    /// <summary>
+    /// player의 모든 animation clip의 speed를 speed로 조정한다.
+    /// </summary>
+    /// <param name="speed"></param>
+    public void SetAnimationSpeed(float speed)
     {
-        base.SetAnimationClipSpeed(anim, speed);
+        base.SetAnimationSpeed(anim, speed);
     }
 }

@@ -47,10 +47,12 @@ public class BGMController : MonoBehaviour
     /// </summary>
     /// <param name="target"></param>
     /// <param name="duration"></param>
-    public void FadeVolume(float target = 1f, float duration = 1f)
+    public void FadeVolume(float target = 1f, float duration = 1f, float delay = 0f)
     {
-        audioSource.DOFade(target, duration);
-        audioSource.Play();
+        audioSource.DOFade(target, duration).SetDelay(delay);
+
+        if (!audioSource.isPlaying)
+            audioSource.Play();
     }
 
     /// <summary>

@@ -38,20 +38,40 @@ public class MapManager : MonoBehaviour
 
     void Awake()
     {
-        stage = GameObject.FindObjectOfType<Stage>();
-        fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
-
-        notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
-
-        FadeScreen.FadeEvent -= EndFade;
-        FadeScreen.FadeEvent += EndFade;
-
+        Initialize();
+        LockCursor();
+        GetAudioClip();
+        SubscribeEvent();
         GetCurrentStageButton();
     }
 
-    void Start()
+    #region Initial Setting
+    void Initialize()
     {
-        StartCoroutine(EnableStage());
+        stage = GameObject.FindObjectOfType<Stage>();
+        fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
+    }
+
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void GetAudioClip()
+    {
+        notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
+    }
+
+    void SubscribeEvent()
+    {
+        FadeScreen.fadeEvent -= EndFade;
+        FadeScreen.fadeEvent += EndFade;
+    }
+    #endregion
+
+    void EndFade(bool state)
+    {
+        endFade = state;
     }
 
     void GetCurrentStageButton()
@@ -59,9 +79,9 @@ public class MapManager : MonoBehaviour
         currentStageButton = offset.transform.parent.GetComponent<StageButton>();
     }
 
-    void EndFade(bool state)
+    void Start()
     {
-        endFade = state;
+        StartCoroutine(EnableStage());
     }
 
     void Update()
@@ -106,11 +126,8 @@ public class MapManager : MonoBehaviour
 
             if (!stages[currnetStageIndex - 1].onLock)
             {
-                DisableStage();
                 currnetStageIndex--;
-                MoveToStageButton(currnetStageIndex);
-                GetCurrentStageButton();
-                SetStageInfo(currentStageButton.stageTemplate);
+                ChangeStateLogic();
             }
         }
 
@@ -121,13 +138,18 @@ public class MapManager : MonoBehaviour
 
             if (!stages[currnetStageIndex + 1].onLock)
             {
-                DisableStage();
                 currnetStageIndex++;
-                MoveToStageButton(currnetStageIndex);
-                GetCurrentStageButton();
-                SetStageInfo(currentStageButton.stageTemplate);
+                ChangeStateLogic();
             }
         }
+    }
+
+    void ChangeStateLogic()
+    {
+        DisableStage();
+        MoveToStageButton(currnetStageIndex);
+        GetCurrentStageButton();
+        SetStageInfo(currentStageButton.stageTemplate);
     }
 
     void MoveToStageButton(int index)
@@ -152,7 +174,7 @@ public class MapManager : MonoBehaviour
     {
         this.chapterText.text = stageTemplate.chapterName;
         this.stageText.text = stageTemplate.stageName;
-        this.lifeText.text = "" + GameManager.instance.life;
+        this.lifeText.text = "" + GameManager.life;
 
         switch (stageTemplate.clearGrade)
         {
@@ -184,20 +206,21 @@ public class MapManager : MonoBehaviour
         onLock = true;
         yield return new WaitUntil(() => endFade);
 
-        stage.ShowStageInfo(0.25f);
-        stage.ShowStartGuide(0.25f);
-        stage.ShowAlbumGuide(0.25f);
+        stage.ShowStageInfo(0.5f);
+        stage.ShowStartGuide(0.5f);
+        stage.ShowAlbumGuide(0.5f);
         SetStageInfo(currentStageButton.stageTemplate);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         onLock = false;
     }
 
     void DisableStage()
     {
         onLock = true;
-        stage.HideStageInfo(0.25f);
-        stage.HideStartGuide(0.25f);
-        stage.HideAlbumGuide(0.25f);
+
+        stage.HideStageInfo(0.3f);
+        stage.HideStartGuide(0.3f);
+        stage.HideAlbumGuide(0.3f);
     }
 }

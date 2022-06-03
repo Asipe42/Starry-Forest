@@ -14,8 +14,6 @@ struct PlayerInfo
 
 public class TutorialEvent : MonoBehaviour
 {
-    public static event Action<bool> OnTutorialEvent;
-
     [SerializeField] Image panel;
     [SerializeField] SpriteRenderer guide;
     [SerializeField] ParticleSystem screenParticle;
@@ -29,7 +27,15 @@ public class TutorialEvent : MonoBehaviour
 
     bool onEvent;
 
+    public static event Action<bool> tutorialEvent;
+
     void Awake()
+    {
+        Initialize();
+    }
+
+    #region Initial Setting
+    void Initialize()
     {
         tutorialPopupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_TutorialPopup");
 
@@ -40,6 +46,7 @@ public class TutorialEvent : MonoBehaviour
         targetKey.Add("downhill", UseKeys.jumpKey);
         targetKey.Add("dash", UseKeys.dashKey);
     }
+    #endregion
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -50,7 +57,7 @@ public class TutorialEvent : MonoBehaviour
         {
             onEvent = true;
 
-            OnTutorialEvent.Invoke(false);
+            tutorialEvent.Invoke(false);
 
             PlayerInfo playerInfo;
             playerInfo.pc = collision.gameObject.GetComponent<PlayerController>();
@@ -59,7 +66,7 @@ public class TutorialEvent : MonoBehaviour
 
             playerInfo.pc.PermitAction(targetActionName);
             playerInfo.pc.onPause = true;
-            playerInfo.pa.SetAnimationClipSpeed(0f);
+            playerInfo.pa.SetAnimationSpeed(0f);
 
             screenParticle.Pause();
             panel.DOFade(0.4f, duration);
@@ -95,7 +102,7 @@ public class TutorialEvent : MonoBehaviour
 
         playerInfo.pc.PermitAction(targetActionName, false);
         playerInfo.pc.onPause = false;
-        playerInfo.pa.SetAnimationClipSpeed(1f);
+        playerInfo.pa.SetAnimationSpeed(1f);
 
         screenParticle.Play();
         panel.DOFade(0, duration);
@@ -123,7 +130,7 @@ public class TutorialEvent : MonoBehaviour
         }
         #endregion
 
-        OnTutorialEvent.Invoke(true);
+        tutorialEvent.Invoke(true);
 
         if (lastEvent)
         {
@@ -131,7 +138,7 @@ public class TutorialEvent : MonoBehaviour
             playerInfo.pc.PermitEveryAction(true);
 
             UIManager.instance.hud.ShowRSBox(1f);
-            StartCoroutine(UIManager.instance.ShowSign(0.5f, 1));
+            StartCoroutine(UIManager.instance.startSign.ShowStartSign(0.5f, 1));
         }
     }
 }

@@ -8,14 +8,14 @@ public class Recover : MonoBehaviour
     #region Set Random Activation
     void Start()
     {
-        if (onRandom)
-        {
-            SetRandomActivation();
-        }
+        SetRandomActivation();
     }
 
     void SetRandomActivation()
     {
+        if (!onRandom)
+            return;
+
         bool state = CalculateRandomValue();
 
         SetActivation(state);

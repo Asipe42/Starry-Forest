@@ -12,8 +12,6 @@ public class Setting : MonoBehaviour
         Control
     }
 
-    public event Action<bool> onSettingEvent;
-
     [SerializeField] SceneType sceneType = SceneType.Title;
 
     [Header("Taps")]
@@ -33,7 +31,7 @@ public class Setting : MonoBehaviour
     [SerializeField] AudioMixer mixer;
     [SerializeField] Slider BGMSlider;
     [SerializeField] Slider SFXSlider;
-
+    
     public const string MIXER_BGM = "BGMVolume";
     public const string MIXER_SFX = "SFXVolume";
 
@@ -43,20 +41,46 @@ public class Setting : MonoBehaviour
 
     AudioClip popupClip;
     AudioClip tapClip;
+    AudioClip errorClip;
+
+    public event Action<bool> onSettingEvent;
 
     void Awake()
     {
-        popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
-        tapClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Tap");
+        Initialize();
+        GetAudioClip();
+        SetVolumes();
     }
 
-    void Start()
+    #region Initial Setting
+    void Initialize()
+    {
+        this.tap = Tap.Sound;
+        ShowSelected(this.tap);
+        sound.SetActive(true);
+        control.SetActive(false);
+    }
+
+    void GetAudioClip()
+    {
+        popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
+        tapClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Tap");
+        errorClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Error");
+    }
+
+    void SetVolumes()
     {
         BGMSlider.onValueChanged.AddListener(SetBGMVolume);
         SFXSlider.onValueChanged.AddListener(SetSFXVolume);
     }
+    #endregion
 
     void Update()
+    {
+        InputKey();
+    }
+
+    void InputKey()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -68,6 +92,10 @@ public class Setting : MonoBehaviour
     }
 
     #region Popup
+    /// <summary>
+    /// Setting UI를 활성화/비활성화 합니다.
+    /// </summary>
+    /// <param name="state"></param>
     public void SetActivation(bool state)
     {
         onSetting = state;
@@ -108,6 +136,10 @@ public class Setting : MonoBehaviour
     #endregion
 
     #region Tap
+    /// <summary>
+    /// tap을 변경합니다.
+    /// </summary>
+    /// <param name="tap"></param>
     public void ConvertTap(string tap)
     {
         switch (tap)
@@ -146,14 +178,26 @@ public class Setting : MonoBehaviour
     #endregion
 
     #region Button Function
+    /// <summary>
+    /// 변경 사항을 적용하고 Setting UI를 닫습니다.
+    /// </summary>
     public void Apply()
     {
         Exit();
     }
 
+    /// <summary>
+    /// 변경 사항을 취소하고 Setting UI를 닫습니다.
+    /// </summary>
     public void Cancle()
     {
         Exit();
+    }
+
+    public void PlayDisabledAnimation()
+    {
+        box.transform.DOShakePosition(0.5f, new Vector3(15f, 0f, 0f), randomness: 0f).SetEase(Ease.OutQuad);
+        SFXController.instance.PlaySFX(errorClip);
     }
     #endregion
 
@@ -164,17 +208,9 @@ public class Setting : MonoBehaviour
 
         onSetting = false;
 
-        Initlaize();
+        Initialize();
 
         SetActivation(false);
-    }
-
-    void Initlaize()
-    {
-        this.tap = Tap.Sound;
-        ShowSelected(this.tap);
-        sound.SetActive(true);
-        control.SetActive(false);
     }
 
     #region Volume Setting

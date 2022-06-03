@@ -3,16 +3,22 @@ using DG.Tweening;
 
 public class Vine : Obstacle
 {
-    [Space]
-    [SerializeField] AudioClip appearClip;
+    AudioClip appearClip;
 
-    [Space]
-    public bool onAppear;
+    [HideInInspector] public bool onAppear;
 
-    void Start()
+    void Awake()
     {
+        GetAudioClip();
+    }
+
+    #region Initial Setting
+    void GetAudioClip()
+    {
+        base.hitClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Hit_01");
         appearClip = Resources.Load<AudioClip>("Audio/SFX/SFX_VineAppear");
     }
+    #endregion
 
     public void Appear()
     {
@@ -22,6 +28,6 @@ public class Vine : Obstacle
         onAppear = true;
         SFXController.instance.PlaySFX(appearClip);
 
-        transform.DOMoveY(-0.25f, 0.9f).SetEase(Ease.OutSine);
+        transform.DOMoveY(-0.5f, 1f).SetEase(Ease.OutSine);
     }
 }

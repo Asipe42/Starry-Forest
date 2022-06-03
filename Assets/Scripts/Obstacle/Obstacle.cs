@@ -2,13 +2,9 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] AudioClip hitClip;
     [SerializeField] int damage;
 
-    void Awake()
-    {
-        hitClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Hit_01");
-    }
+    protected AudioClip hitClip;
 
     void OnTriggerEnter2D(Collider2D collision)
     {

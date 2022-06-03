@@ -6,6 +6,11 @@ public class MushroomManager : MonoBehaviour
 
     void Awake()
     {
+        SetMushroomDelay();
+    }
+
+    void SetMushroomDelay()
+    {
         itemCount = transform.childCount;
 
         for (int i = 0; i < itemCount; i++)
@@ -15,6 +20,11 @@ public class MushroomManager : MonoBehaviour
     }
 
     void Start()
+    {
+        AccumulateItemCount();
+    }
+
+    void AccumulateItemCount()
     {
         FloorManager.instance.totalItemCount += itemCount;
     }

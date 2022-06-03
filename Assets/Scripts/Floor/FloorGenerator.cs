@@ -7,11 +7,17 @@ public class FloorGenerator : MonoBehaviour
 
     public GameObject[] candidate;
 
+    /// <summary>
+    /// position에 floor을 생성한다. (last가 true라면 마지막 floor)
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="last"></param>
+    /// <returns></returns>
     public GameObject CreateFloor(Vector3 position, bool last = false)
     {
         if (last)
         {
-            return Instantiate(FloorManager.instance.stageTemplate.lastFloor, position + createPosition, Quaternion.identity, floorGroup);
+            return Instantiate(StageManager.instance.stageTemplate.lastFloor, position + createPosition, Quaternion.identity, floorGroup);
         }
         else
         {
@@ -20,6 +26,10 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// floor를 제거한다
+    /// </summary>
+    /// <param name="floor"></param>
     public void DestroyFloor(GameObject floor)
     {
         Destroy(floor);

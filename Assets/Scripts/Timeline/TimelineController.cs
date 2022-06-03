@@ -9,15 +9,29 @@ public class TimelineController : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
-        playable = GetComponent<PlayableDirector>();
+        Initialize();
     }
 
+    #region Initial Setting
+    void Initialize()
+    {
+        instance = this;
+
+        playable = GetComponent<PlayableDirector>();
+    }
+    #endregion
+
+    /// <summary>
+    /// Timeline을 정지합니다.
+    /// </summary>
     public void PauseTimeline()
     {
         playable.Pause();
     }
 
+    /// <summary>
+    /// Timeline을 재개합니다.
+    /// </summary>
     public void ContinueTimeline()
     {
         playable.Play();

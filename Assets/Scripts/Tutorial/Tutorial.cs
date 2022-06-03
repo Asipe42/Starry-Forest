@@ -12,8 +12,15 @@ public class Tutorial : MonoBehaviour
 
     void Awake()
     {
+        GetAudioClip();
+    }
+
+    #region Initial Setting
+    void GetAudioClip()
+    {
         showClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Show");
     }
+    #endregion
 
     void Start()
     {

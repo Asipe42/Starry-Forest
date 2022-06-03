@@ -12,22 +12,24 @@ public class StageButton : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
     void Start()
     {
-        onLock = GameManager.instance.isLockedStage[index];
-
-        if (stageTemplate.clearGrade > GameManager.instance.highGrade[index])
-            stageTemplate.clearGrade = GameManager.instance.highGrade[index];
-
+        Initialize();
         ChangeColor(onLock);
     }
 
-    public void ChangeColor(bool state)
+    #region Initial Setting
+    void Initialize()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        onLock = GameManager.stageButtonInfo[index].isLockedStage;
+
+        if (stageTemplate.clearGrade > GameManager.stageButtonInfo[index].highGrade)
+            stageTemplate.clearGrade = GameManager.stageButtonInfo[index].highGrade;
+    }
+
+    void ChangeColor(bool state)
     {
         if (state) // unlock
         {
@@ -38,4 +40,5 @@ public class StageButton : MonoBehaviour
             spriteRenderer.color = unlockColor;
         }
     }
+    #endregion
 }

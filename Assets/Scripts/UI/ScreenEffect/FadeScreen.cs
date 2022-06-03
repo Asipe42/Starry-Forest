@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class FadeScreen : MonoBehaviour
 {
-    public static event Action<bool> FadeEvent;
+    public static event Action<bool> fadeEvent;
 
     [Header("Values")]
     [SerializeField] Image image;
@@ -27,11 +27,11 @@ public class FadeScreen : MonoBehaviour
     /// <param name="delay"></param>
     public void FadeScreenEffect(float target, float duration = 1f, float delay = 0f)
     {
-        if (sceneType == SceneType.Title)
+        if (sceneType == SceneType.Title || sceneType == SceneType.Map)
         {
             image.DOFade(target, duration).SetDelay(delay).OnComplete(() => 
             {
-                FadeEvent.Invoke(true);
+                fadeEvent.Invoke(true);
             });
         }
         else

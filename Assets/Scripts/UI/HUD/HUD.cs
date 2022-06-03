@@ -8,11 +8,9 @@ public class HUD : MonoBehaviour
     [SerializeField] RectTransform rsBox; // rank and score
     [SerializeField] RectTransform pdBox; // progress and dash;
 
-    public bool onTutorial;
-
     void Start()
     {
-        if (!onTutorial)
+        if (!PlayerController.instance.onTutorial)
         {
             StartCoroutine(ShowHUD(5f));
         }

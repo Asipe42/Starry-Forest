@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,7 +10,8 @@ public class ProgressBar : MonoBehaviour
     [Header("UI")]
     [SerializeField] Slider slider;
     [SerializeField] Image gaugeImage;
-    [SerializeField] GameObject speechBubble;
+    [SerializeField] GameObject speechBubbleOffset;
+    [SerializeField] Image speechBubble;
     [SerializeField] TextMeshProUGUI cheerText;
     [SerializeField] Color[] colors;
     public bool[] changedColor;
@@ -73,6 +75,7 @@ public class ProgressBar : MonoBehaviour
             if (!PlayerController.instance.onTutorial)
             {
                 FillGague();
+                CheckGaugeFull();
                 CheckGauge();
             }
         }
@@ -80,16 +83,30 @@ public class ProgressBar : MonoBehaviour
 
     void FillGague()
     {
-        if (slider.value == slider.maxValue)
+        if (gauge >= gaugeMax)
             return;
 
         gauge += fillSpeed[(int)PlayerController.instance.dashLevel] * Time.deltaTime;
         slider.value = gauge;
     }
 
+    void CheckGaugeFull()
+    {
+        if (gauge >= gaugeMax)
+        {
+            if (!gaugeIsFull)
+            {
+                gaugeIsFull = true;
+                fullGaugeEvent.Invoke(true);
+
+                Cheer();
+            }
+        }
+    }
+
     void CheckGauge()
     {
-        if (slider.value == slider.maxValue)
+        if (gauge >= gaugeMax)
             return;
 
         for (int i = 0; i < grade; i++)
@@ -99,7 +116,7 @@ public class ProgressBar : MonoBehaviour
 
             if (slider.maxValue / (grade + 1) * (grade - i) <= slider.value)
             {
-                if (i == FloorManager.instance.stageTemplate.levelUpTimeRate)
+                if (i == StageManager.instance.stageTemplate.levelUpTimeRate)
                 {
                     if (!onLevelUp)
                     {
@@ -110,19 +127,6 @@ public class ProgressBar : MonoBehaviour
 
                 changedColor[i] = true;
                 ChangeColor(colors[i]);
-            }
-        }
-
-        if (gauge >= slider.maxValue)
-        {
-            gauge = slider.maxValue;
-         
-            if (!gaugeIsFull)
-            {
-                gaugeIsFull = true;
-                fullGaugeEvent.Invoke(true);
-
-                Cheer();
             }
         }
     }
@@ -136,27 +140,28 @@ public class ProgressBar : MonoBehaviour
     {
         SFXController.instance.PlaySFX(notificationClip, 0.25f);
 
-        var appearSequence = DOTween.Sequence();
-        var disappearSequence = DOTween.Sequence();
+        PlayAppearAnimation();
+    }
 
-        disappearSequence.Pause();
+    void PlayAppearAnimation()
+    {
+        float insertTime = 1.5f;
 
-        appearSequence.Append(speechBubble.transform.DOLocalRotate(new Vector3(0f, 0f, 360f), 1.5f).SetEase(Ease.OutBounce, overshoot: 1.25f))
-                .Insert(2f, cheerText.DOText("거의 다 왔어요!", 0.75f))
-                                     .OnUpdate(() => PlayMessageClip())
-                                     .OnComplete(() => audioSource.Stop())
-                .Insert(3f, cheerText.DOText("조금만 더 힘내세요!", 0.75f))
-                                     .OnStart(() => cheerText.text = "")
-                                     .OnUpdate(() => PlayMessageClip())
-                                     .OnComplete(() => audioSource.Stop())
-                .OnComplete(() =>
-                {
-                    disappearSequence.Restart();
-                });
+        var sequence = DOTween.Sequence();
 
-        disappearSequence.AppendCallback(() => audioSource.Stop())
-                         .Append(speechBubble.GetComponent<Image>().DOFade(0f, 1.25f))
-                         .Append(cheerText.DOFade(0f, 1.25f));
+        sequence.Append(speechBubbleOffset.transform.DORotate(new Vector3(0f, 0f, 90f), 0.5f).SetEase(Ease.OutExpo))
+                .InsertCallback(insertTime, () => PlayTypinganimation("거의 다 왔어요!"))
+                .InsertCallback(insertTime * 2f, () => PlayTypinganimation("조금만 더 힘내세요!"))
+                .OnComplete(() => StartCoroutine(PlayDisappearanimation(insertTime)));
+    }
+
+    void PlayTypinganimation(string message)
+    {
+        cheerText.text = "";
+
+        cheerText.DOText(message, 0.5f)
+                 .OnUpdate(() => PlayMessageClip())
+                 .OnComplete(() => audioSource.Stop());
     }
 
     void PlayMessageClip()
@@ -167,5 +172,15 @@ public class ProgressBar : MonoBehaviour
             audioSource.clip = messageClip;
             audioSource.Play();
         }
+    }
+
+    IEnumerator PlayDisappearanimation(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(speechBubble.DOFade(0f, 1f))
+                .Append(cheerText.DOFade(0f, 1f));
     }
 }
