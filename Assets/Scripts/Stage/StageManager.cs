@@ -45,22 +45,20 @@ public class StageManager : MonoBehaviour
 
     IEnumerator PlayGoalDirecting(LastFloorState lastFloorState)
     {
-        float duration = 1f;
-
         UIManager.instance.resultSign.ShowResultSign("완주 성공");
         yield return new WaitUntil(() => UIManager.instance.resultSign.endDirecting);
 
-        UIManager.instance.fadeScreen.FadeScreenEffect(1, duration);
-        yield return new WaitForSeconds(duration * 2);
-
-        if (lastFloorState == LastFloorState.Normal)
+        if (lastFloorState == LastFloorState.Normal || lastFloorState == LastFloorState.Bornfire)
         {
+            Debug.Log(lastFloorState);
             PlayResultDirecting();
+            yield return new WaitUntil(() => UIManager.instance.result.endDirecting);
+            StartCoroutine(LoadMapScene(stageTemplate.currentStageIndex + 1, lastFloorState));
         }
 
         if (lastFloorState == LastFloorState.Tutorial)
         {
-            LoadMapScene(stageTemplate.currentStageIndex + 1);
+            StartCoroutine(LoadMapScene(stageTemplate.currentStageIndex + 1, lastFloorState));
         }
     }
 
@@ -69,10 +67,22 @@ public class StageManager : MonoBehaviour
         UIManager.instance.result.PlayResultDirecting();
     }
 
-    void LoadMapScene(int index)
+    IEnumerator LoadMapScene(int index, LastFloorState lastFloorState)
     {
+        UIManager.instance.fadeScreen.FadeScreenEffect(1, 1f);
+        yield return new WaitForSeconds(2f);
+
         GameManager.UnlockStage(index);
-        Loading.LoadScene("Map");
+
+        if (lastFloorState == LastFloorState.Normal || lastFloorState == LastFloorState.Tutorial)
+        {
+            Loading.LoadScene("Map");
+        }
+
+        if (lastFloorState == LastFloorState.Bornfire)
+        {
+            Loading.LoadScene("Rest_" + stageTemplate.chapterIndex);
+        }
     }
     #endregion
 }

@@ -16,10 +16,11 @@ public class TutorialEvent : MonoBehaviour
 {
     [SerializeField] Image panel;
     [SerializeField] SpriteRenderer guide;
-    [SerializeField] ParticleSystem screenParticle;
     [SerializeField] string targetActionName;
     [SerializeField] float duration = 0.3f;
     [SerializeField] bool lastEvent;
+
+    ParticleSystem screenParticle;
 
     Dictionary<string, KeyCode> targetKey;
 
@@ -32,6 +33,11 @@ public class TutorialEvent : MonoBehaviour
     void Awake()
     {
         Initialize();
+    }
+
+    void Start()
+    {
+        AllocateScreenParticle();
     }
 
     #region Initial Setting
@@ -47,6 +53,11 @@ public class TutorialEvent : MonoBehaviour
         targetKey.Add("dash", UseKeys.dashKey);
     }
     #endregion
+
+    void AllocateScreenParticle()
+    {
+        screenParticle = GameObject.FindObjectOfType<Scroll>().transform.GetChild(0).GetComponent<ParticleSystem>();
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {

@@ -14,7 +14,8 @@ public enum SceneType
 {
     Title = 0,
     Map,
-    InGame
+    InGame,
+    Timeline
 }
 
 public class Menu : MonoBehaviour

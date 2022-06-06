@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class Vine : Obstacle
 {
+    [SerializeField] float destination = -0.5f;
+
     AudioClip appearClip;
 
     [HideInInspector] public bool onAppear;
@@ -28,6 +30,6 @@ public class Vine : Obstacle
         onAppear = true;
         SFXController.instance.PlaySFX(appearClip);
 
-        transform.DOMoveY(-0.5f, 1f).SetEase(Ease.OutSine);
+        transform.DOMoveY(destination, 1f).SetEase(Ease.OutSine);
     }
 }

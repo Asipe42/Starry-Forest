@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class StageButton : MonoBehaviour
 {
-    [SerializeField] Color unlockColor;
-    [SerializeField] Color lockColor;
+    [SerializeField] Sprite[] sprite; // 0: Unlock, 1: lock
     [SerializeField] int index;
 
     public StageButtonTemplate stageTemplate;
@@ -25,19 +24,22 @@ public class StageButton : MonoBehaviour
 
         onLock = GameManager.stageButtonInfo[index].isLockedStage;
 
+        if (stageTemplate.clearGrade == Grade.None)
+            stageTemplate.clearGrade = GameManager.stageButtonInfo[index].highGrade;
+
         if (stageTemplate.clearGrade > GameManager.stageButtonInfo[index].highGrade)
             stageTemplate.clearGrade = GameManager.stageButtonInfo[index].highGrade;
     }
 
     void ChangeColor(bool state)
     {
-        if (state) // unlock
+        if (state) // lock
         {
-            spriteRenderer.color = lockColor;
+            spriteRenderer.sprite = sprite[1];
         }
-        else // lock
+        else // unlcok
         {
-            spriteRenderer.color = unlockColor;
+            spriteRenderer.sprite = sprite[0];
         }
     }
     #endregion

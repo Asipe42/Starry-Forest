@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: StageButton_1_4
   m_EditorClassIdentifier: 
   chapterName: "\uBC84\uC12F \uC232"
-  stageName: 1-4
-  sceneName: Stage_1_4
+  stageName: 1-3
+  sceneName: Stage_1_3
   clearGrade: 0

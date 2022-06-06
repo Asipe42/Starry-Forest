@@ -27,7 +27,6 @@ public class Dash : MonoBehaviour
 
     void FillDash(DashLevel dashLevel)
     {
-        Debug.Log((int)dashLevel);
         float targetFillGuage = fillValues[(int)dashLevel];
 
         DOVirtual.Float(fillImage.fillAmount, targetFillGuage, duration, DashGaugeFillValue);

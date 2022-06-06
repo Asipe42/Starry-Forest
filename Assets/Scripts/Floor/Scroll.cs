@@ -6,7 +6,7 @@ public class Scroll : MonoBehaviour
     [SerializeField] List<GameObject> preFloors;
     [SerializeField] Transform[] backgroundLayer_01;
     [SerializeField] Transform[] backgroundLayer_02;
-    [SerializeField] ParticleSystem screenParticle;
+    [SerializeField] GameObject screenParticlePrefab;
 
     [Header("Values")]
     [SerializeField] Vector3 deadline = new Vector3(-60f, 0f, 0f);
@@ -14,7 +14,7 @@ public class Scroll : MonoBehaviour
     [SerializeField] float[] scrollSpeed_background;
     [SerializeField] float[] scrollSpeed_floor;
 
-    ParticleSystem.VelocityOverLifetimeModule screenParticleModule;
+    ParticleSystem screenParticle;
 
     public bool canScroll;
     public bool createdLastFloor;
@@ -29,8 +29,11 @@ public class Scroll : MonoBehaviour
     #region Initial Setting
     void Initialize()
     {
-        screenParticleModule = new ParticleSystem.VelocityOverLifetimeModule();
-        screenParticleModule = screenParticle.velocityOverLifetime;
+        GameObject particle = Instantiate(screenParticlePrefab, transform);
+        particle.transform.position = new Vector3(11f, 0.9f, 0f);
+        particle.transform.eulerAngles = new Vector3(-90f, 0f, 0f);
+
+        screenParticle = particle.GetComponent<ParticleSystem>();
     }
 
     void SubscribeEvent()
@@ -41,8 +44,8 @@ public class Scroll : MonoBehaviour
         PlayerController.deadEvent -= SetCanScroll;
         PlayerController.deadEvent += SetCanScroll;
 
-        PlayerController.DashEvent -= ScrollParticle;
-        PlayerController.DashEvent += ScrollParticle;
+        //PlayerController.DashEvent -= ScrollParticle;
+        //PlayerController.DashEvent += ScrollParticle;
     }
     #endregion
 
@@ -56,9 +59,11 @@ public class Scroll : MonoBehaviour
         canScroll = state;
     }
 
-    void ScrollParticle(DashLevel dashLevel)
+    public void ScrollParticle(DashLevel dashLevel)
     {
-        screenParticleModule.xMultiplier = -1 * (1.5f * (float)dashLevel);
+        var temp = screenParticle.velocityOverLifetime;
+
+        temp.xMultiplier = -1 * (1.5f * (float)dashLevel);
     }
 
     void Update()

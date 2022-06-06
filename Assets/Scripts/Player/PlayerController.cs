@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement thePlayerMovement { get; private set; }
     public PlayerParticle thePlayerParticle { get; private set; }
     public Status theStatus { get; private set; }
+    public Scroll scroll { get; private set; }
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
@@ -86,6 +87,7 @@ public class PlayerController : MonoBehaviour
         thePlayerParticle = GetComponent<PlayerParticle>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
+        scroll = GameObject.FindObjectOfType<Scroll>();
 
         theStatus = new Status();
 
@@ -312,6 +314,7 @@ public class PlayerController : MonoBehaviour
                 dashLevel++;
                 dashLevel = dashLevel > DashLevel.Max ? DashLevel.Max : dashLevel;
                 DashEvent.Invoke(dashLevel);
+                scroll.ScrollParticle(dashLevel);
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
@@ -333,6 +336,7 @@ public class PlayerController : MonoBehaviour
                 dashLevel--;
                 dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
                 DashEvent.Invoke(dashLevel);
+                scroll.ScrollParticle(dashLevel);
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
                 Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], 0.75f).SetEase(Ease.OutCubic);
@@ -416,7 +420,6 @@ public class PlayerController : MonoBehaviour
 
         deadEvent.Invoke(false);
         thePlayerAnimation.PlayDeadAnimation();
-
         StopAction();
         StartCoroutine(DeadDirection());
         yield return new WaitForSeconds(duration);
@@ -439,6 +442,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration + 0.5f);
 
         UIManager.instance.resultSign.ShowResultSign("완주 실패");
+        yield return new WaitUntil(() => UIManager.instance.resultSign.endDirecting);
+        UIManager.instance.fadeScreen.FadeScreenEffect(1, 1f);
     }
 
     void DeadLogic()
@@ -502,11 +507,14 @@ public class PlayerController : MonoBehaviour
                 break;
             case LastFloorState.Bornfire:
                 onWalk = false;
+                dashLevel = DashLevel.None;
                 thePlayerAnimation.PlayDownhillAnimation(false);
                 thePlayerAnimation.PlayJumpAnimation(false);
                 thePlayerAnimation.PlaySlidingAnimation(false);
                 thePlayerAnimation.PlayDashAnimation(false);
                 thePlayerAnimation.PlayWalkAnimation(false);
+                yield return new WaitForSeconds(1.5f);
+                onGoal = true;
                 break;
         }
     }

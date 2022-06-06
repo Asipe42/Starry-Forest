@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public static StageButtonInfo[] stageButtonInfo;
     public static int life = 3;
+    public static int lastSelectedStageButtonIndex = 0;
 
     void Awake()
     {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     void SetStageButtonInfo()
     {
-        int stageIndex = 5;
+        int stageIndex = 11;
 
         stageButtonInfo = new StageButtonInfo[stageIndex];
 

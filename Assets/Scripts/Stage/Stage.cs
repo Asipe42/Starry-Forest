@@ -15,12 +15,12 @@ public class Stage : MonoBehaviour
 
     public void ShowStartGuide(float duration)
     {
-        startGuide.DOAnchorPos(new Vector2(60, 60f), duration).SetEase(Ease.OutExpo);
+        startGuide.DOAnchorPos(new Vector2(60, 10), duration).SetEase(Ease.OutExpo);
     }
 
     public void ShowAlbumGuide(float duration)
     {
-        albumGuide.DOAnchorPos(new Vector2(-60f, 60f), duration).SetEase(Ease.OutExpo);
+        albumGuide.DOAnchorPos(new Vector2(-60f, 10), duration).SetEase(Ease.OutExpo);
     }
     #endregion
 
@@ -32,12 +32,12 @@ public class Stage : MonoBehaviour
 
     public void HideStartGuide(float duration)
     {
-        startGuide.DOAnchorPos(new Vector2(-400f, 60f), duration).SetEase(Ease.InQuad);
+        startGuide.DOAnchorPos(new Vector2(-450, 60f), duration).SetEase(Ease.InQuad);
     }
 
     public void HideAlbumGuide(float duration)
     {
-        albumGuide.DOAnchorPos(new Vector2(400f, 60f), duration).SetEase(Ease.InQuad);
+        albumGuide.DOAnchorPos(new Vector2(450, 60f), duration).SetEase(Ease.InQuad);
     }
     #endregion
 }

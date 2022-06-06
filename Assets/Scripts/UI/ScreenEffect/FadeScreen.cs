@@ -34,9 +34,26 @@ public class FadeScreen : MonoBehaviour
                 fadeEvent.Invoke(true);
             });
         }
-        else
+        
+        if (sceneType == SceneType.InGame)
         {
             image.DOFade(target, duration).SetDelay(delay);
         }
+
+        if (sceneType == SceneType.Timeline)
+        {
+            ; // do nohitng
+        }
+    }
+
+    /// <summary>
+    /// Timeline 전용 함수
+    /// </summary>
+    public void Fade(bool state)
+    {
+        if (state)
+            image.DOFade(0, 1f);
+        else
+            image.DOFade(1, 1f);
     }
 }

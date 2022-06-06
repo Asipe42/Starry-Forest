@@ -24,6 +24,8 @@ public class ResultSign : MonoBehaviour
 
     public void ShowResultSign(string message)
     {
+        BGMController.instance.FadeVolume(0f, 2.5f);
+
         text.text = message;
 
         var sequence = DOTween.Sequence();
@@ -31,6 +33,6 @@ public class ResultSign : MonoBehaviour
         sequence.Append(box.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBounce).OnStart(() => SFXController.instance.PlaySFX(goalClip)))
                 .Insert(1.5f, box.GetComponent<Image>().DOFade(0f, 2f))
                 .Insert(1.5f, text.DOFade(0f, 2f))
-                .AppendCallback(() => UIManager.instance.fadeScreen.FadeScreenEffect(1f, 1f)).OnComplete(() => endDirecting = true);
+                .AppendCallback(() => endDirecting = true);
     }
 }

@@ -36,4 +36,12 @@ public class TimelineController : MonoBehaviour
     {
         playable.Play();
     }
+
+    /// <summary>
+    /// 지도 화면으로 이동한다.
+    /// </summary>
+    public void GoMap()
+    {
+        Loading.LoadScene("Map");
+    }
 }

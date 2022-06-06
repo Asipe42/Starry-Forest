@@ -42,7 +42,7 @@ public class MapManager : MonoBehaviour
         LockCursor();
         GetAudioClip();
         SubscribeEvent();
-        GetCurrentStageButton();
+        SetOffset();
     }
 
     #region Initial Setting
@@ -72,6 +72,13 @@ public class MapManager : MonoBehaviour
     void EndFade(bool state)
     {
         endFade = state;
+    }
+
+    void SetOffset()
+    {
+        currnetStageIndex = GameManager.lastSelectedStageButtonIndex;
+        currentStageButton = stages[GameManager.lastSelectedStageButtonIndex];
+        MoveToStageButton(GameManager.lastSelectedStageButtonIndex, 0.01f);
     }
 
     void GetCurrentStageButton()
@@ -149,21 +156,26 @@ public class MapManager : MonoBehaviour
         DisableStage();
         MoveToStageButton(currnetStageIndex);
         GetCurrentStageButton();
-        SetStageInfo(currentStageButton.stageTemplate);
     }
 
-    void MoveToStageButton(int index)
+    void MoveToStageButton(int index, float duration = 0.75f)
     {
+        Vector3 destination = new Vector3(offset.transform.parent.transform.position.x,
+                                          offset.transform.parent.transform.position.y + 0.6f,
+                                          offset.transform.parent.transform.position.z);
+
         offset.transform.parent = stages[index].transform;
-        offset.transform.DOMove(offset.transform.parent.transform.position, 0.5f).OnComplete(() => StartCoroutine(EnableStage()));
+        offset.transform.DOMove(destination, duration).OnComplete(() => StartCoroutine(EnableStage()));
     }
 
     IEnumerator Select()
     {
         DisableStage();
+        GameManager.lastSelectedStageButtonIndex = currnetStageIndex;
         fadeScreen.FadeScreenEffect(1f, 0.5f, 1f);
 
         SFXController.instance.PlaySFX(notificationClip);
+        BGMController.instance.FadeVolume(0f, 1.75f);
         emotion.transform.DOScale(0.5f, 0.5f).SetEase(Ease.OutBounce);
 
         yield return new WaitForSeconds(2f);
