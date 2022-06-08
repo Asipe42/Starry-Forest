@@ -32,12 +32,12 @@ public class Stage : MonoBehaviour
 
     public void HideStartGuide(float duration)
     {
-        startGuide.DOAnchorPos(new Vector2(-450, 60f), duration).SetEase(Ease.InQuad);
+        startGuide.DOAnchorPos(new Vector2(-450, 10f), duration).SetEase(Ease.InQuad);
     }
 
     public void HideAlbumGuide(float duration)
     {
-        albumGuide.DOAnchorPos(new Vector2(450, 60f), duration).SetEase(Ease.InQuad);
+        albumGuide.DOAnchorPos(new Vector2(450, 10f), duration).SetEase(Ease.InQuad);
     }
     #endregion
 }

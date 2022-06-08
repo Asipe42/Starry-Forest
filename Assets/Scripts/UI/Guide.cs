@@ -23,9 +23,12 @@ public class Guide : MonoBehaviour
     [SerializeField] float duration;
     [SerializeField] string[] Message_NewGame;
     [SerializeField] string Message_Exit;
+    [SerializeField] string Message_GobackTitle;
     [SerializeField] bool onGuide;
+    [SerializeField] bool isMap;
+    [SerializeField] FadeScreen fadeScreen;
 
-    Menu menu;
+    //Menu menu;
 
     AudioClip popupClip;
     AudioClip acceptClip;
@@ -42,7 +45,7 @@ public class Guide : MonoBehaviour
     
     void Initialize()
     {
-        menu = GameObject.FindObjectOfType<Menu>();
+        //menu = GameObject.FindObjectOfType<Menu>();
     }
 
     void GetAudioClip()
@@ -59,6 +62,11 @@ public class Guide : MonoBehaviour
             {
                 Cancle();
             }
+
+            if (isMap && !onGuide)
+            {
+                PopupGuide_Map(true, 1);
+            }
         }
     }
 
@@ -74,6 +82,20 @@ public class Guide : MonoBehaviour
             FadeInPanel(state);
             SetScaleBox(targetScale);
             SetText();
+        }
+    }
+
+    public void PopupGuide_Map(bool state, int targetScale)
+    {
+        if (!onGuide)
+        {
+            onGuide = true;
+
+            SFXController.instance.PlaySFX(popupClip, 0f, 1.25f, 0.3f);
+
+            FadeInPanel(state);
+            SetScaleBox(targetScale);
+            SetText_Map();
         }
     }
 
@@ -114,11 +136,19 @@ public class Guide : MonoBehaviour
         }
     }
 
+    public void SetText_Map()
+    {
+        mainText.rectTransform.anchoredPosition = textPosition_Exit;
+        mainText.text = Message_GobackTitle;
+        subText.text = "";
+    }
+
     public void Accept()
     {
         switch (menuType)
         {
             case MenuType.NewGame:
+                InitializeStageInfo();
                 StartCoroutine(AcceptLogic(3f));
                 break;
             case MenuType.Exit:
@@ -129,6 +159,16 @@ public class Guide : MonoBehaviour
 #endif
                 break;
         }
+    }
+
+    void InitializeStageInfo()
+    {
+        GameManager.SetStageButtonInfo();
+    }
+
+    public void Accept_Map()
+    {
+        StartCoroutine(AcceptLogic_Map(3f));
     }
 
     IEnumerator AcceptLogic(float delay)
@@ -144,14 +184,26 @@ public class Guide : MonoBehaviour
         }
     }
 
+    IEnumerator AcceptLogic_Map(float delay)
+    {
+        if (!onAccept)
+        {
+            onAccept = true;
+
+            PlayAcceptAnimation();
+
+            yield return new WaitForSeconds(delay);
+            Loading.LoadScene("Title");
+        }
+    }
+
     void PlayAcceptAnimation()
     {
         SFXController.instance.PlaySFX(acceptClip);
         BGMController.instance.FadeVolume(0f, 1f, 1f);
-        menu.fadeScreen.FadeScreenEffect(1f, 1f, 1f);
+        fadeScreen.FadeScreenEffect(1f, 1f, 1f);
         acceptButtonImage.transform.DOPunchRotation(new Vector3(0f, 0f, 7.5f), 0.5f, 10, 0.5f).SetEase(Ease.OutQuad);
     }
-
 
     public void Cancle()
     {

@@ -1132,7 +1132,7 @@ GameObject:
   - component: {fileID: 217486086}
   - component: {fileID: 217486089}
   m_Layer: 5
-  m_Name: Option
+  m_Name: Pause Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10431,7 +10431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5ee03e19fa7a1438d9a2747e4fe047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneType: 0
+  sceneType: 2
   sound: {fileID: 318842215810296619}
   control: {fileID: 318842215685731499}
   box: {fileID: 318842215989868848}
@@ -11420,8 +11420,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Option, Assembly-CSharp
+      - m_Target: {fileID: 217486089}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: GoTitle
         m_Mode: 1
         m_Arguments:
@@ -11691,8 +11691,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Option, Assembly-CSharp
+      - m_Target: {fileID: 217486089}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Cancle
         m_Mode: 1
         m_Arguments:
@@ -11958,8 +11958,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Option, Assembly-CSharp
+      - m_Target: {fileID: 217486089}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -12301,9 +12301,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Option, Assembly-CSharp
-        m_MethodName: OnSetting
+      - m_Target: {fileID: 217486089}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: GoSetting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

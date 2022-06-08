@@ -33,14 +33,11 @@ public class PauseMenu : MonoBehaviour
 
             panel.DOFade(0.3f, 0.3f);
             box.DOScale(1f, 0.5f)
-               .SetEase(Ease.OutBounce)
-               .OnComplete(() => Time.timeScale = 0f );
+               .SetEase(Ease.OutBounce);
         }
         else
         {
             InputManager.instance.onLock = false;
-
-            Time.timeScale = 1f;
 
             SFXController.instance.PlaySFX(
                     clip: popupClip,
@@ -58,8 +55,6 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void Restart()
     {
-        Time.timeScale = 1f;
-
         Loading.LoadScene(StageManager.instance.stageTemplate.currentSceneName);
     }
 

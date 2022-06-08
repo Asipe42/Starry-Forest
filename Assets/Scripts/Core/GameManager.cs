@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static StageButtonInfo[] stageButtonInfo;
     public static int life = 3;
     public static int lastSelectedStageButtonIndex = 0;
+    public static int stageIndex = 11;
 
     void Awake()
     {
@@ -34,10 +35,8 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
-    void SetStageButtonInfo()
+    public static void SetStageButtonInfo()
     {
-        int stageIndex = 11;
-
         stageButtonInfo = new StageButtonInfo[stageIndex];
 
         for (int i = 0; i < stageIndex; i++)

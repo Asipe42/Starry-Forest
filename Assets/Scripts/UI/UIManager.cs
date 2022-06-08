@@ -82,7 +82,6 @@ public class UIManager : MonoBehaviour
     public void HideOption()
     {
         onOption = false;
-        BGMController.instance.FadeVolume(0.5f);
 
         pauseMenu.SetActivation(onOption);
     }
@@ -90,7 +89,6 @@ public class UIManager : MonoBehaviour
     public void ShowOption()
     {
         onOption = true;
-        BGMController.instance.FadeVolume(0f);
 
         pauseMenu.SetActivation(onOption);
     }

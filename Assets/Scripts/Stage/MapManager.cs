@@ -26,6 +26,7 @@ public class MapManager : MonoBehaviour
     Stage stage;
     StageButton currentStageButton;
     FadeScreen fadeScreen;
+    Animator anim;
 
     int currnetStageIndex = 0;
     int maxStageIndex = 10;
@@ -39,7 +40,7 @@ public class MapManager : MonoBehaviour
     void Awake()
     {
         Initialize();
-        LockCursor();
+        //LockCursor();
         GetAudioClip();
         SubscribeEvent();
         SetOffset();
@@ -50,6 +51,7 @@ public class MapManager : MonoBehaviour
     {
         stage = GameObject.FindObjectOfType<Stage>();
         fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
+        anim = offset.GetComponent<Animator>();
     }
 
     void LockCursor()
@@ -119,7 +121,7 @@ public class MapManager : MonoBehaviour
             if (!onLoading)
             {
                 onLoading = true;
-                StartCoroutine(Select());
+                StartCoroutine(SelectLogic());
             }
         }
     }
@@ -134,6 +136,7 @@ public class MapManager : MonoBehaviour
             if (!stages[currnetStageIndex - 1].onLock)
             {
                 currnetStageIndex--;
+                offset.transform.rotation = Quaternion.Euler(0, 180f, 0f);
                 ChangeStateLogic();
             }
         }
@@ -146,6 +149,7 @@ public class MapManager : MonoBehaviour
             if (!stages[currnetStageIndex + 1].onLock)
             {
                 currnetStageIndex++;
+                offset.transform.rotation = Quaternion.Euler(0, 0f, 0f);
                 ChangeStateLogic();
             }
         }
@@ -160,15 +164,32 @@ public class MapManager : MonoBehaviour
 
     void MoveToStageButton(int index, float duration = 0.75f)
     {
+        anim.SetBool("move", true);
+        offset.transform.parent = stages[index].transform;
+
         Vector3 destination = new Vector3(offset.transform.parent.transform.position.x,
                                           offset.transform.parent.transform.position.y + 0.6f,
                                           offset.transform.parent.transform.position.z);
 
-        offset.transform.parent = stages[index].transform;
-        offset.transform.DOMove(destination, duration).OnComplete(() => StartCoroutine(EnableStage()));
+        offset.transform.DOMove(destination, duration)
+                        .OnComplete(() => 
+                        { 
+                            StartCoroutine(EnableStage());
+                            anim.SetBool("move", false);
+                            offset.transform.DORotate(new Vector3(0f, 0f, 0f), 0.5f).SetEase(Ease.OutQuad);
+                        });
     }
 
-    IEnumerator Select()
+    public void Select()
+    {
+        if (!onLoading)
+        {
+            onLoading = true;
+            StartCoroutine(SelectLogic());
+        }
+    }
+
+    IEnumerator SelectLogic()
     {
         DisableStage();
         GameManager.lastSelectedStageButtonIndex = currnetStageIndex;
@@ -176,7 +197,7 @@ public class MapManager : MonoBehaviour
 
         SFXController.instance.PlaySFX(notificationClip);
         BGMController.instance.FadeVolume(0f, 1.75f);
-        emotion.transform.DOScale(0.5f, 0.5f).SetEase(Ease.OutBounce);
+        emotion.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBounce);
 
         yield return new WaitForSeconds(2f);
         Loading.LoadScene(currentStageButton.stageTemplate.sceneName);
