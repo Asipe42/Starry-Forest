@@ -12,6 +12,7 @@ public class PlayerAudio : MonoBehaviour
     AudioClip dashLevelUpClip;
     AudioClip takeItemClip;
     AudioClip recoverClip;
+    AudioClip flyClip;
 
     void Awake()
     {
@@ -29,6 +30,7 @@ public class PlayerAudio : MonoBehaviour
         dashLevelUpClip = Resources.Load<AudioClip>("Audio/SFX/SFX_DashLevelUp");
         takeItemClip = Resources.Load<AudioClip>("Audio/SFX/SFX_TakeItem");
         recoverClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Recover");
+        flyClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Fly");
 
         audioSource.clip = walkClip;
     }
@@ -87,5 +89,10 @@ public class PlayerAudio : MonoBehaviour
     public void PlaySFX_Recover(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
         SFXController.instance.PlaySFX(recoverClip, delay, pitch, volume);
+    }
+
+    public void PlaySFX_Fly(float delay = 0f, float pitch = 1f, float volume = 1f)
+    {
+        SFXController.instance.PlaySFX(flyClip, delay, pitch, volume);
     }
 }

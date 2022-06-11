@@ -4,6 +4,7 @@ using DG.Tweening;
 public class Bird : Obstacle
 {
     [SerializeField] Vector2 destination = new Vector2(-0.5f, -1.25f);
+    [SerializeField] float duration;
 
     AudioClip appearClip;
 
@@ -18,7 +19,7 @@ public class Bird : Obstacle
     void GetAudioClip()
     {
         base.hitClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Hit_01");
-        appearClip = Resources.Load<AudioClip>("Audio/SFX/SFX_VineAppear");
+        appearClip = Resources.Load<AudioClip>("Audio/SFX/SFX_BirdAppear");
     }
     #endregion
 
@@ -29,7 +30,6 @@ public class Bird : Obstacle
 
         onAppear = true;
         SFXController.instance.PlaySFX(appearClip);
-
-        transform.DOMove(destination, 2f).SetEase(Ease.OutSine);
+        transform.DOMove(destination, duration).SetEase(Ease.OutSine);
     }
 }

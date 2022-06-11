@@ -109,7 +109,6 @@ public class Result : MonoBehaviour
 
     void PlayTimeCardAnimation()
     {
-        Debug.Log("!");
         GetTimeInfo();
         float target = 0f;
 

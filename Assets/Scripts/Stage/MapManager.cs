@@ -20,6 +20,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] Sprite[] rankSprites;
     [SerializeField] GameObject offset;
     [SerializeField] GameObject emotion;
+    [SerializeField] Transform[] chapterTransform;
+    [SerializeField] int[] chapterIndex;
 
     public StageButton[] stages;
 
@@ -28,12 +30,15 @@ public class MapManager : MonoBehaviour
     FadeScreen fadeScreen;
     Animator anim;
 
-    int currnetStageIndex = 0;
+    int currentStageIndex = 0;
     int maxStageIndex = 10;
     bool onRight, onLeft, onSelect;
     bool onLoading;
     bool onLock;
     bool endFade;
+    bool checkChapter;
+    bool changedChapter;
+    bool onChange;
 
     AudioClip notificationClip;
 
@@ -78,8 +83,9 @@ public class MapManager : MonoBehaviour
 
     void SetOffset()
     {
-        currnetStageIndex = GameManager.lastSelectedStageButtonIndex;
+        currentStageIndex = GameManager.lastSelectedStageButtonIndex;
         currentStageButton = stages[GameManager.lastSelectedStageButtonIndex];
+        Camera.main.transform.position = new Vector3(chapterTransform[GameManager.currentChapterIndex].position.x, chapterTransform[GameManager.currentChapterIndex].position.y, -10);
         MoveToStageButton(GameManager.lastSelectedStageButtonIndex, 0.01f);
     }
 
@@ -109,10 +115,18 @@ public class MapManager : MonoBehaviour
 
         if (onRight && !onLeft)
         {
+            if (onChange)
+                return;
+
+            onChange = true;
             ChangeStage(DirectionType.Right);
         }
         else if (!onRight && onLeft)
         {
+            if (onChange)
+                return;
+
+            onChange = true;
             ChangeStage(DirectionType.Left);
         }
 
@@ -128,38 +142,94 @@ public class MapManager : MonoBehaviour
 
     void ChangeStage(DirectionType directionType)
     {
+        bool checkChapter = false;
+        changedChapter = false;
+
         if (directionType == DirectionType.Left)
         {
-            if (currnetStageIndex < 1)
+            if (currentStageIndex < 1)
                 return;
 
-            if (!stages[currnetStageIndex - 1].onLock)
+            for (int i = 0; i < chapterIndex.Length; i++)
             {
-                currnetStageIndex--;
+                if (currentStageIndex == chapterIndex[i])
+                {
+                    checkChapter = false;
+                    GameManager.currentChapterIndex = i - 1;
+                    StartCoroutine(ChangeChapter(i - 1));
+                    break;
+                }
+                else
+                {
+                    checkChapter = true;
+                }
+            }
+
+            if (checkChapter)
+                changedChapter = true;
+
+            if (!stages[currentStageIndex - 1].onLock)
+            {
+                currentStageIndex--;
                 offset.transform.rotation = Quaternion.Euler(0, 180f, 0f);
-                ChangeStateLogic();
+                StartCoroutine(ChangeStateLogic());
             }
         }
 
         if (directionType == DirectionType.Right)
         {
-            if (currnetStageIndex > maxStageIndex - 1)
+            if (currentStageIndex > maxStageIndex - 1)
                 return;
 
-            if (!stages[currnetStageIndex + 1].onLock)
+            for (int i = 0; i < chapterIndex.Length; i++)
             {
-                currnetStageIndex++;
+                if (i == GameManager.currentChapterIndex)
+                    continue;
+
+                if (currentStageIndex + 1 == chapterIndex[i])
+                {
+                    checkChapter = false;
+                    GameManager.currentChapterIndex = i;
+                    StartCoroutine(ChangeChapter(i));
+                    break;
+                }
+                else
+                {
+                    checkChapter = true;
+                }
+            }
+
+            if (checkChapter)
+                changedChapter = true;
+
+            if (!stages[currentStageIndex + 1].onLock)
+            {
+                currentStageIndex++;
                 offset.transform.rotation = Quaternion.Euler(0, 0f, 0f);
-                ChangeStateLogic();
+                StartCoroutine(ChangeStateLogic());
             }
         }
     }
 
-    void ChangeStateLogic()
+    IEnumerator ChangeChapter(int index)
     {
+        fadeScreen.FadeScreenEffect(1f, 0.25f);
+        yield return new WaitForSeconds(0.25f);
+        changedChapter = true;
+        Camera.main.transform.DOMove(new Vector3(chapterTransform[index].position.x, chapterTransform[index].position.y, -10), 0.5f)
+                             .OnComplete(() => 
+                             {
+                                 fadeScreen.FadeScreenEffect(0f, 0.5f);
+                             });
+    }
+
+    IEnumerator ChangeStateLogic()
+    {
+        yield return new WaitUntil(() => changedChapter);
         DisableStage();
-        MoveToStageButton(currnetStageIndex);
+        MoveToStageButton(currentStageIndex);
         GetCurrentStageButton();
+        changedChapter = false;
     }
 
     void MoveToStageButton(int index, float duration = 0.75f)
@@ -177,6 +247,7 @@ public class MapManager : MonoBehaviour
                             StartCoroutine(EnableStage());
                             anim.SetBool("move", false);
                             offset.transform.DORotate(new Vector3(0f, 0f, 0f), 0.5f).SetEase(Ease.OutQuad);
+                            onChange = false;
                         });
     }
 
@@ -192,7 +263,7 @@ public class MapManager : MonoBehaviour
     IEnumerator SelectLogic()
     {
         DisableStage();
-        GameManager.lastSelectedStageButtonIndex = currnetStageIndex;
+        GameManager.lastSelectedStageButtonIndex = currentStageIndex;
         fadeScreen.FadeScreenEffect(1f, 0.5f, 1f);
 
         SFXController.instance.PlaySFX(notificationClip);

@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpPower;
     [SerializeField] float defaultGravityScale;
     [SerializeField] float downhillGravityScale;
+    [SerializeField] float flyGravityScale;
     
     Rigidbody2D rigid;
     
@@ -33,6 +34,19 @@ public class PlayerMovement : MonoBehaviour
         {
             rigid.velocity = new Vector2(rigid.velocity.x, 2f);
             rigid.gravityScale = downhillGravityScale;
+        }
+        else
+        {
+            rigid.gravityScale = defaultGravityScale;
+        }
+    }
+
+    public void Movement_Fly(bool state)
+    {
+        if (state)
+        {
+            rigid.velocity = new Vector2(rigid.velocity.x, 2f);
+            rigid.gravityScale = flyGravityScale;
         }
         else
         {

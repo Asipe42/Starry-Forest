@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Stage_1_4_Hard
   m_EditorClassIdentifier: 
   floor:
-  - {fileID: 1099032512048204355, guid: ef181d07f0fd8fa49a5c31c9ccc0ddae, type: 3}
-  - {fileID: 1099032512048204355, guid: 251c1fa0f491f7844b6e5ef7b8661ffe, type: 3}
   - {fileID: 6327069248886222847, guid: 138bfc826c1238a479d361e80bb6e3c8, type: 3}
   - {fileID: 1099032512048204355, guid: b71ac810b3f18c748a842e9812e448ed, type: 3}
   - {fileID: 1962902303605509424, guid: 80dff61a2561321449dbbb96e106da8a, type: 3}
   - {fileID: 6327069248886222847, guid: 23efe498171f75c47b80f1f589da78fb, type: 3}
+  - {fileID: 1099032512048204355, guid: 39c2d582b3a9e084f9548311cd43fefb, type: 3}
+  - {fileID: 1099032512048204355, guid: 5f67c01292763b548ae8eb4ea7fd6918, type: 3}

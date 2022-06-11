@@ -6,6 +6,7 @@ public class PlayerParticle : BaseParticle
     [SerializeField] ParticleSystem slidingDust;
     [SerializeField] ParticleSystem takeItem;
     [SerializeField] ParticleSystem recover;
+    [SerializeField] ParticleSystem dandelion;
 
     void Update()
     {
@@ -30,5 +31,10 @@ public class PlayerParticle : BaseParticle
     public void PlayRecover(bool state = true)
     {
         SetParticleSystem(recover, state);
+    }
+
+    public void PlayDandelion(bool state = true)
+    {
+        SetParticleSystem(dandelion, state);
     }
 }

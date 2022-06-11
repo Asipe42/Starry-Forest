@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5732277761355039965}
   - component: {fileID: 1873254696694291479}
   - component: {fileID: 5732277761355039954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Thorn_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,5 +229,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc6f189294d26f459b38967cbece69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitClip: {fileID: 8300000, guid: a831f0d5d393668438b6830b246f568a, type: 3}
   damage: 1

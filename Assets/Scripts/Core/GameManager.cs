@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static int life = 3;
     public static int lastSelectedStageButtonIndex = 0;
     public static int stageIndex = 11;
+    public static int currentChapterIndex;
 
     void Awake()
     {
@@ -46,6 +47,13 @@ public class GameManager : MonoBehaviour
         }
 
         stageButtonInfo[0].isLockedStage = false;
+
+        stageButtonInfo[1].isLockedStage = false;
+        stageButtonInfo[2].isLockedStage = false;
+        stageButtonInfo[3].isLockedStage = false;
+        stageButtonInfo[4].isLockedStage = false;
+        stageButtonInfo[5].isLockedStage = false;
+        stageButtonInfo[6].isLockedStage = false;
     }
 
     public static void UnlockStage(int index, bool state = false)

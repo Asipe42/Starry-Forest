@@ -18,6 +18,12 @@ public enum DashLevel
     Max,
 }
 
+public enum SpecialAction
+{
+    None = 0,
+    Fly
+}
+
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
@@ -30,7 +36,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float[] dashTime;
     [SerializeField] float[] dashCameraSize;
     [SerializeField] float[] dashCameraPosition;
+    [SerializeField] float[] dashFlyColliderPosition;
 
+    [Header("Fly")]
+    [SerializeField] GameObject flyCollider;
+    [SerializeField] float flyForce;
+
+    [Space]
     public bool onTutorial;
     public bool onPause;
     public bool onFix;
@@ -41,15 +53,19 @@ public class PlayerController : MonoBehaviour
     public bool canSliding;
     public bool canDownhill;
     public bool canDash;
+    public bool canFly;
     public bool onGround;
     public bool onWalk;
     public bool onJump;
     public bool onDownhill;
     public bool onSliding;
     public bool onDash;
+    public bool onFly;
     public bool hasDownhill;
     public bool hasDash;
+    public bool hasFly;
     public bool onInvincibility;
+    public SpecialAction specialAction = SpecialAction.None;
 
     [SerializeField] Transform targetTransform;
 
@@ -170,6 +186,9 @@ public class PlayerController : MonoBehaviour
         if (onSliding)
             return;
 
+        if (onFly)
+            return;
+
         if (hasDownhill)
         {
             onDownhill = true;
@@ -192,7 +211,8 @@ public class PlayerController : MonoBehaviour
             {
                 onDownhill = false;
 
-                thePlayerMovement.Movement_Downhill(onDownhill);
+                if (!onFly)
+                    thePlayerMovement.Movement_Downhill(onDownhill);
             }
 
             yield return null;
@@ -319,6 +339,9 @@ public class PlayerController : MonoBehaviour
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
                 Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
+                flyCollider.transform.position = new Vector3(flyCollider.transform.position.x,
+                                                             dashFlyColliderPosition[(int)dashLevel - 1],
+                                                             flyCollider.transform.position.z);
             }
 
             yield return null;
@@ -340,6 +363,9 @@ public class PlayerController : MonoBehaviour
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
                 Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], 0.75f).SetEase(Ease.OutCubic);
+                flyCollider.transform.position = new Vector3(flyCollider.transform.position.x,
+                                                             dashFlyColliderPosition[(int)dashLevel],
+                                                             flyCollider.transform.position.z);
             }
 
             yield return null;
@@ -354,6 +380,78 @@ public class PlayerController : MonoBehaviour
         }
 
         hasDash = true;
+    }
+    #endregion
+
+    public void PlaySpecialAction()
+    {
+        switch (specialAction)
+        {
+            case SpecialAction.None:
+                break;
+            case SpecialAction.Fly:
+                Fly();
+                break;
+        }
+    }
+
+    #region Fly
+    void Fly()
+    {
+        if (!canMove)
+            return;
+
+        if (!canFly)
+            return;
+
+        if (onGround)
+            return;
+
+        if (onFly)
+            return;
+
+        onFly = true;
+        hasFly = true;
+
+        thePlayerMovement.Movement_Fly(true);
+        thePlayerAnimation.PlayFlyAnimation(true);
+        thePlayerAudio.PlaySFX_Fly();
+        thePlayerParticle.PlayDandelion(true);
+
+        StartCoroutine(WaitFly());
+    }
+
+    public void CancleFly()
+    {
+        hasFly = false;
+        canFly = false;
+    }
+
+    IEnumerator WaitFly()
+    {
+        while (onFly)
+        {
+            if (Input.GetKeyDown(UseKeys.specialKey))
+            {
+                rigid.velocity = Vector2.zero;
+            }
+
+            if (Input.GetKey(UseKeys.specialKey))
+            {
+                rigid.AddForce(Vector2.up * flyForce);
+            }
+
+            if (!hasFly || onGround)
+            {
+                onFly = false;
+                hasFly = false;
+
+                thePlayerMovement.Movement_Fly(false);
+                thePlayerAnimation.PlayFlyAnimation(false);
+                thePlayerParticle.PlayDandelion(false);
+            }
+            yield return null;
+        }
     }
     #endregion
 

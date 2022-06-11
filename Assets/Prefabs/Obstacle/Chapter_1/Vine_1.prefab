@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 1097605083431940366}
   - component: {fileID: 1873254696694291479}
   - component: {fileID: 1731967739}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Vine_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cde82f417f9864ba50f095ab2e1ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitClip: {fileID: 0}
   damage: 1
-  appearClip: {fileID: 0}
+  destination: -0.5
   onAppear: 0

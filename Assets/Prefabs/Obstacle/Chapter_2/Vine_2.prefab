@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1385615725126225728}
   - component: {fileID: 1385615725126225733}
   - component: {fileID: 1385615725126225730}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Vine_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  destination: -0.5
+  destination: 1
   onAppear: 0
 --- !u!1 &1385615726030778176
 GameObject:

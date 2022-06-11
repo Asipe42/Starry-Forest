@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAnimation : BaseAnimation
 {
     Animator anim;
+    bool onGround;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class PlayerAnimation : BaseAnimation
     {
         CheckWalkAnimation();
         CheckDashAnimation();
+        CheckGround();
     }
 
     #region Check Animation
@@ -34,6 +36,15 @@ public class PlayerAnimation : BaseAnimation
             PlayDashAnimation(true);
         else
             PlayDashAnimation(false);
+    }
+
+    void CheckGround()
+    {
+        if (this.onGround != PlayerController.instance.onGround)
+        {
+            this.onGround = PlayerController.instance.onGround;
+            base.SetAnimationClip(anim, "onGround", this.onGround);
+        }
     }
     #endregion
 
@@ -66,6 +77,11 @@ public class PlayerAnimation : BaseAnimation
     public void PlayDeadAnimation(bool state = true)
     {
         base.SetAnimationClip(anim, "dead", state);
+    }
+
+    public void PlayFlyAnimation(bool state = true)
+    {
+        base.SetAnimationClip(anim, "fly", state);
     }
     #endregion
 

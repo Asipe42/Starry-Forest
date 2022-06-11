@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Stage_1_2_Easy
   m_EditorClassIdentifier: 
   floor:
-  - {fileID: 6327069248886222847, guid: cf18e35411ef98e4ead905bb35830e63, type: 3}
-  - {fileID: 1161124795726854314, guid: 1120795f9c0131a4696072d1dc74cd22, type: 3}
   - {fileID: 1099032512048204355, guid: 6df4d1d21b4eebf4e91ee7420b7bf1db, type: 3}
   - {fileID: 1099032512048204355, guid: f3bd19e0fe69b524db028c82c0c7c4be, type: 3}
   - {fileID: 1099032512048204355, guid: ef181d07f0fd8fa49a5c31c9ccc0ddae, type: 3}
   - {fileID: 1099032512048204355, guid: 251c1fa0f491f7844b6e5ef7b8661ffe, type: 3}
+  - {fileID: 6327069248886222847, guid: 138bfc826c1238a479d361e80bb6e3c8, type: 3}
+  - {fileID: 1099032512048204355, guid: b71ac810b3f18c748a842e9812e448ed, type: 3}

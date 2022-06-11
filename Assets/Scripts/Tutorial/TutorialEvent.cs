@@ -51,6 +51,7 @@ public class TutorialEvent : MonoBehaviour
         targetKey.Add("sliding", UseKeys.SlidingKey);
         targetKey.Add("downhill", UseKeys.jumpKey);
         targetKey.Add("dash", UseKeys.dashKey);
+        targetKey.Add("fly", UseKeys.specialKey);
     }
     #endregion
 
@@ -85,15 +86,18 @@ public class TutorialEvent : MonoBehaviour
             #region Exception Case
             if (targetActionName == "downhill")
             {
-                playerInfo.rb.gravityScale = 0f;
-                playerInfo.rb.velocity = new Vector2(playerInfo.rb.velocity.x, 0f);
-
+                RemoveExternalForce(playerInfo);
                 guide.gameObject.SetActive(true);
             }
             else if (targetActionName == "dash")
             {
                 guide.gameObject.SetActive(true);
                 guide.gameObject.GetComponent<Animator>().enabled = true;
+            }
+            else if (targetActionName == "fly")
+            {
+                RemoveExternalForce(playerInfo);
+                guide.DOFade(1f, 1f).SetLoops(-1, LoopType.Yoyo);
             }
             else
             {
@@ -103,6 +107,12 @@ public class TutorialEvent : MonoBehaviour
 
             StartCoroutine(WaitAction(targetActionName, playerInfo));
         }
+    }
+
+    void RemoveExternalForce(PlayerInfo playerInfo)
+    {
+        playerInfo.rb.gravityScale = 0f;
+        playerInfo.rb.velocity = new Vector2(playerInfo.rb.velocity.x, 0f);
     }
 
     IEnumerator WaitAction(string targetActionName, PlayerInfo playerInfo)
@@ -148,7 +158,10 @@ public class TutorialEvent : MonoBehaviour
             playerInfo.pc.onTutorial = false;
             playerInfo.pc.PermitEveryAction(true);
 
+            UIManager.instance.hud.ShowHeartBox(1f);
+            UIManager.instance.hud.ShowPDBox(1f);
             UIManager.instance.hud.ShowRSBox(1f);
+
             StartCoroutine(UIManager.instance.startSign.ShowStartSign(0.5f, 1));
         }
     }

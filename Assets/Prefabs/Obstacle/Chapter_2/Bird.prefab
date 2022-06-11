@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 791184780244465187}
   - component: {fileID: 791184780244465190}
   - component: {fileID: 791184780244465191}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bird
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  destination: {x: -0.5, y: -1.25}
+  destination: {x: -0.5, y: -2}
+  duration: 2
   onAppear: 0
 --- !u!1 &791184781156836506
 GameObject:
@@ -162,7 +163,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791184781156836506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: -8, z: 0}
+  m_LocalPosition: {x: -24, y: -8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 791184780244465185}
@@ -192,7 +193,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 10}
+  m_Size: {x: 0.1, y: 10}
   m_EdgeRadius: 0
 --- !u!114 &791184781156836504
 MonoBehaviour:
