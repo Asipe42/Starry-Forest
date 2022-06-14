@@ -7,13 +7,14 @@ public class Stone : Obstacle
     [SerializeField] Transform endTriggerTransform;
     [SerializeField] LayerMask whatIsPlayer;
     [SerializeField] ParticleSystem stoneDust;
+    [SerializeField] int emitCount = 16;
 
     Rigidbody2D rigid;
     PolygonCollider2D stoneCollider;
     AudioClip crashClip;
 
-    bool onPlayer;
-    bool onApeear;
+    bool reachPlayer;
+    bool onAppear;
 
     void Awake()
     {
@@ -23,7 +24,7 @@ public class Stone : Obstacle
 
     void Update()
     {
-        CheckTrigger();
+        base.CheckTrigger(out reachPlayer, startTriggerTransform, endTriggerTransform, whatIsPlayer);
         Fall();
     }
 
@@ -41,19 +42,14 @@ public class Stone : Obstacle
     }
     #endregion
 
-    void CheckTrigger()
-    {
-        onPlayer = Physics2D.Linecast(startTriggerTransform.position, endTriggerTransform.position, whatIsPlayer);
-    }
-
     void Fall()
     {
-        if (!onPlayer)
+        if (!reachPlayer)
             return;
 
-        if (!onApeear)
+        if (!onAppear)
         {
-            onApeear = true;
+            onAppear = true;
 
             rigid.gravityScale = fallGravityScale;
             stoneCollider.isTrigger = false;
@@ -78,7 +74,7 @@ public class Stone : Obstacle
 
     void PlayStoneDust()
     {
-        stoneDust.Emit(16);
+        stoneDust.Emit(emitCount);
     }
 
     void OnDrawGizmos()

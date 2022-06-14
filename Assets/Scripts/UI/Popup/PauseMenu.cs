@@ -9,6 +9,8 @@ public class PauseMenu : MonoBehaviour
 
     AudioClip popupClip;
 
+    AudioClip errorClip;
+
     void Awake()
     {
         GetAudioClip();
@@ -17,6 +19,7 @@ public class PauseMenu : MonoBehaviour
     void GetAudioClip()
     {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
+        errorClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Error");
     }
 
     public void SetActivation(bool state)
@@ -55,7 +58,14 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void Restart()
     {
-        Loading.LoadScene(StageManager.instance.stageTemplate.currentSceneName);
+        //Loading.LoadScene(StageManager.instance.stageTemplate.currentSceneName);
+        PlayDisabledAnimation();
+    }
+
+    public void PlayDisabledAnimation()
+    {
+        box.transform.DOShakePosition(0.5f, new Vector3(15f, 0f, 0f), randomness: 0f).SetEase(Ease.OutQuad);
+        SFXController.instance.PlaySFX(errorClip);
     }
 
     /// <summary>

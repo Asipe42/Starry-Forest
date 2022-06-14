@@ -93,4 +93,14 @@ public class PlayerAnimation : BaseAnimation
     {
         base.SetAnimationSpeed(anim, speed);
     }
+
+    public void SetEveryAnimationParameter(bool state)
+    {
+        string[] animationParameter = { "walk", "jump", "downhill", "sliding", "dash", "fly" };
+
+        foreach (var parameter in animationParameter)
+        {
+            base.SetAnimationClip(anim, parameter, state);
+        }
+    }
 }

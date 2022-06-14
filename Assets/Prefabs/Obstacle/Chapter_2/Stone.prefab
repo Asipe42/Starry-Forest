@@ -257,6 +257,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   stoneDust: {fileID: 7876907287756686488}
+  emitCount: 16
 --- !u!1001 &6701935367774640317
 PrefabInstance:
   m_ObjectHideFlags: 0

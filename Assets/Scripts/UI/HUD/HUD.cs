@@ -7,54 +7,75 @@ public class HUD : MonoBehaviour
     [SerializeField] RectTransform heartBox;
     [SerializeField] RectTransform rsBox; // rank and score
     [SerializeField] RectTransform pdBox; // progress and dash;
+    [SerializeField] RectTransform dsBox;
 
     void Start()
     {
         if (!PlayerController.instance.onTutorial)
         {
-            StartCoroutine(ShowHUD(5f));
+            StartCoroutine(ShowEveryElement(5f, 1f));
         }
     }
 
-    IEnumerator ShowHUD(float delay)
+    public IEnumerator ShowEveryElement(float delay, float duration)
     {
         yield return new WaitForSeconds(delay);
-        ShowHeartBox(1f);
-        ShowRSBox(1f);
-        ShowPDBox(1f);
+        ShowHeartBox(duration);
+        ShowRSBox(duration);
+        ShowPDBox(duration);
+        ShowDSBox(duration);
+    }
+
+    public IEnumerator HideEveryElement(float delay, float duration)
+    {
+        yield return new WaitForSeconds(delay);
+        HideHeartBox(duration);
+        HideRSBox(duration);
+        HidePDBox(duration);
+        HideDSBox(duration);
     }
 
     #region Show HUD UI
     public void ShowHeartBox(float duration)
     {
-        heartBox.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
+        heartBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
     }
     
     public void ShowRSBox(float duration)
     {
-        rsBox.DOAnchorPos(new Vector2(0, 90f), duration).SetEase(Ease.OutQuad);
+        rsBox?.DOAnchorPos(new Vector2(0, 90f), duration).SetEase(Ease.OutQuad);
     }
 
     public void ShowPDBox(float duration)
     {
-        pdBox.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
+        pdBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
+    }
+
+    public void ShowDSBox(float duration)
+    {
+        dsBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
     }
     #endregion
 
     #region Hide HUD UI
     public void HideHeartBox(float duration)
     {
-        heartBox.DOAnchorPos(new Vector2(-400f, 0f), duration).SetEase(Ease.InQuad);
+        heartBox?.DOAnchorPos(new Vector2(-400f, 0f), duration).SetEase(Ease.InQuad);
     }
 
     public void HideRSBox(float duration)
     {
-        rsBox.DOAnchorPos(new Vector2(420f, 90f), duration).SetEase(Ease.InQuad);
+        rsBox?.DOAnchorPos(new Vector2(420f, 90f), duration).SetEase(Ease.InQuad);
     }
 
     public void HidePDBox(float duration)
     {
-        pdBox.DOAnchorPos(new Vector2(0f, -200f), duration).SetEase(Ease.InQuad);
+        pdBox?.DOAnchorPos(new Vector2(0f, -200f), duration).SetEase(Ease.InQuad);
+    }
+
+    public void HideDSBox(float duration)
+    {
+        dsBox?.DOAnchorPos(new Vector2(-200f, 0f), duration).SetEase(Ease.OutQuad);
     }
     #endregion
 }

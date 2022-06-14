@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Rank rank { get; private set; }
     public Dash dash { get; private set; }
     public ProgressBar progressBar { get; private set; }
+    public DandelionStack dandelionStack { get; private set; }
     #endregion
 
     #region Popup Components
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
         rank = GameObject.FindObjectOfType<Rank>();
         dash = GameObject.FindObjectOfType<Dash>();
         progressBar = GameObject.FindObjectOfType<ProgressBar>();
+        dandelionStack = GameObject.FindObjectOfType<DandelionStack>();
 
         pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
         setting = GameObject.FindObjectOfType<Setting>();

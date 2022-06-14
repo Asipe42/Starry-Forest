@@ -43,9 +43,6 @@ public class Scroll : MonoBehaviour
 
         PlayerController.deadEvent -= SetCanScroll;
         PlayerController.deadEvent += SetCanScroll;
-
-        //PlayerController.DashEvent -= ScrollParticle;
-        //PlayerController.DashEvent += ScrollParticle;
     }
     #endregion
 

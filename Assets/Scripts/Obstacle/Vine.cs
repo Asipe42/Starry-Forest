@@ -4,10 +4,15 @@ using DG.Tweening;
 public class Vine : Obstacle
 {
     [SerializeField] float destination = -0.5f;
+    [SerializeField] float duration;
+    [SerializeField] Transform startTriggerTransform;
+    [SerializeField] Transform endTriggerTransform;
+    [SerializeField] LayerMask whatIsPlayer;
 
     AudioClip appearClip;
 
-    [HideInInspector] public bool onAppear;
+    bool reachPlayer;
+    bool onAppear;
 
     void Awake()
     {
@@ -22,14 +27,28 @@ public class Vine : Obstacle
     }
     #endregion
 
-    public void Appear()
+    void Update()
     {
-        if (onAppear)
+        base.CheckTrigger(out reachPlayer, startTriggerTransform, endTriggerTransform, whatIsPlayer);
+        Appear();
+    }
+
+    void Appear()
+    {
+        if (!reachPlayer)
             return;
 
-        onAppear = true;
-        SFXController.instance.PlaySFX(appearClip);
+        if (!onAppear)
+        {
+            onAppear = true;
+            SFXController.instance.PlaySFX(appearClip);
 
-        transform.DOMoveY(destination, 1f).SetEase(Ease.OutSine);
+            transform.DOMoveY(destination, duration).SetEase(Ease.OutSine);
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(startTriggerTransform.position, endTriggerTransform.position);
     }
 }

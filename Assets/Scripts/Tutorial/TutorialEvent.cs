@@ -97,6 +97,7 @@ public class TutorialEvent : MonoBehaviour
             else if (targetActionName == "fly")
             {
                 RemoveExternalForce(playerInfo);
+                UIManager.instance.hud.ShowDSBox(1f);
                 guide.DOFade(1f, 1f).SetLoops(-1, LoopType.Yoyo);
             }
             else
@@ -161,6 +162,7 @@ public class TutorialEvent : MonoBehaviour
             UIManager.instance.hud.ShowHeartBox(1f);
             UIManager.instance.hud.ShowPDBox(1f);
             UIManager.instance.hud.ShowRSBox(1f);
+            UIManager.instance.hud.ShowDSBox(1f);
 
             StartCoroutine(UIManager.instance.startSign.ShowStartSign(0.5f, 1));
         }

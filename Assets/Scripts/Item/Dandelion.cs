@@ -12,19 +12,17 @@ public class Dandelion : MonoBehaviour
 
     void Start()
     {
-        transform.DOMoveY(-0.02f, 4f).SetEase(Ease.OutSine).SetLoops(-1, LoopType.Yoyo);
+        transform.DOMoveY(-0.02f, 3f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            if (!PlayerController.instance.canFly)
-            {
-                PlayerController.instance.canFly = true;
-                SFXController.instance.PlaySFX(dandelionClip);
-                transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutElastic).OnComplete(() => Destroy(gameObject));
-            }
+            PlayerController.instance.flyCount++;
+            UIManager.instance.dandelionStack.CheckDandelionCount();
+            SFXController.instance.PlaySFX(dandelionClip);
+            Destroy(gameObject);
         }
     }
 }

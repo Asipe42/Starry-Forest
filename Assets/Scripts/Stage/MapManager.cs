@@ -45,10 +45,10 @@ public class MapManager : MonoBehaviour
     void Awake()
     {
         Initialize();
-        //LockCursor();
         GetAudioClip();
         SubscribeEvent();
         SetOffset();
+        CheckLife();
     }
 
     #region Initial Setting
@@ -57,11 +57,6 @@ public class MapManager : MonoBehaviour
         stage = GameObject.FindObjectOfType<Stage>();
         fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
         anim = offset.GetComponent<Animator>();
-    }
-
-    void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void GetAudioClip()
@@ -73,6 +68,16 @@ public class MapManager : MonoBehaviour
     {
         FadeScreen.fadeEvent -= EndFade;
         FadeScreen.fadeEvent += EndFade;
+    }
+
+    void CheckLife()
+    {
+        if (GameManager.life <= 0)
+        {
+            Loading.LoadScene("Title");
+            GameManager.InitializeStageButtonInfo();
+            GameManager.InitializeLifeCount();
+        }
     }
     #endregion
 

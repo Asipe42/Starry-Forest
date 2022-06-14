@@ -16,4 +16,4 @@ MonoBehaviour:
   currentStageIndex: 5
   levelUpTimeRate: -1
   currentSceneName: Stage_2_Tutorial
-  lastFloor: {fileID: 6327069248886222847, guid: 4337c98448763534a8319ec074969a65, type: 3}
+  lastFloor: {fileID: 6327069248886222847, guid: 4576552ce90893d45b0fc8f6220d8215, type: 3}

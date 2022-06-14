@@ -42,32 +42,42 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject flyCollider;
     [SerializeField] float flyForce;
 
-    [Space]
+    [Header("Core")]
     public bool onTutorial;
     public bool onPause;
     public bool onFix;
     public bool reachLastFloor;
     public bool onGoal;
-    public bool canMove;
-    public bool canJump;
-    public bool canSliding;
-    public bool canDownhill;
-    public bool canDash;
-    public bool canFly;
     public bool onGround;
-    public bool onWalk;
-    public bool onJump;
-    public bool onDownhill;
-    public bool onSliding;
-    public bool onDash;
-    public bool onFly;
-    public bool hasDownhill;
-    public bool hasDash;
-    public bool hasFly;
     public bool onInvincibility;
+    public bool canMove;
+    public bool onWalk;
     public SpecialAction specialAction = SpecialAction.None;
-
     [SerializeField] Transform targetTransform;
+
+    [Header("Jump")]
+    public bool canJump;
+    public bool onJump;
+
+    [Header("Sliding")]
+    public bool canSliding;
+    public bool onSliding;
+
+    [Header("Downhill")]
+    public bool canDownhill;
+    public bool onDownhill;
+    public bool hasDownhill;
+
+    [Header("Dash")]
+    public bool canDash;
+    public bool onDash;
+    public bool hasDash;
+
+    [Header("Fly")]
+    public bool canFly;
+    public bool onFly;
+    public bool hasFly;
+    public int flyCount;
 
     public PlayerAnimation thePlayerAnimation { get; private set; }
     public PlayerAudio thePlayerAudio { get; private set; }
@@ -111,6 +121,7 @@ public class PlayerController : MonoBehaviour
         actionList.Add("sliding");
         actionList.Add("downhill");
         actionList.Add("dash");
+        actionList.Add("fly");
     }
     #endregion
 
@@ -134,6 +145,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case "dash":
                 canDash = state;
+                break;
+            case "fly":
+                canFly = state;
                 break;
         }
     }
@@ -331,17 +345,14 @@ public class PlayerController : MonoBehaviour
             {
                 yield return new WaitForSeconds(dashTime[(int)dashLevel]);
 
-                dashLevel++;
-                dashLevel = dashLevel > DashLevel.Max ? DashLevel.Max : dashLevel;
+                dashLevel++; dashLevel = dashLevel > DashLevel.Max ? DashLevel.Max : dashLevel;
+
                 DashEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
+                ChangeCameraOption(dashLevel, 0.75f);
+                ChangeFlyColliderPosition(dashLevel - 1);
+
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
-                Camera.main.DOKill();
-                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
-                Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel - 1], 0.75f).SetEase(Ease.OutCubic);
-                flyCollider.transform.position = new Vector3(flyCollider.transform.position.x,
-                                                             dashFlyColliderPosition[(int)dashLevel - 1],
-                                                             flyCollider.transform.position.z);
             }
 
             yield return null;
@@ -356,19 +367,32 @@ public class PlayerController : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.15f);
 
-                dashLevel--;
-                dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
+                dashLevel--; dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
+
                 DashEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
-                Camera.main.DOKill();
-                Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], 0.5f).SetEase(Ease.OutCubic);
-                Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], 0.75f).SetEase(Ease.OutCubic);
-                flyCollider.transform.position = new Vector3(flyCollider.transform.position.x,
-                                                             dashFlyColliderPosition[(int)dashLevel],
-                                                             flyCollider.transform.position.z);
+                ChangeCameraOption(dashLevel, 0.5f);
+                ChangeFlyColliderPosition(dashLevel);
             }
 
             yield return null;
+        }
+    }
+
+    void ChangeCameraOption(DashLevel dashLevel, float duration)
+    {
+        Camera.main.DOKill();
+        Camera.main.DOOrthoSize(dashCameraSize[(int)dashLevel], duration).SetEase(Ease.OutCubic);
+        Camera.main.transform.DOMoveY(dashCameraPosition[(int)dashLevel], duration).SetEase(Ease.OutCubic);
+    }
+
+    void ChangeFlyColliderPosition(DashLevel dashLevel)
+    {
+        if (flyCollider != null)
+        {
+            Vector3 flyColliderPosition = flyCollider.transform.position;
+            flyColliderPosition.y = dashFlyColliderPosition[(int)dashLevel];
+            flyCollider.transform.position = flyColliderPosition;
         }
     }
 
@@ -410,21 +434,26 @@ public class PlayerController : MonoBehaviour
         if (onFly)
             return;
 
-        onFly = true;
-        hasFly = true;
+        if (flyCount > 0)
+        {
+            onFly = true;
+            hasFly = true;
 
-        thePlayerMovement.Movement_Fly(true);
-        thePlayerAnimation.PlayFlyAnimation(true);
-        thePlayerAudio.PlaySFX_Fly();
-        thePlayerParticle.PlayDandelion(true);
+            flyCount--;
+            UIManager.instance.dandelionStack.CheckDandelionCount();
 
-        StartCoroutine(WaitFly());
+            thePlayerMovement.Movement_Fly(true);
+            thePlayerAnimation.PlayFlyAnimation(true);
+            thePlayerAudio.PlaySFX_Fly();
+            thePlayerParticle.PlayDandelion(true);
+
+            StartCoroutine(WaitFly());
+        }
     }
 
     public void CancleFly()
     {
         hasFly = false;
-        canFly = false;
     }
 
     IEnumerator WaitFly()
@@ -516,10 +545,13 @@ public class PlayerController : MonoBehaviour
     {
         float duration = 8f;
 
+        canMove = false;
         deadEvent.Invoke(false);
         thePlayerAnimation.PlayDeadAnimation();
+
         StopAction();
         StartCoroutine(DeadDirection());
+
         yield return new WaitForSeconds(duration);
         DeadLogic();
     }
@@ -534,12 +566,11 @@ public class PlayerController : MonoBehaviour
         Knockback(knockbackDirection, knockbackForce);
 
         UIManager.instance.darkenScreen.DarkenScreenEffect(1, duration);
-        UIManager.instance.hud.HideHeartBox(0.5f);
-        UIManager.instance.hud.HidePDBox(0.5f);
-        UIManager.instance.hud.HideRSBox(0.5f);
-        yield return new WaitForSeconds(duration + 0.5f);
+        UIManager.instance.hud.HideEveryElement(0f, 0.5f);
 
+        yield return new WaitForSeconds(duration + 0.5f);
         UIManager.instance.resultSign.ShowResultSign("완주 실패");
+
         yield return new WaitUntil(() => UIManager.instance.resultSign.endDirecting);
         UIManager.instance.fadeScreen.FadeScreenEffect(1, 1f);
     }
@@ -587,9 +618,7 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(IncreaseDashLevelCoroutine);
 
         UIManager.instance.darkenScreen.DarkenScreenEffect(0.4f, 1f);
-        UIManager.instance.hud.HideHeartBox(1f);
-        UIManager.instance.hud.HidePDBox(1f);
-        UIManager.instance.hud.HideRSBox(1f);
+        UIManager.instance.hud.HideEveryElement(0f, 1f);
 
         switch (lastFloorState)
         {
@@ -606,11 +635,8 @@ public class PlayerController : MonoBehaviour
             case LastFloorState.Bornfire:
                 onWalk = false;
                 dashLevel = DashLevel.None;
-                thePlayerAnimation.PlayDownhillAnimation(false);
-                thePlayerAnimation.PlayJumpAnimation(false);
-                thePlayerAnimation.PlaySlidingAnimation(false);
-                thePlayerAnimation.PlayDashAnimation(false);
-                thePlayerAnimation.PlayWalkAnimation(false);
+                thePlayerAnimation.SetEveryAnimationParameter(false);
+
                 yield return new WaitForSeconds(1.5f);
                 onGoal = true;
                 break;

@@ -163,7 +163,7 @@ public class Guide : MonoBehaviour
 
     void InitializeStageInfo()
     {
-        GameManager.SetStageButtonInfo();
+        GameManager.InitializeStageButtonInfo();
     }
 
     public void Accept_Map()

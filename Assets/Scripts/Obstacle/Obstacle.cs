@@ -6,6 +6,11 @@ public class Obstacle : MonoBehaviour
 
     protected AudioClip hitClip;
 
+    protected void CheckTrigger(out bool reachPlayer, Transform start, Transform end, LayerMask whatIsPlayer)
+    {
+        reachPlayer = Physics2D.Linecast(start.position, end.position, whatIsPlayer);
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))

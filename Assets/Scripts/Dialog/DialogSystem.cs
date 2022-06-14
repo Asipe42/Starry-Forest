@@ -76,6 +76,7 @@ public class DialogSystem : MonoBehaviour
         int count = 0;
         int index = 0;
 
+        #region StageIndex: 1
         if (stageIndex == 1)
         {
             for (int i = 0; i < dialogDB.Stage1.Count; i++)
@@ -99,6 +100,33 @@ public class DialogSystem : MonoBehaviour
                 }
             }
         }
+        #endregion
+
+        #region StageIndex: 2
+        if (stageIndex == 2)
+        {
+            for (int i = 0; i < dialogDB.Stage2.Count; i++)
+            {
+                if (dialogDB.Stage2[i].branch == branch)
+                {
+                    count++;
+                }
+            }
+
+            dialogs = new DialogData[count];
+
+            for (int i = 0; i < dialogDB.Stage2.Count; i++)
+            {
+                if (dialogDB.Stage2[i].branch == branch)
+                {
+                    dialogs[index].speakerIndex = dialogDB.Stage2[i].speakerIndex;
+                    dialogs[index].name = dialogDB.Stage2[i].name;
+                    dialogs[index].message = dialogDB.Stage2[i].message;
+                    index++;
+                }
+            }
+        }
+        #endregion
     }
 
     public void ProgressDialog()
@@ -190,14 +218,13 @@ public class DialogSystem : MonoBehaviour
 
         if (portrait.sprite != speakers[currentSpeakerIndex].portraitSprite)
         {
-            StartCoroutine(FadePortrait());
+            FadePortrait();
         }
         else
         {
             portrait.sprite = speakers[currentSpeakerIndex].portraitSprite;
+            portrait.transform.localScale = speakers[currentSpeakerIndex].portraitScale;
         }
-
-        portrait.transform.localScale = speakers[currentSpeakerIndex].portraitScale;
 
         name.text = dialogs[currentDialogIndex].name;
         message.text = dialogs[currentDialogIndex].message;
@@ -205,12 +232,17 @@ public class DialogSystem : MonoBehaviour
         StartCoroutine("TypingMessage");
     }
 
-    IEnumerator FadePortrait()
+    void FadePortrait()
     {
-        portrait.DOFade(0f, 0.2f);
-        yield return new WaitForSeconds(0.1f);
-        portrait.sprite = speakers[currentSpeakerIndex].portraitSprite;
-        portrait.DOFade(1f, 0.2f);
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(portrait.DOFade(0f, 0.1f))
+                .AppendCallback(() =>
+                {
+                    portrait.sprite = speakers[currentSpeakerIndex].portraitSprite;
+                    portrait.transform.localScale = speakers[currentSpeakerIndex].portraitScale;
+                })
+                .Append(portrait.DOFade(1f, 0.1f));
     }
     
     void SetActivateObjects(bool visible)

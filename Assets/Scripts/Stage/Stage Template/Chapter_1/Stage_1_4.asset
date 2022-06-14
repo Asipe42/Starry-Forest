@@ -15,5 +15,5 @@ MonoBehaviour:
   chapterIndex: 1
   currentStageIndex: 4
   levelUpTimeRate: 3
-  currentSceneName: Stage_1_5
+  currentSceneName: Stage_1_4
   lastFloor: {fileID: 6327069248886222847, guid: 5a309f5fd20423349a72662c11953efb, type: 3}

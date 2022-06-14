@@ -5,10 +5,14 @@ public class Wood : Obstacle
 {
     [SerializeField] Transform destinationTransform;
     [SerializeField] float duration;
+    [SerializeField] Transform startTriggerTransform;
+    [SerializeField] Transform endTriggerTransform;
+    [SerializeField] LayerMask whatIsPlayer;
 
     AudioClip appearClip;
 
-    [HideInInspector] public bool onAppear;
+    bool reachPlayer;
+    bool onAppear;
 
     void Awake()
     {
@@ -21,16 +25,30 @@ public class Wood : Obstacle
         base.hitClip = Resources.Load<AudioClip>("Audio/SFX/SFX_WoodHit");
         appearClip = Resources.Load<AudioClip>("Audio/SFX/SFX_WoodAppear");
     }
+    #endregion
 
-    public void Appear()
+    void Update()
     {
-        if (onAppear)
+        base.CheckTrigger(out reachPlayer, startTriggerTransform, endTriggerTransform, whatIsPlayer);
+        Appear();
+    }
+
+    void Appear()
+    {
+        if (!reachPlayer)
             return;
 
-        onAppear = true;
-        transform.DOMove(destinationTransform.position, duration)
-                 .SetEase(Ease.OutQuad)
-                 .OnComplete(() => SFXController.instance.PlaySFX(appearClip));
+        if (!onAppear)
+        {
+            onAppear = true;
+            transform.DOMoveY(destinationTransform.position.y, duration)
+                     .SetEase(Ease.InCubic)
+                     .OnComplete(() => SFXController.instance.PlaySFX(appearClip));
+        }
     }
-    #endregion
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(startTriggerTransform.position, endTriggerTransform.position);
+    }
 }

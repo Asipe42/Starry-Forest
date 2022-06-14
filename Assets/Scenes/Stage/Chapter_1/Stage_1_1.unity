@@ -6153,11 +6153,11 @@ RectTransform:
   m_Father: {fileID: 225014197}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 1920, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!1 &1498027133
 GameObject:
   m_ObjectHideFlags: 0
@@ -9211,8 +9211,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 318842215590970142}
         m_TargetAssemblyTypeName: Setting, Assembly-CSharp
-        m_MethodName: ConvertTap
-        m_Mode: 5
+        m_MethodName: PlayDisabledAnimation
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12706,25 +12706,33 @@ MonoBehaviour:
   - -0.15
   - -0.1
   - 0
+  dashFlyColliderPosition: []
+  flyCollider: {fileID: 0}
+  flyForce: 0
   onTutorial: 0
   onPause: 0
   onFix: 0
   reachLastFloor: 0
   onGoal: 0
+  onGround: 0
+  onWalk: 0
   canMove: 1
   canJump: 1
+  onJump: 0
   canSliding: 1
   canDownhill: 1
   canDash: 1
-  onGround: 0
-  onWalk: 0
-  onJump: 0
+  canFly: 0
   onDownhill: 0
   onSliding: 0
   onDash: 0
+  onFly: 0
   hasDownhill: 1
   hasDash: 1
+  hasFly: 0
+  flyCount: 0
   onInvincibility: 0
+  specialAction: 0
   targetTransform: {fileID: 146964456}
 --- !u!114 &4463849169569998933
 MonoBehaviour:
@@ -12742,6 +12750,7 @@ MonoBehaviour:
   slidingDust: {fileID: 744293712}
   takeItem: {fileID: 613908627}
   recover: {fileID: 649759571}
+  dandelion: {fileID: 0}
 --- !u!212 &4463849169569998942
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12812,7 +12821,7 @@ GameObject:
   - component: {fileID: 1366271057456564959}
   - component: {fileID: 4463849169569998928}
   - component: {fileID: 4463849169569998933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -13043,6 +13052,7 @@ MonoBehaviour:
   jumpPower: 10
   defaultGravityScale: 2
   downhillGravityScale: 0.2
+  flyGravityScale: 0
 --- !u!1 &7281014386294897232
 GameObject:
   m_ObjectHideFlags: 0
@@ -15201,6 +15211,7 @@ MonoBehaviour:
   heartBox: {fileID: 7281014386344050881}
   rsBox: {fileID: 7281014386776524836}
   pdBox: {fileID: 7281014387547575049}
+  dsBox: {fileID: 0}
 --- !u!224 &7281014388315170045
 RectTransform:
   m_ObjectHideFlags: 0
