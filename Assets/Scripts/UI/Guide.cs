@@ -15,15 +15,20 @@ public class Guide : MonoBehaviour
     [SerializeField] Image acceptButtonImage;
     [SerializeField] TextMeshProUGUI mainText;
     [SerializeField] TextMeshProUGUI subText;
+    [SerializeField] TextMeshProUGUI accpetText;
+    [SerializeField] TextMeshProUGUI cancleText;
 
     [Header("Values")]
     [SerializeField] Vector3 textPosition_NewGame;
     [SerializeField] Vector3 textPosition_Exit;
     [SerializeField] Color fadeColor;
     [SerializeField] float duration;
-    [SerializeField] string[] Message_NewGame;
-    [SerializeField] string Message_Exit;
-    [SerializeField] string Message_GobackTitle;
+    [SerializeField] string[] Message_newGame;
+    [SerializeField] string[] Message_newGameButton;
+    [SerializeField] string Message_exit;
+    [SerializeField] string[] Message_exitButton;
+    [SerializeField] string Message_goTitle;
+    [SerializeField] string[] Message_goTitleButton;
     [SerializeField] bool onGuide;
     [SerializeField] bool isMap;
     [SerializeField] FadeScreen fadeScreen;
@@ -39,33 +44,36 @@ public class Guide : MonoBehaviour
 
     void Awake()
     {
-        Initialize();
         GetAudioClip();
-    }
-    
-    void Initialize()
-    {
-        //menu = GameObject.FindObjectOfType<Menu>();
     }
 
     void GetAudioClip()
     {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
-        acceptClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Accept");
+        acceptClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Appear");
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (onGuide)
+            if (isMap)
             {
-                Cancle();
+                if (!onGuide)
+                {
+                    PopupGuide_Map(onGuide, 1);
+                }
+                else
+                {
+                    Cancle();
+                }
             }
-
-            if (isMap && !onGuide)
+            else
             {
-                PopupGuide_Map(true, 1);
+                if (onGuide)
+                {
+                    Cancle();
+                }
             }
         }
     }
@@ -87,16 +95,13 @@ public class Guide : MonoBehaviour
 
     public void PopupGuide_Map(bool state, int targetScale)
     {
-        if (!onGuide)
-        {
-            onGuide = true;
+        onGuide = true;
 
-            SFXController.instance.PlaySFX(popupClip, 0f, 1.25f, 0.3f);
+        SFXController.instance.PlaySFX(popupClip, 0f, 1.25f, 0.3f);
 
-            FadeInPanel(state);
-            SetScaleBox(targetScale);
-            SetText_Map();
-        }
+        FadeInPanel(state);
+        SetScaleBox(targetScale);
+        SetText_Map();
     }
 
     void FadeInPanel(bool state)
@@ -125,13 +130,11 @@ public class Guide : MonoBehaviour
         {
             case MenuType.NewGame:
                 mainText.rectTransform.anchoredPosition = textPosition_NewGame;
-                mainText.text = Message_NewGame[0];
-                subText.text = Message_NewGame[1];
+                SetText(Message_newGame[0], Message_newGame[1], Message_newGameButton);
                 break;
             case MenuType.Exit:
                 mainText.rectTransform.anchoredPosition = textPosition_Exit;
-                mainText.text = Message_Exit;
-                subText.text = "";
+                SetText(Message_exit, "", Message_exitButton);
                 break;
         }
     }
@@ -139,8 +142,15 @@ public class Guide : MonoBehaviour
     public void SetText_Map()
     {
         mainText.rectTransform.anchoredPosition = textPosition_Exit;
-        mainText.text = Message_GobackTitle;
-        subText.text = "";
+        SetText(Message_goTitle, "", Message_goTitleButton);
+    }
+
+    void SetText(string mainText, string subText, string[] buttonText)
+    {
+        this.mainText.text = mainText;
+        this.subText.text = subText;
+        accpetText.text = buttonText[0];
+        cancleText.text = buttonText[1];
     }
 
     public void Accept()

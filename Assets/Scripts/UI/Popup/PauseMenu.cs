@@ -8,7 +8,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] RectTransform box;
 
     AudioClip popupClip;
-
     AudioClip errorClip;
 
     void Awake()
@@ -56,10 +55,9 @@ public class PauseMenu : MonoBehaviour
     /// <summary>
     /// 해당 스테이지를 다시 시작합니다.
     /// </summary>
-    public void Restart()
+    public void GoMap()
     {
-        //Loading.LoadScene(StageManager.instance.stageTemplate.currentSceneName);
-        PlayDisabledAnimation();
+        Loading.LoadScene("Map");
     }
 
     public void PlayDisabledAnimation()

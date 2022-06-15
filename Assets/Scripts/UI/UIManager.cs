@@ -97,6 +97,6 @@ public class UIManager : MonoBehaviour
 
     public void ShowSetting(bool state)
     {
-        setting.SetActivation(state);
+        setting.SetActivation(state, 0f);
     }
 }

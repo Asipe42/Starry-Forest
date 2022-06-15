@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Status
 {
     public int maxHp = 3;

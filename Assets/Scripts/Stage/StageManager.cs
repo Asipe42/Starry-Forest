@@ -50,7 +50,6 @@ public class StageManager : MonoBehaviour
 
         if (lastFloorState == LastFloorState.Normal || lastFloorState == LastFloorState.Bornfire)
         {
-            Debug.Log(lastFloorState);
             PlayResultDirecting();
             yield return new WaitUntil(() => UIManager.instance.result.endDirecting);
             StartCoroutine(LoadMapScene(stageTemplate.currentStageIndex + 1, lastFloorState));

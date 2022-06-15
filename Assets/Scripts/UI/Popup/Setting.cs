@@ -96,7 +96,7 @@ public class Setting : MonoBehaviour
     /// Setting UI를 활성화/비활성화 합니다.
     /// </summary>
     /// <param name="state"></param>
-    public void SetActivation(bool state)
+    public void SetActivation(bool state, float duration = 0.2f)
     {
         onSetting = state;
 
@@ -111,9 +111,10 @@ public class Setting : MonoBehaviour
             if (sceneType == SceneType.Title)
             {
                 panel.DOFade(0.3f, 0.3f);
+                panel.raycastTarget = true;
             }
 
-            box.DOScale(1f, 0.2f).SetEase(Ease.OutQuad);
+            box.DOScale(1f, duration).SetEase(Ease.OutQuad);
 
             ShowSelected(tap);
         }
@@ -128,9 +129,10 @@ public class Setting : MonoBehaviour
             if (sceneType == SceneType.Title)
             {
                 panel.DOFade(0, 0.3f);
+                panel.raycastTarget = false;
             }
 
-            box.DOScale(0f, 0.2f).SetEase(Ease.OutQuad);
+            box.DOScale(0f, duration).SetEase(Ease.OutQuad);
         }
     }
     #endregion

@@ -17,6 +17,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI lifeText;
     [SerializeField] Image rankBox;
     [SerializeField] Image rank;
+    [SerializeField] GameObject startButton;
+    [SerializeField] GameObject albumButton;
     [SerializeField] Sprite[] rankSprites;
     [SerializeField] GameObject offset;
     [SerializeField] GameObject emotion;
@@ -36,11 +38,11 @@ public class MapManager : MonoBehaviour
     bool onLoading;
     bool onLock;
     bool endFade;
-    bool checkChapter;
     bool changedChapter;
     bool onChange;
 
     AudioClip notificationClip;
+    AudioClip errorClip;
 
     void Awake()
     {
@@ -62,6 +64,7 @@ public class MapManager : MonoBehaviour
     void GetAudioClip()
     {
         notificationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Notification");
+        errorClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Error");
     }
 
     void SubscribeEvent()
@@ -70,10 +73,19 @@ public class MapManager : MonoBehaviour
         FadeScreen.fadeEvent += EndFade;
     }
 
+    void SetOffset()
+    {
+        currentStageIndex = GameManager.lastSelectedStageButtonIndex;
+        currentStageButton = stages[GameManager.lastSelectedStageButtonIndex];
+        Camera.main.transform.position = new Vector3(chapterTransform[GameManager.currentChapterIndex].position.x, chapterTransform[GameManager.currentChapterIndex].position.y, -10);
+        MoveToStageButton(GameManager.lastSelectedStageButtonIndex, 0.01f);
+    }
+
     void CheckLife()
     {
         if (GameManager.life <= 0)
         {
+            //TO-DO: GameOver Directing
             Loading.LoadScene("Title");
             GameManager.InitializeStageButtonInfo();
             GameManager.InitializeLifeCount();
@@ -84,14 +96,6 @@ public class MapManager : MonoBehaviour
     void EndFade(bool state)
     {
         endFade = state;
-    }
-
-    void SetOffset()
-    {
-        currentStageIndex = GameManager.lastSelectedStageButtonIndex;
-        currentStageButton = stages[GameManager.lastSelectedStageButtonIndex];
-        Camera.main.transform.position = new Vector3(chapterTransform[GameManager.currentChapterIndex].position.x, chapterTransform[GameManager.currentChapterIndex].position.y, -10);
-        MoveToStageButton(GameManager.lastSelectedStageButtonIndex, 0.01f);
     }
 
     void GetCurrentStageButton()
@@ -118,28 +122,22 @@ public class MapManager : MonoBehaviour
         onLeft = Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A);
         onSelect = Input.GetButtonDown("Submit");
 
-        if (onRight && !onLeft)
+        if (!onChange)
         {
-            if (onChange)
-                return;
-
-            onChange = true;
-            ChangeStage(DirectionType.Right);
-        }
-        else if (!onRight && onLeft)
-        {
-            if (onChange)
-                return;
-
-            onChange = true;
-            ChangeStage(DirectionType.Left);
-        }
-
-        if (onSelect)
-        {
-            if (!onLoading)
+            if (onRight && !onLeft)
             {
-                onLoading = true;
+                ChangeStage(DirectionType.Right);
+            }
+            else if (!onRight && onLeft)
+            {
+                ChangeStage(DirectionType.Left);
+            }
+        }
+
+        if (!onLoading)
+        {
+            if (onSelect)
+            {
                 StartCoroutine(SelectLogic());
             }
         }
@@ -147,45 +145,54 @@ public class MapManager : MonoBehaviour
 
     void ChangeStage(DirectionType directionType)
     {
-        bool checkChapter = false;
+        onChange = true;
         changedChapter = false;
 
         if (directionType == DirectionType.Left)
         {
             if (currentStageIndex < 1)
+            {
+                onChange = false;
                 return;
-
-            for (int i = 0; i < chapterIndex.Length; i++)
-            {
-                if (currentStageIndex == chapterIndex[i])
-                {
-                    checkChapter = false;
-                    GameManager.currentChapterIndex = i - 1;
-                    StartCoroutine(ChangeChapter(i - 1));
-                    break;
-                }
-                else
-                {
-                    checkChapter = true;
-                }
             }
 
-            if (checkChapter)
-                changedChapter = true;
-
-            if (!stages[currentStageIndex - 1].onLock)
-            {
-                currentStageIndex--;
-                offset.transform.rotation = Quaternion.Euler(0, 180f, 0f);
-                StartCoroutine(ChangeStateLogic());
-            }
+            CheckChapterIndex(directionType);
+            CheckAvailableStageButton(directionType);
         }
 
         if (directionType == DirectionType.Right)
         {
             if (currentStageIndex > maxStageIndex - 1)
+            {
+                onChange = false;
                 return;
+            }
 
+            CheckChapterIndex(directionType);
+            CheckAvailableStageButton(directionType);
+        }
+    }
+
+    void CheckChapterIndex(DirectionType directionType)
+    {
+        changedChapter = true;
+
+        if (directionType == DirectionType.Left)
+        {
+            for (int i = 0; i < chapterIndex.Length; i++)
+            {
+                if (currentStageIndex == chapterIndex[i])
+                {
+                    changedChapter = false;
+                    GameManager.currentChapterIndex = i - 1;
+                    StartCoroutine(ChangeChapter(i - 1));
+                    break;
+                }
+            }
+        }
+
+        if (directionType == DirectionType.Right)
+        {
             for (int i = 0; i < chapterIndex.Length; i++)
             {
                 if (i == GameManager.currentChapterIndex)
@@ -193,24 +200,39 @@ public class MapManager : MonoBehaviour
 
                 if (currentStageIndex + 1 == chapterIndex[i])
                 {
-                    checkChapter = false;
+                    changedChapter = false;
                     GameManager.currentChapterIndex = i;
                     StartCoroutine(ChangeChapter(i));
                     break;
                 }
-                else
-                {
-                    checkChapter = true;
-                }
             }
+        }
+    }
 
-            if (checkChapter)
-                changedChapter = true;
+    void CheckAvailableStageButton(DirectionType directionType)
+    {
+        float angleValue = 0f;
+
+        if (directionType == DirectionType.Left)
+        {
+            angleValue = 180f;
+
+            if (!stages[currentStageIndex - 1].onLock)
+            {
+                currentStageIndex--;
+                offset.transform.rotation = Quaternion.Euler(0, angleValue, 0f);
+                StartCoroutine(ChangeStateLogic());
+            }
+        }
+
+        if (directionType == DirectionType.Right)
+        {
+            angleValue = 0f;
 
             if (!stages[currentStageIndex + 1].onLock)
             {
                 currentStageIndex++;
-                offset.transform.rotation = Quaternion.Euler(0, 0f, 0f);
+                offset.transform.rotation = Quaternion.Euler(0, angleValue, 0f);
                 StartCoroutine(ChangeStateLogic());
             }
         }
@@ -218,22 +240,26 @@ public class MapManager : MonoBehaviour
 
     IEnumerator ChangeChapter(int index)
     {
-        fadeScreen.FadeScreenEffect(1f, 0.25f);
-        yield return new WaitForSeconds(0.25f);
+        Vector3 cameraPosition = chapterTransform[index].position;
+        cameraPosition.z = -10;
+        float duration = 0.3f;
+
+        fadeScreen.FadeScreenEffect(1f, duration);
+        yield return new WaitForSeconds(duration);
+
         changedChapter = true;
-        Camera.main.transform.DOMove(new Vector3(chapterTransform[index].position.x, chapterTransform[index].position.y, -10), 0.5f)
-                             .OnComplete(() => 
-                             {
-                                 fadeScreen.FadeScreenEffect(0f, 0.5f);
-                             });
+        Camera.main.transform.DOMove(cameraPosition, duration * 2f)
+                             .OnComplete(() => fadeScreen.FadeScreenEffect(0f, duration * 2f));
     }
 
     IEnumerator ChangeStateLogic()
     {
         yield return new WaitUntil(() => changedChapter);
+
         DisableStage();
         MoveToStageButton(currentStageIndex);
         GetCurrentStageButton();
+
         changedChapter = false;
     }
 
@@ -256,6 +282,9 @@ public class MapManager : MonoBehaviour
                         });
     }
 
+    /// <summary>
+    /// [시작] 버튼 전용 함수
+    /// </summary>
     public void Select()
     {
         if (!onLoading)
@@ -267,6 +296,8 @@ public class MapManager : MonoBehaviour
 
     IEnumerator SelectLogic()
     {
+        onLoading = true;
+
         DisableStage();
         GameManager.lastSelectedStageButtonIndex = currentStageIndex;
         fadeScreen.FadeScreenEffect(1f, 0.5f, 1f);
@@ -315,9 +346,7 @@ public class MapManager : MonoBehaviour
         onLock = true;
         yield return new WaitUntil(() => endFade);
 
-        stage.ShowStageInfo(0.5f);
-        stage.ShowStartGuide(0.5f);
-        stage.ShowAlbumGuide(0.5f);
+        StartCoroutine(stage.ShowEveryElements(0f, 0.5f));
         SetStageInfo(currentStageButton.stageTemplate);
 
         yield return new WaitForSeconds(0.5f);
@@ -328,8 +357,12 @@ public class MapManager : MonoBehaviour
     {
         onLock = true;
 
-        stage.HideStageInfo(0.3f);
-        stage.HideStartGuide(0.3f);
-        stage.HideAlbumGuide(0.3f);
+        StartCoroutine(stage.HideEveryElements(0f, 0.3f));
+    }
+
+    public void PlayDisabledAnimation()
+    {
+        albumButton.transform.DOShakePosition(0.5f, new Vector3(15f, 0f, 0f), randomness: 0f).SetEase(Ease.OutQuad);
+        SFXController.instance.PlaySFX(errorClip);
     }
 }

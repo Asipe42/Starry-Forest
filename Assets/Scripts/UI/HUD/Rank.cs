@@ -25,6 +25,8 @@ public class Rank : MonoBehaviour
     [SerializeField] float[] timeLimit;
     [SerializeField] bool[] onRank;
 
+    bool onGameOver;
+
     public Grade grade = Grade.APlus;
 
     public float ElapsedTime
@@ -72,17 +74,25 @@ public class Rank : MonoBehaviour
 
     void Update()
     {
-        if (!PlayerController.instance.onGoal)
+        if (!PlayerController.instance.onGoal && !onGameOver)
         {
             CalculateGrade();
             DisplayTime();
             CheckTime();
+            CheckGameOver();
         }
     }
 
     void CalculateGrade()
     {
-        rankFull.fillAmount = (currentTime - timeLimit[(int)grade]) / (timeLimit[(int)grade - 1] - timeLimit[(int)grade]);
+        if (grade < Grade.C)
+        {
+            rankFull.fillAmount = (currentTime - timeLimit[(int)grade]) / (timeLimit[(int)grade - 1] - timeLimit[(int)grade]);
+        }
+        else
+        {
+            rankFull.fillAmount = currentTime / timeLimit[(int)grade - 1];
+        }
     }
 
     void DisplayTime()
@@ -106,6 +116,17 @@ public class Rank : MonoBehaviour
         }
     }
 
+    void CheckGameOver()
+    {
+        if (currentTime < 0)
+        {
+            onGameOver = true;
+
+            currentTime = 0;
+            StartCoroutine(PlayerController.instance.Dead());
+        }
+    }
+
     void DowngradeRank()
     {
         grade++;
@@ -118,12 +139,12 @@ public class Rank : MonoBehaviour
         SFXController.instance.PlaySFX(changeClip);
 
         DOTween.Sequence()
-            .Append(rankFull.transform.DOScale(new Vector3(originalScale_rankFull.x + 0.5f, originalScale_rankFull.y + 0.5f, originalScale_rankFull.z + 0.5f), 0.2f).SetEase(Ease.Linear))
-            .Append(rankFull.transform.DOScale(originalScale_rankFull, 0.2f).SetEase(Ease.Linear));
+               .Append(rankFull.transform.DOScale(new Vector3(originalScale_rankFull.x + 0.5f, originalScale_rankFull.y + 0.5f, originalScale_rankFull.z + 0.5f), 0.2f).SetEase(Ease.Linear))
+               .Append(rankFull.transform.DOScale(originalScale_rankFull, 0.2f).SetEase(Ease.Linear));
 
         DOTween.Sequence()
-            .Append(rankEmpty.transform.DOScale(new Vector3(originalScale_rankEmpty.x + 0.5f, originalScale_rankEmpty.y + 0.5f, originalScale_rankEmpty.z + 0.5f), 0.2f).SetEase(Ease.Linear))
-            .Append(rankEmpty.transform.DOScale(originalScale_rankEmpty, 0.2f).SetEase(Ease.Linear));
+               .Append(rankEmpty.transform.DOScale(new Vector3(originalScale_rankEmpty.x + 0.5f, originalScale_rankEmpty.y + 0.5f, originalScale_rankEmpty.z + 0.5f), 0.2f).SetEase(Ease.Linear))
+               .Append(rankEmpty.transform.DOScale(originalScale_rankEmpty, 0.2f).SetEase(Ease.Linear));
 
         rankFull.sprite = rankSpriteFull[(int)grade - 1];
         rankEmpty.sprite = rankSpriteEmtpy[(int)grade - 1];

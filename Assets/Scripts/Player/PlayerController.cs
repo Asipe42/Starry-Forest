@@ -55,6 +55,11 @@ public class PlayerController : MonoBehaviour
     public SpecialAction specialAction = SpecialAction.None;
     [SerializeField] Transform targetTransform;
 
+    [Header("Cursor")]
+    public bool[] changedCursor;
+    [SerializeField] ParticleSystem cursorFirecraker;
+    [SerializeField] Color[] cursorFirecrakerColors;
+
     [Header("Jump")]
     public bool canJump;
     public bool onJump;
@@ -97,9 +102,12 @@ public class PlayerController : MonoBehaviour
     public static event Action<DashLevel> DashEvent;
     public static event Action<bool> deadEvent;
 
+    AudioClip cursorClip;
+
     void Awake()
     {
         Initialize();
+        GetAudioClip();
     }
 
     #region Initial Setting
@@ -122,6 +130,13 @@ public class PlayerController : MonoBehaviour
         actionList.Add("downhill");
         actionList.Add("dash");
         actionList.Add("fly");
+
+        changedCursor = new bool[2];
+    }
+
+    void GetAudioClip()
+    {
+        cursorClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Cursor");
     }
     #endregion
 
@@ -349,7 +364,8 @@ public class PlayerController : MonoBehaviour
 
                 DashEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
-                ChangeCameraOption(dashLevel, 0.75f);
+                ChangeCursor(dashLevel);
+                ChangeCameraOption(dashLevel - 1, 0.75f);
                 ChangeFlyColliderPosition(dashLevel - 1);
 
                 thePlayerAudio.PlaySFX_DashLevelup(0, 1 + (float)dashLevel * 0.1f, 0.25f);
@@ -371,11 +387,55 @@ public class PlayerController : MonoBehaviour
 
                 DashEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
+                InitializeCursorImage(dashLevel);
                 ChangeCameraOption(dashLevel, 0.5f);
                 ChangeFlyColliderPosition(dashLevel);
             }
 
             yield return null;
+        }
+    }
+
+    void ChangeCursor(DashLevel dashLevel)
+    {
+        if (dashLevel == DashLevel.Max && !changedCursor[1])
+        {
+            changedCursor[1] = true;
+
+            Texture2D cursorImg = GameManager.instance.cursorImg[2];
+            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
+
+            ShowCursorFirecracker(cursorFirecrakerColors[1], 75);
+        }
+        else if (dashLevel > DashLevel.None && !changedCursor[0])
+        {
+            changedCursor[0] = true;
+
+            Texture2D cursorImg = GameManager.instance.cursorImg[1];
+            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
+
+            ShowCursorFirecracker(cursorFirecrakerColors[0], 75);
+        }
+    }
+
+    void ShowCursorFirecracker(Color color, int emit)
+    {
+        Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); targetPos.z = 0f;
+        cursorFirecraker.transform.position = targetPos;
+
+        var temp = cursorFirecraker.main;
+        temp.startColor = color;
+
+        cursorFirecraker.Emit(emit);
+    }
+
+    void InitializeCursorImage(DashLevel dashLevel)
+    {
+        if (dashLevel == DashLevel.None)
+        {
+            changedCursor[0] = false; changedCursor[1] = false;
+            Texture2D cursorImg = GameManager.instance.cursorImg[0];
+            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
         }
     }
 
@@ -521,6 +581,8 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Dead());
         }
 
+        ResetDash();
+
         StartCoroutine(Invincibility(0.8f, 0.5f));
 
         SFXController.instance.PlaySFX(clip);
@@ -532,6 +594,20 @@ public class PlayerController : MonoBehaviour
                                         vibrato: 5,
                                         randomness: 90))
                                      .SetEase(Ease.OutQuad);
+    }
+
+    void ResetDash()
+    {
+        onDash = false;
+        dashLevel = DashLevel.None;
+
+        StartCoroutine(ChargeDash());
+
+        DashEvent.Invoke(dashLevel);
+        scroll.ScrollParticle(dashLevel);
+        InitializeCursorImage(dashLevel);
+        ChangeCameraOption(dashLevel, 0.5f);
+        ChangeFlyColliderPosition(dashLevel);
     }
 
     void CameraSize(float x)
@@ -566,7 +642,7 @@ public class PlayerController : MonoBehaviour
         Knockback(knockbackDirection, knockbackForce);
 
         UIManager.instance.darkenScreen.DarkenScreenEffect(1, duration);
-        UIManager.instance.hud.HideEveryElement(0f, 0.5f);
+        StartCoroutine(UIManager.instance.hud.HideEveryElements(0f, 0.5f));
 
         yield return new WaitForSeconds(duration + 0.5f);
         UIManager.instance.resultSign.ShowResultSign("완주 실패");
@@ -618,7 +694,7 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(IncreaseDashLevelCoroutine);
 
         UIManager.instance.darkenScreen.DarkenScreenEffect(0.4f, 1f);
-        UIManager.instance.hud.HideEveryElement(0f, 1f);
+        StartCoroutine(UIManager.instance.hud.HideEveryElements(0f, 1f));
 
         switch (lastFloorState)
         {

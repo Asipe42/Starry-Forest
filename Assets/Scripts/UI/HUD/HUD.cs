@@ -13,11 +13,12 @@ public class HUD : MonoBehaviour
     {
         if (!PlayerController.instance.onTutorial)
         {
-            StartCoroutine(ShowEveryElement(5f, 1f));
+            StartCoroutine(ShowEveryElements(5f, 1f));
         }
     }
 
-    public IEnumerator ShowEveryElement(float delay, float duration)
+    #region Show HUD UI
+    public IEnumerator ShowEveryElements(float delay, float duration)
     {
         yield return new WaitForSeconds(delay);
         ShowHeartBox(duration);
@@ -26,16 +27,6 @@ public class HUD : MonoBehaviour
         ShowDSBox(duration);
     }
 
-    public IEnumerator HideEveryElement(float delay, float duration)
-    {
-        yield return new WaitForSeconds(delay);
-        HideHeartBox(duration);
-        HideRSBox(duration);
-        HidePDBox(duration);
-        HideDSBox(duration);
-    }
-
-    #region Show HUD UI
     public void ShowHeartBox(float duration)
     {
         heartBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
@@ -58,6 +49,15 @@ public class HUD : MonoBehaviour
     #endregion
 
     #region Hide HUD UI
+    public IEnumerator HideEveryElements(float delay, float duration)
+    {
+        yield return new WaitForSeconds(delay);
+        HideHeartBox(duration);
+        HideRSBox(duration);
+        HidePDBox(duration);
+        HideDSBox(duration);
+    }
+
     public void HideHeartBox(float duration)
     {
         heartBox?.DOAnchorPos(new Vector2(-400f, 0f), duration).SetEase(Ease.InQuad);

@@ -64,9 +64,9 @@ public class Result : MonoBehaviour
         float[] cardPositionY = { 360, 960, 1560 };
 
         appearSequence.Append(timeCard.DOAnchorPosX(cardPositionY[0], duration).SetEase(Ease.OutQuint)).OnStart(() => SFXController.instance.PlaySFX(resultClip))
-                .Insert(intervalTime, itemCard.DOAnchorPosX(cardPositionY[1], duration).SetEase(Ease.OutQuint))
-                .Insert(intervalTime * 2, heartCard.DOAnchorPosX(cardPositionY[2], duration).SetEase(Ease.OutQuint))
-                .OnComplete(() => PlayRotateSequence());
+                      .Insert(intervalTime, itemCard.DOAnchorPosX(cardPositionY[1], duration).SetEase(Ease.OutQuint))
+                      .Insert(intervalTime * 2, heartCard.DOAnchorPosX(cardPositionY[2], duration).SetEase(Ease.OutQuint))
+                      .OnComplete(() => PlayRotateSequence());
     }
 
     void PlayRotateSequence()

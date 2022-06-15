@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public struct StageButtonInfo
 {
@@ -8,7 +9,7 @@ public struct StageButtonInfo
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] Texture2D cursorImg;
+    public Texture2D[] cursorImg;
 
     public static GameManager instance;
     public static StageButtonInfo[] stageButtonInfo;
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeCursorImage()
     {
-        Cursor.SetCursor(cursorImg, new Vector2(0.5f, -0.5f), CursorMode.ForceSoftware);
+        Cursor.SetCursor(cursorImg[0], new Vector2(cursorImg[0].width / 2, cursorImg[1].height / 2), CursorMode.ForceSoftware);
     }
     #endregion
 
