@@ -263,9 +263,33 @@ public class PlayerController : MonoBehaviour
         if (onSliding)
             return;
 
-        if (onJump || onDownhill)
-            return;
+        if (!onGround)
+        {
+            onSliding = true;
+            StartCoroutine(WaitSliding());
+        }
+        else
+        {
+            SlidingLogic();
+        }
+    }
 
+    IEnumerator WaitSliding()
+    {
+        yield return new WaitUntil(() => onGround);
+
+        if (Input.GetKey(UseKeys.slidingKey))
+        {
+            SlidingLogic();
+        }
+        else
+        {
+            onSliding = false;
+        }
+    }
+
+    public void SlidingLogic()
+    {
         onWalk = false;
         onSliding = true;
 
@@ -283,7 +307,7 @@ public class PlayerController : MonoBehaviour
     {
         while (onSliding)
         {
-            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.SlidingKey) && !onFix))
+            if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.slidingKey) && !onFix))
             {
                 onWalk = true;
                 onSliding = false;
@@ -311,9 +335,6 @@ public class PlayerController : MonoBehaviour
         if (!canDash)
             return;
 
-        if (!onGround)
-            return;
-
         if (hasDash)
         {
             onDash = true;
@@ -322,29 +343,38 @@ public class PlayerController : MonoBehaviour
             thePlayerAudio.PlaySFX_Dash(0f);
 
             if (IncreaseDashLevelCoroutine != null)
+            {
                 StopCoroutine(IncreaseDashLevelCoroutine);
+            }
 
             IncreaseDashLevelCoroutine = IncreaseDashLevel();
-            StartCoroutine(IncreaseDashLevelCoroutine);
 
-            StartCoroutine(CancleDash());
+            StartCoroutine(IncreaseDashLevelCoroutine);
+            StartCoroutine(WaitCancleDash());
         }
     }
 
-    IEnumerator CancleDash()
+    public void Break()
+    {
+        ResetDash();
+    }
+
+    IEnumerator WaitCancleDash()
     {
         while (true)
         {
             if ((!onFix && onTutorial) || (Input.GetKeyUp(UseKeys.dashKey) && !onFix))
             {
                 onDash = false;
-
-                StartCoroutine(ChargeDash());
+                hasDash = true;
 
                 if (DecreaseDashLevelCoroutine != null)
+                {
                     StopCoroutine(DecreaseDashLevelCoroutine);
+                }
 
                 DecreaseDashLevelCoroutine = DecraseDashLevel();
+
                 StartCoroutine(DecreaseDashLevelCoroutine);
             }
 
@@ -381,7 +411,7 @@ public class PlayerController : MonoBehaviour
         {
             if (dashLevel > DashLevel.None)
             {
-                yield return new WaitForSeconds(0.15f);
+                yield return new WaitForSeconds(0.5f);
 
                 dashLevel--; dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
 
@@ -454,16 +484,6 @@ public class PlayerController : MonoBehaviour
             flyColliderPosition.y = dashFlyColliderPosition[(int)dashLevel];
             flyCollider.transform.position = flyColliderPosition;
         }
-    }
-
-    IEnumerator ChargeDash()
-    {
-        while (dashLevel > DashLevel.None)
-        {
-            yield return null;
-        }
-
-        hasDash = true;
     }
     #endregion
 
@@ -598,10 +618,7 @@ public class PlayerController : MonoBehaviour
 
     void ResetDash()
     {
-        onDash = false;
-        dashLevel = DashLevel.None;
-
-        StartCoroutine(ChargeDash());
+        dashLevel = DashLevel.One;
 
         DashEvent.Invoke(dashLevel);
         scroll.ScrollParticle(dashLevel);

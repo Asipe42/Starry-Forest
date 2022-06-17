@@ -72,7 +72,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panel: {fileID: 0}
   guide: {fileID: 7839571006910434463}
-  screenParticle: {fileID: 0}
   targetActionName: dash
   duration: 0.3
   lastEvent: 0
@@ -149,7 +148,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 404927651
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: cbb8bd6faca1c6e4dbb4cb52627a1627, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -260,12 +259,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -1979407630316415822, guid: 0ba0ddba210f0cc4a877703e506107b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 28f85378d95bf5246b327ea642b64d9a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.01, y: 1.6}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

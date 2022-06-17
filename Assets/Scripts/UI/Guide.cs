@@ -9,9 +9,23 @@ public class Guide : MonoBehaviour
 {
     MenuType menuType = MenuType.NewGame;
 
+    enum ButtonType
+    {
+        None = 0,
+        Cancle,
+        Accept
+    }
+
+    enum DirectionType
+    {
+        Right,
+        Left
+    }
+
     [Header("UI")]
     [SerializeField] Transform box;
     [SerializeField] Image panel;
+    [SerializeField] Image cancleButtonImage;
     [SerializeField] Image acceptButtonImage;
     [SerializeField] TextMeshProUGUI mainText;
     [SerializeField] TextMeshProUGUI subText;
@@ -33,12 +47,13 @@ public class Guide : MonoBehaviour
     [SerializeField] bool isMap;
     [SerializeField] FadeScreen fadeScreen;
 
-    //Menu menu;
-
     AudioClip popupClip;
     AudioClip acceptClip;
+    AudioClip menuClip;
 
+    ButtonType currnetButtonType = ButtonType.None;
     bool onAccept;
+    bool onPopup;
 
     public static event Action<bool> cancleGuideEvent;
 
@@ -51,9 +66,15 @@ public class Guide : MonoBehaviour
     {
         popupClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Popup");
         acceptClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Appear");
+        menuClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Menu");
     }
 
     void Update()
+    {
+        InputKey();
+    }
+
+    void InputKey()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -74,6 +95,28 @@ public class Guide : MonoBehaviour
                 {
                     Cancle();
                 }
+            }
+        }
+
+        if (onPopup && onGuide && !onAccept)
+        {
+            bool onRight = Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
+            bool onLeft = Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A);
+            bool onSelect = Input.GetButtonDown("Submit");
+
+            if (onRight && !onLeft)
+            {
+                ChangeSelectedButton(DirectionType.Right);
+            }
+
+            if (onLeft && !onRight)
+            {
+                ChangeSelectedButton(DirectionType.Left);
+            }
+
+            if (onSelect)
+            {
+                Select(currnetButtonType);
             }
         }
     }
@@ -116,11 +159,11 @@ public class Guide : MonoBehaviour
     {
         if (targetScale > 0) // appear
         {
-            box.DOScale(targetScale, duration).SetEase(Ease.OutCubic);
+            box.DOScale(targetScale, duration).SetEase(Ease.OutCubic).OnComplete(() => onPopup = true);
         }
         else // disappear
         {
-            box.DOScale(targetScale, duration).SetEase(Ease.OutCubic);
+            box.DOScale(targetScale, duration).SetEase(Ease.OutCubic).OnComplete(() => onPopup = false);
         }
     }
 
@@ -151,6 +194,79 @@ public class Guide : MonoBehaviour
         this.subText.text = subText;
         accpetText.text = buttonText[0];
         cancleText.text = buttonText[1];
+    }
+
+    void ChangeSelectedButton(DirectionType directionType)
+    {
+        if (directionType == DirectionType.Right)
+        {
+            switch (currnetButtonType)
+            {
+                case ButtonType.None:
+                    currnetButtonType = ButtonType.Cancle;
+                    break;
+                case ButtonType.Cancle:
+                    currnetButtonType = ButtonType.Accept;
+                    break;
+                case ButtonType.Accept:
+                    currnetButtonType = ButtonType.Cancle;
+                    break;
+            }
+        }
+
+        if (directionType == DirectionType.Left)
+        {
+            switch (currnetButtonType)
+            {
+                case ButtonType.None:
+                    currnetButtonType = ButtonType.Accept;
+                    break;
+                case ButtonType.Cancle:
+                    currnetButtonType = ButtonType.Accept;
+                    break;
+                case ButtonType.Accept:
+                    currnetButtonType = ButtonType.Cancle;
+                    break;
+            }
+        }
+
+        UpdateButtonType(currnetButtonType);
+    }
+
+    void UpdateButtonType(ButtonType buttonType)
+    {
+        SFXController.instance.PlaySFX(menuClip);
+
+        Color disableColor = new Color(0.75f, 0.75f, 0.75f, 1f);
+        cancleButtonImage.color = disableColor;
+        acceptButtonImage.color = disableColor;
+
+        switch (buttonType)
+        {
+            case ButtonType.None:
+                break;
+            case ButtonType.Cancle:
+                cancleButtonImage.color = Color.white;
+                break;
+            case ButtonType.Accept:
+                acceptButtonImage.color = Color.white;
+                break;
+        }
+    }
+
+    void Select(ButtonType buttonType)
+    {
+        switch (currnetButtonType)
+        {
+            case ButtonType.None:
+                break;
+            case ButtonType.Cancle:
+                Cancle();
+                break;
+            case ButtonType.Accept:
+                Accept();
+                break;
+        }
     }
 
     public void Accept()

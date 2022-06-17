@@ -46,10 +46,6 @@ public class Menu : MonoBehaviour
     public bool onEnable;
     public bool onLock;
 
-    bool onUp;
-    bool onDown;
-    bool onSelect;
-
     void Awake()
     {
         Initialize();
@@ -66,7 +62,6 @@ public class Menu : MonoBehaviour
         menuText = new Dictionary<MenuType, Text>();
         destination = new List<Vector3>();
     }
-
 
     void SetDestination()
     {
@@ -132,9 +127,9 @@ public class Menu : MonoBehaviour
         if (onLock)
             return;
 
-        onUp = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
-        onDown = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
-        onSelect = Input.GetButtonDown("Submit");
+        bool onUp = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
+        bool onDown = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
+        bool onSelect = Input.GetButtonDown("Submit");
 
         if (onUp && !onDown)
         {

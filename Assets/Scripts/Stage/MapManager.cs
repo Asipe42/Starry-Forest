@@ -162,7 +162,7 @@ public class MapManager : MonoBehaviour
 
         if (directionType == DirectionType.Right)
         {
-            if (currentStageIndex > maxStageIndex - 1)
+            if (currentStageIndex >= maxStageIndex - 1)
             {
                 onChange = false;
                 return;
@@ -263,7 +263,7 @@ public class MapManager : MonoBehaviour
         changedChapter = false;
     }
 
-    void MoveToStageButton(int index, float duration = 0.75f)
+    void MoveToStageButton(int index, float duration = 0.5f)
     {
         anim.SetBool("move", true);
         offset.transform.parent = stages[index].transform;
@@ -277,7 +277,7 @@ public class MapManager : MonoBehaviour
                         { 
                             StartCoroutine(EnableStage());
                             anim.SetBool("move", false);
-                            offset.transform.DORotate(new Vector3(0f, 0f, 0f), 0.5f).SetEase(Ease.OutQuad);
+                            offset.transform.DORotate(new Vector3(0f, 0f, 0f), 0.3f).SetEase(Ease.OutQuad);
                             onChange = false;
                         });
     }
@@ -346,10 +346,10 @@ public class MapManager : MonoBehaviour
         onLock = true;
         yield return new WaitUntil(() => endFade);
 
-        StartCoroutine(stage.ShowEveryElements(0f, 0.5f));
+        StartCoroutine(stage.ShowEveryElements(0f, 0.3f));
         SetStageInfo(currentStageButton.stageTemplate);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         onLock = false;
     }
 
@@ -357,7 +357,7 @@ public class MapManager : MonoBehaviour
     {
         onLock = true;
 
-        StartCoroutine(stage.HideEveryElements(0f, 0.3f));
+        StartCoroutine(stage.HideEveryElements(0f, 0.25f));
     }
 
     public void PlayDisabledAnimation()

@@ -48,7 +48,7 @@ public class TutorialEvent : MonoBehaviour
         targetKey = new Dictionary<string, KeyCode>();
 
         targetKey.Add("jump", UseKeys.jumpKey);
-        targetKey.Add("sliding", UseKeys.SlidingKey);
+        targetKey.Add("sliding", UseKeys.slidingKey);
         targetKey.Add("downhill", UseKeys.jumpKey);
         targetKey.Add("dash", UseKeys.dashKey);
         targetKey.Add("fly", UseKeys.specialKey);
