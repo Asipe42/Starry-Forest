@@ -137,7 +137,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 404927651
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8fb6c7b3bfa546b43a5a21cd56659744, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -616,6 +616,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird
       objectReference: {fileID: 0}
+    - target: {fileID: 791184780244465191, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: destination.x
+      value: -11
+      objectReference: {fileID: 0}
+    - target: {fileID: 791184780244465191, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: destination.y
+      value: -2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
 --- !u!4 &4161857369618897567 stripped
@@ -636,7 +644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 791184780244465185, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16
+      value: 17.79
       objectReference: {fileID: 0}
     - target: {fileID: 791184780244465185, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
       propertyPath: m_LocalPosition.y
@@ -677,6 +685,22 @@ PrefabInstance:
     - target: {fileID: 791184780244465186, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
       propertyPath: m_Name
       value: Bird
+      objectReference: {fileID: 0}
+    - target: {fileID: 791184780244465191, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: destination.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 791184780244465191, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: destination.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845098770113708825, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -19.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 5387160086415431966, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -19.04
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2a11ed74f3c23241b0dfbf798f3a356, type: 3}

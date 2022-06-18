@@ -50,5 +50,6 @@ public class Wood : Obstacle
     void OnDrawGizmos()
     {
         Gizmos.DrawLine(startTriggerTransform.position, endTriggerTransform.position);
+        Gizmos.DrawWireSphere(destinationTransform.position, 0.5f);
     }
 }

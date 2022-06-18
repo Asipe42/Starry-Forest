@@ -82,6 +82,7 @@ public class Guide : MonoBehaviour
             {
                 if (!onGuide)
                 {
+                    Cursor.visible = true;
                     PopupGuide_Map(onGuide, 1);
                 }
                 else
@@ -315,6 +316,7 @@ public class Guide : MonoBehaviour
         if (!onAccept)
         {
             onAccept = true;
+            Cursor.visible = false;
 
             PlayAcceptAnimation();
 
@@ -336,6 +338,7 @@ public class Guide : MonoBehaviour
         if (onAccept)
             return;
 
+        Cursor.visible = false;
         onGuide = false;
         cancleGuideEvent.Invoke(false);
 

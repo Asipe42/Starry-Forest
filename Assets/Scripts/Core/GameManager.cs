@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
         ChangeCursorImage();
     }
 
+    void Start()
+    {
+        Cursor.visible = false;
+    }
+
     #region Initial Setting
     void Initialize()
     {

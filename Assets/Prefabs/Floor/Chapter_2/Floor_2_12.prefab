@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!61 &826116042622853140
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1193516617104410556}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 20}
-  m_EdgeRadius: 0
 --- !u!1 &3803012382729931501
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +169,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 404927651
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: cb4a327e6711fdc47bccdf044448c55c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -326,11 +300,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6591064688215205738, guid: f7f9d0e5189dd1d428604f029f8040e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.25
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6591064688215205738, guid: f7f9d0e5189dd1d428604f029f8040e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.3
       objectReference: {fileID: 0}
     - target: {fileID: 6591064688215205738, guid: f7f9d0e5189dd1d428604f029f8040e1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -505,11 +479,6 @@ PrefabInstance:
 --- !u!4 &1193516617809700799 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1385615725126225731, guid: 5f25a74fcd5b6f844ac66174d35a5e17, type: 3}
-  m_PrefabInstance: {fileID: 264176512562538748}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1193516617104410556 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1385615726030778176, guid: 5f25a74fcd5b6f844ac66174d35a5e17, type: 3}
   m_PrefabInstance: {fileID: 264176512562538748}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &444487469619145232

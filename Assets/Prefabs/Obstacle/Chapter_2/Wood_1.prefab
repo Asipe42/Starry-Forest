@@ -197,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   destinationTransform: {fileID: 3104017739057440389}
-  duration: 0.75
+  duration: 1
   startTriggerTransform: {fileID: 253361913443076890}
   endTriggerTransform: {fileID: 1696390830426257416}
   whatIsPlayer:

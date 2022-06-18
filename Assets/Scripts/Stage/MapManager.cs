@@ -15,11 +15,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI chapterText;
     [SerializeField] TextMeshProUGUI stageText;
     [SerializeField] TextMeshProUGUI lifeText;
-    [SerializeField] Image rankBox;
-    [SerializeField] Image rank;
     [SerializeField] GameObject startButton;
     [SerializeField] GameObject albumButton;
-    [SerializeField] Sprite[] rankSprites;
     [SerializeField] GameObject offset;
     [SerializeField] GameObject emotion;
     [SerializeField] Transform[] chapterTransform;
@@ -307,7 +304,7 @@ public class MapManager : MonoBehaviour
         emotion.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBounce);
 
         yield return new WaitForSeconds(2f);
-        Loading.LoadScene(currentStageButton.stageTemplate.sceneName);
+        Loading.LoadScene(currentStageButton.stageButtonTemplate.sceneName);
     }
 
     void SetStageInfo(StageButtonTemplate stageTemplate)
@@ -315,30 +312,6 @@ public class MapManager : MonoBehaviour
         this.chapterText.text = stageTemplate.chapterName;
         this.stageText.text = stageTemplate.stageName;
         this.lifeText.text = "" + GameManager.life;
-
-        switch (stageTemplate.clearGrade)
-        {
-            case Grade.None:
-                break;
-            case Grade.APlus:
-                rank.sprite = rankSprites[0];
-                break;
-            case Grade.A:
-                rank.sprite = rankSprites[1];
-                break;
-            case Grade.BPlus:
-                rank.sprite = rankSprites[2];
-                break;
-            case Grade.B:
-                rank.sprite = rankSprites[3];
-                break;
-            case Grade.CPlus:
-                rank.sprite = rankSprites[4];
-                break;
-            case Grade.C:
-                rank.sprite = rankSprites[5];
-                break;
-        }
     }
 
     IEnumerator EnableStage()
@@ -347,7 +320,7 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => endFade);
 
         StartCoroutine(stage.ShowEveryElements(0f, 0.3f));
-        SetStageInfo(currentStageButton.stageTemplate);
+        SetStageInfo(currentStageButton.stageButtonTemplate);
 
         yield return new WaitForSeconds(0.3f);
         onLock = false;

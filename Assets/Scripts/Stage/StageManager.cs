@@ -73,6 +73,9 @@ public class StageManager : MonoBehaviour
 
         GameManager.UnlockStage(index);
 
+        if (UIManager.instance.result != null)
+            GameManager.RecordGrade(index - 1, UIManager.instance.result.GetRank());
+
         if (lastFloorState == LastFloorState.Normal || lastFloorState == LastFloorState.Tutorial)
         {
             Loading.LoadScene("Map");

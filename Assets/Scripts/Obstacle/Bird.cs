@@ -49,5 +49,6 @@ public class Bird : Obstacle
     void OnDrawGizmos()
     {
         Gizmos.DrawLine(startTriggerTransform.position, endTriggerTransform.position);
+        Gizmos.DrawWireSphere(destination, 0.5f);
     }
 }

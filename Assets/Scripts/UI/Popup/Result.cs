@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,27 +6,33 @@ using DG.Tweening;
 
 public class Result : MonoBehaviour
 {
-    [SerializeField] RectTransform timeCard;
-    [SerializeField] RectTransform itemCard;
-    [SerializeField] RectTransform heartCard;
-    [SerializeField] RectTransform rankBar;
-    [SerializeField] Image rankBarGauge;
     [SerializeField] Sprite cardFront;
 
     [Header("Time")]
+    [SerializeField] RectTransform timeCard;
     [SerializeField] TextMeshProUGUI timePercentage;
     [SerializeField] Image timeGague;
     [SerializeField] TextMeshProUGUI timeScore;
+    [SerializeField] GameObject timePoints;
 
     [Header("Item")]
+    [SerializeField] RectTransform itemCard;
     [SerializeField] TextMeshProUGUI itemPercentage;
     [SerializeField] Image itemGague;
     [SerializeField] TextMeshProUGUI itemScore;
+    [SerializeField] GameObject itemPoints;
 
     [Header("Heart")]
+    [SerializeField] RectTransform heartCard;
     [SerializeField] TextMeshProUGUI heartPercentage;
     [SerializeField] Image heartGauge;
     [SerializeField] TextMeshProUGUI heartScore;
+
+    [Header("Rank Bar")]
+    [SerializeField] RectTransform rankBar;
+    [SerializeField] Image rankBarGauge;
+    [SerializeField] GameObject Diamonds;
+
 
     int timePoint;
     int itemBounusPoint;
@@ -39,6 +46,7 @@ public class Result : MonoBehaviour
     AudioClip starClip;
     AudioClip resultClip;
     AudioClip rotationClip;
+    AudioClip rankStarClip;
 
     void Awake()
     {
@@ -51,6 +59,7 @@ public class Result : MonoBehaviour
         starClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Star");
         resultClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Result");
         rotationClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Rotation");
+        rankStarClip = Resources.Load<AudioClip>("Audio/SFX/SFX_RankStar");
     }
     #endregion
 
@@ -61,11 +70,11 @@ public class Result : MonoBehaviour
 
         float intervalTime = 0.3f;
         float duration = 1.5f;
-        float[] cardPositionY = { 360, 960, 1560 };
+        float[] cardPositionX = { -600, 0, 600 };
 
-        appearSequence.Append(timeCard.DOAnchorPosX(cardPositionY[0], duration).SetEase(Ease.OutQuint)).OnStart(() => SFXController.instance.PlaySFX(resultClip))
-                      .Insert(intervalTime, itemCard.DOAnchorPosX(cardPositionY[1], duration).SetEase(Ease.OutQuint))
-                      .Insert(intervalTime * 2, heartCard.DOAnchorPosX(cardPositionY[2], duration).SetEase(Ease.OutQuint))
+        appearSequence.Append(timeCard.DOAnchorPosX(cardPositionX[0], duration).SetEase(Ease.OutQuint)).OnStart(() => SFXController.instance.PlaySFX(resultClip))
+                      .Insert(intervalTime, itemCard.DOAnchorPosX(cardPositionX[1], duration).SetEase(Ease.OutQuint))
+                      .Insert(intervalTime * 2, heartCard.DOAnchorPosX(cardPositionX[2], duration).SetEase(Ease.OutQuint))
                       .OnComplete(() => PlayRotateSequence());
     }
 
@@ -73,6 +82,7 @@ public class Result : MonoBehaviour
     {
         var rotateSequence = DOTween.Sequence();
 
+        float intervalTime = 3f;
         float duration = 0.5f;
 
         rotateSequence.Append(timeCard.DORotate(new Vector3(0f, 180f, 0f), duration)
@@ -80,12 +90,12 @@ public class Result : MonoBehaviour
                                       .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
                                       .OnUpdate(() => ShowCardInfo(timeCard)))
                       .AppendCallback(() => PlayTimeCardAnimation())
-                      .Insert(3f, itemCard.DORotate(new Vector3(0f, 180f, 0f), duration)
+                      .Insert(intervalTime, itemCard.DORotate(new Vector3(0f, 180f, 0f), duration)
                                           .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
                                           .SetEase(Ease.InSine)
                                           .OnUpdate(() => ShowCardInfo(itemCard)))
                       .AppendCallback(() => PlayItemCardAnimation())
-                      .Insert(6f, heartCard.DORotate(new Vector3(0f, 180f, 0f), duration)
+                      .Insert(intervalTime * 2f, heartCard.DORotate(new Vector3(0f, 180f, 0f), duration)
                                            .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
                                            .SetEase(Ease.InSine)
                                            .OnUpdate(() => ShowCardInfo(heartCard)))
@@ -118,27 +128,27 @@ public class Result : MonoBehaviour
         {
             case Grade.APlus:
                 gradeCharacter = "A+";
-                target = 0.16f;
+                target = 1f;
                 break;
             case Grade.A:
                 gradeCharacter = "A";
-                target = 0.33f;
+                target = 0.78f;
                 break;
             case Grade.BPlus:
                 gradeCharacter = "B+";
-                target = 0.5f;
+                target = 0.6f;
                 break;
             case Grade.B:
                 gradeCharacter = "B";
-                target = 0.66f;
+                target = 0.4f;
                 break;
             case Grade.CPlus:
                 gradeCharacter = "C+";
-                target = 0.83f;
+                target = 0.22f;
                 break;
             case Grade.C:
                 gradeCharacter = "C";
-                target = 1f;
+                target = 0f;
                 break;
         }
 
@@ -149,8 +159,8 @@ public class Result : MonoBehaviour
 
         sequence.Append(timePercentage.DOScale(1f, 0.5f)
                                       .SetEase(Ease.OutBounce)
-                                      .OnPlay(() => SFXController.instance.PlaySFX(starClip))
-                                      .OnComplete(() => timeGague.DOFillAmount(target, 1f)))
+                                      .OnPlay(() => SFXController.instance.PlaySFX(starClip)))
+                                      .OnComplete(() => timeGague.DOFillAmount(target, 1f))
                 .Append(timeScore.DOScale(1f, 0.5f)
                                  .SetEase(Ease.OutBounce)
                                  .OnPlay(() => SFXController.instance.PlaySFX(starClip)));
@@ -189,8 +199,8 @@ public class Result : MonoBehaviour
 
         sequence.Append(itemPercentage.DOScale(1f, 0.5f)
                                       .SetEase(Ease.OutBounce)
-                                      .OnPlay(() => SFXController.instance.PlaySFX(starClip))
-                                      .OnComplete(() => itemGague.DOFillAmount(target, 1f)))
+                                      .OnPlay(() => SFXController.instance.PlaySFX(starClip)))
+                                      .OnComplete(() => itemGague.DOFillAmount(target, 1f))
                 .Append(itemScore.DOScale(1f, 0.5f)
                                  .SetEase(Ease.OutBounce)
                                  .OnPlay(() => SFXController.instance.PlaySFX(starClip)));     
@@ -222,7 +232,7 @@ public class Result : MonoBehaviour
         }
 
         heartPercentage.text = string.Format("{0} Ä­", heart);
-        heartPercentage.text = "+" + itemBounusPoint + " Á¡";
+        heartScore.text = "+" + itemBounusPoint + " Á¡";
 
         var sequence = DOTween.Sequence();
 
@@ -237,18 +247,40 @@ public class Result : MonoBehaviour
 
     void PlayRankBarSequence()
     {
+        int index = Diamonds.transform.childCount;
+        bool[] check = new bool[index];
+        float[] diamondAmount = { 0.01f, 0.2f, 0.4f, 0.6f, 0.8f, 1f };
         float gaugeRate = (float)(itemBounusPoint + heartBounusPoint) / 100f;
 
         var sequence = DOTween.Sequence();
 
-        sequence.Append(rankBar.DOAnchorPosY(50f, 0.5f).OnComplete(() => rankBarGauge.DOFillAmount(gaugeRate, 2f).SetEase(Ease.OutSine)))
-                .InsertCallback(5f, () => endDirecting = true);
+        sequence.AppendInterval(1.5f)
+                .Append(rankBar.DOAnchorPosY(50f, 0.5f)
+                               .OnComplete(() => rankBarGauge.DOFillAmount(gaugeRate, 5f).SetEase(Ease.OutSine)))
+                               .OnUpdate(() => PlayDiamondAnimation(rankBarGauge.fillAmount, index, check, diamondAmount))
+                .InsertCallback(9f, () => endDirecting = true);
           
         if (itemBounusPoint + heartBounusPoint > 100)
         {
             if (currentStageGrade > Grade.APlus)
             {
                 currentStageGrade--;
+            }
+        }
+    }
+
+    void PlayDiamondAnimation(float fillAmount, int index, bool[] check, float[] diamondAmount)
+    {
+        for(int i = 0; i < index; i++)
+        {
+            if (fillAmount >= diamondAmount[i])
+            {
+                if (!check[i])
+                {
+                    check[i] = true;
+                    Diamonds.transform.GetChild(i).transform.DOPunchScale(new Vector3(1.25f, 1.25f, 1f), 1.25f);
+                    SFXController.instance.PlaySFX(rankStarClip);
+                }
             }
         }
     }
@@ -302,7 +334,7 @@ public class Result : MonoBehaviour
         }
     }
 
-    Grade GetRank()
+    public Grade GetRank()
     {
         return currentStageGrade;
     }

@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (state)
         {
-            rigid.velocity = new Vector2(rigid.velocity.x, 2f);
+            rigid.velocity = new Vector2(rigid.velocity.x, 3f);
             rigid.gravityScale = flyGravityScale;
         }
         else

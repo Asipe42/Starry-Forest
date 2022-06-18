@@ -4176,6 +4176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rank And Score
       objectReference: {fileID: 0}
+    - target: {fileID: 7491573268806818718, guid: e463d34cef2365442928a3b6127d8615, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7491573268806818719, guid: e463d34cef2365442928a3b6127d8615, type: 3}
       propertyPath: m_Pivot.x
       value: 1

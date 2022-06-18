@@ -12,6 +12,25 @@ public class Setting : MonoBehaviour
         Control
     }
 
+    enum DirectionType
+    {
+        Up,
+        Down,
+        Right,
+        Left
+    }
+
+    enum ButtonType
+    {
+        None = 0,
+        Sound,
+        Control,
+        BGMSlider,
+        SFXSlider,
+        Accpet,
+        Cancle
+    }
+
     [SerializeField] SceneType sceneType = SceneType.Title;
 
     [Header("Taps")]
@@ -36,6 +55,7 @@ public class Setting : MonoBehaviour
     public const string MIXER_SFX = "SFXVolume";
 
     Tap tap = Tap.Sound;
+    ButtonType currentButtonType = ButtonType.None;
 
     bool onSetting;  
 
@@ -87,6 +107,42 @@ public class Setting : MonoBehaviour
             if (onSetting)
             {
                 Exit();
+            }
+        }
+
+        if (onSetting)
+        {
+            Cursor.visible = true;
+
+            bool onRight = Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
+            bool onLeft = Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A);
+            bool onUp = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
+            bool onDown = Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
+            bool onSelect = Input.GetButtonDown("Submit");
+
+            if (onRight && !onLeft)
+            {
+
+            }
+
+            if (onLeft && !onRight)
+            {
+
+            }
+
+            if (onUp && !onDown)
+            {
+
+            }
+
+            if (onDown && !onUp)
+            {
+
+            }
+
+            if (onSelect)
+            {
+
             }
         }
     }
@@ -209,6 +265,7 @@ public class Setting : MonoBehaviour
             onSettingEvent.Invoke(false);
 
         onSetting = false;
+        Cursor.visible = false;
 
         Initialize();
 

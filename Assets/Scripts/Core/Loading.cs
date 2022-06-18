@@ -7,7 +7,7 @@ public class Loading : MonoBehaviour
 {
     static string nextScene;
 
-    const float LOAD_VALUE = 0.2f;
+    const float LOAD_VALUE = 0.7f;
 
     Slider loadingBar;
 
@@ -33,7 +33,7 @@ public class Loading : MonoBehaviour
         AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
         op.allowSceneActivation = false;
 
-        float timer = 0f;
+        float timer = -3f;
 
         while (!op.isDone)
         {
