@@ -43,9 +43,11 @@ public class Guide : MonoBehaviour
     [SerializeField] string[] Message_exitButton;
     [SerializeField] string Message_goTitle;
     [SerializeField] string[] Message_goTitleButton;
-    [SerializeField] bool onGuide;
     [SerializeField] bool isMap;
     [SerializeField] FadeScreen fadeScreen;
+
+    [Space]
+    public bool onGuide;
 
     AudioClip popupClip;
     AudioClip acceptClip;
@@ -82,7 +84,6 @@ public class Guide : MonoBehaviour
             {
                 if (!onGuide)
                 {
-                    Cursor.visible = true;
                     PopupGuide_Map(onGuide, 1);
                 }
                 else

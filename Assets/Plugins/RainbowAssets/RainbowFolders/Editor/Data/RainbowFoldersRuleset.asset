@@ -16,26 +16,26 @@ MonoBehaviour:
   - Type: 0
     Key: Animations
     Ordinal: 0
-    Priority: 0
+    Priority: 1
     IconType: 2510
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 80
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
-  - Type: 0
-    Key: Audio
+  - Type: 1
+    Key: Assets/Scripts/Audio
     Ordinal: 1
     Priority: 0
     IconType: 2520
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 50
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Editor
@@ -77,10 +77,10 @@ MonoBehaviour:
     Key: Extensions
     Ordinal: 5
     Priority: 0
-    IconType: 2040
+    IconType: 2540
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
+    IsIconRecursive: 1
     BackgroundType: 0
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0
@@ -88,14 +88,14 @@ MonoBehaviour:
   - Type: 0
     Key: Fonts
     Ordinal: 6
-    Priority: 0
+    Priority: 1
     IconType: 2560
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 160
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Icons
@@ -112,14 +112,14 @@ MonoBehaviour:
   - Type: 0
     Key: Materials
     Ordinal: 8
-    Priority: 0
-    IconType: 2070
+    Priority: 1
+    IconType: 2570
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 130
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Meshes
@@ -140,22 +140,22 @@ MonoBehaviour:
     IconType: 2600
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 200
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Prefabs
     Ordinal: 11
-    Priority: 0
+    Priority: 1
     IconType: 2610
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 130
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Project
@@ -188,7 +188,7 @@ MonoBehaviour:
     IconType: 2140
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
+    IsIconRecursive: 1
     BackgroundType: 0
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0
@@ -200,10 +200,10 @@ MonoBehaviour:
     IconType: 2650
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 50
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Scripts
@@ -212,22 +212,22 @@ MonoBehaviour:
     IconType: 2660
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 140
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Shaders
     Ordinal: 17
     Priority: 0
-    IconType: 2170
+    IconType: 2670
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 180
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Terrains
@@ -244,14 +244,14 @@ MonoBehaviour:
   - Type: 0
     Key: Textures
     Ordinal: 19
-    Priority: 0
+    Priority: 1
     IconType: 2690
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
-    IsIconRecursive: 0
-    BackgroundType: 30
+    IsIconRecursive: 1
+    BackgroundType: 0
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 1
+    IsBackgroundRecursive: 0
     IsHidden: 0
   - Type: 0
     Key: Physics
@@ -333,6 +333,18 @@ MonoBehaviour:
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
     IsIconRecursive: 0
+    BackgroundType: 0
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/Resources/Audio
+    Ordinal: 27
+    Priority: 1
+    IconType: 2520
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 1
     BackgroundType: 0
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0

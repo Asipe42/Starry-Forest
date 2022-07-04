@@ -92,7 +92,6 @@ public class TutorialEvent : MonoBehaviour
             else if (targetActionName == "dash")
             {
                 guide.gameObject.SetActive(true);
-                guide.gameObject.GetComponent<Animator>().enabled = true;
             }
             else if (targetActionName == "fly")
             {

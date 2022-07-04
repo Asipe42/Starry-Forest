@@ -20,8 +20,8 @@ public class Dash : MonoBehaviour
     #region Initial Setting
     void SubscribeEvent()
     {
-        PlayerController.DashEvent -= FillDash;
-        PlayerController.DashEvent += FillDash;
+        PlayerController.dashGuageEvent -= FillDash;
+        PlayerController.dashGuageEvent += FillDash;
     }
     #endregion
 

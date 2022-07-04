@@ -55,11 +55,6 @@ public class PlayerController : MonoBehaviour
     public SpecialAction specialAction = SpecialAction.None;
     [SerializeField] Transform targetTransform;
 
-    [Header("Cursor")]
-    public bool[] changedCursor;
-    [SerializeField] ParticleSystem cursorFirecraker;
-    [SerializeField] Color[] cursorFirecrakerColors;
-
     [Header("Jump")]
     public bool canJump;
     public bool onJump;
@@ -77,6 +72,7 @@ public class PlayerController : MonoBehaviour
     public bool canDash;
     public bool onDash;
     public bool hasDash;
+    public bool onMaxDash;
 
     [Header("Fly")]
     public bool canFly;
@@ -96,18 +92,17 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator IncreaseDashLevelCoroutine;
     IEnumerator DecreaseDashLevelCoroutine;
+    IEnumerator WaitDashCancleCoroutine;
 
     List<string> actionList = new List<string>();
 
-    public static event Action<DashLevel> DashEvent;
+    public static event Action<DashLevel> dashGuageEvent;
+    public static event Action<DashLevel> dashLevelEvent;
     public static event Action<bool> deadEvent;
-
-    AudioClip cursorClip;
 
     void Awake()
     {
         Initialize();
-        GetAudioClip();
     }
 
     #region Initial Setting
@@ -130,13 +125,6 @@ public class PlayerController : MonoBehaviour
         actionList.Add("downhill");
         actionList.Add("dash");
         actionList.Add("fly");
-
-        changedCursor = new bool[2];
-    }
-
-    void GetAudioClip()
-    {
-        cursorClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Cursor");
     }
     #endregion
 
@@ -335,6 +323,9 @@ public class PlayerController : MonoBehaviour
         if (!canDash)
             return;
 
+        if (onMaxDash)
+            return;
+
         if (hasDash)
         {
             onDash = true;
@@ -350,7 +341,9 @@ public class PlayerController : MonoBehaviour
             IncreaseDashLevelCoroutine = IncreaseDashLevel();
 
             StartCoroutine(IncreaseDashLevelCoroutine);
-            StartCoroutine(WaitCancleDash());
+
+            WaitDashCancleCoroutine = WaitCancleDash();
+            StartCoroutine(WaitDashCancleCoroutine);
         }
     }
 
@@ -373,7 +366,7 @@ public class PlayerController : MonoBehaviour
                     StopCoroutine(DecreaseDashLevelCoroutine);
                 }
 
-                DecreaseDashLevelCoroutine = DecraseDashLevel();
+                DecreaseDashLevelCoroutine = DecreaseDashLevel();
 
                 StartCoroutine(DecreaseDashLevelCoroutine);
             }
@@ -392,9 +385,14 @@ public class PlayerController : MonoBehaviour
 
                 dashLevel++; dashLevel = dashLevel > DashLevel.Max ? DashLevel.Max : dashLevel;
 
-                DashEvent.Invoke(dashLevel);
+                if (dashLevel == DashLevel.Max)
+                {
+                    StartCoroutine(MaxDash());
+                }
+
+                dashGuageEvent.Invoke(dashLevel);
+                dashLevelEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
-                ChangeCursor(dashLevel);
                 ChangeCameraOption(dashLevel - 1, 0.75f);
                 ChangeFlyColliderPosition(dashLevel - 1);
 
@@ -405,7 +403,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator DecraseDashLevel()
+    IEnumerator DecreaseDashLevel()
     {
         while (!onDash)
         {
@@ -415,9 +413,9 @@ public class PlayerController : MonoBehaviour
 
                 dashLevel--; dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
 
-                DashEvent.Invoke(dashLevel);
+                dashGuageEvent.Invoke(dashLevel);
+                dashLevelEvent.Invoke(dashLevel);
                 scroll.ScrollParticle(dashLevel);
-                InitializeCursorImage(dashLevel);
                 ChangeCameraOption(dashLevel, 0.5f);
                 ChangeFlyColliderPosition(dashLevel);
             }
@@ -426,47 +424,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ChangeCursor(DashLevel dashLevel)
+    IEnumerator MaxDash()
     {
-        if (dashLevel == DashLevel.Max && !changedCursor[1])
+        onMaxDash = true;
+        onInvincibility = true;
+
+        if (IncreaseDashLevelCoroutine != null)
+            StopCoroutine(IncreaseDashLevelCoroutine);
+
+        if (DecreaseDashLevelCoroutine != null)
+            StopCoroutine(DecreaseDashLevelCoroutine);
+
+        if (WaitDashCancleCoroutine != null)
+            StopCoroutine(WaitDashCancleCoroutine);
+
+        thePlayerParticle.PlayMaxDash(true);
+
+        while (dashLevel > DashLevel.None)
         {
-            changedCursor[1] = true;
+            yield return new WaitForSeconds(0.5f);
 
-            Texture2D cursorImg = GameManager.instance.cursorImg[2];
-            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
+            dashLevel--; dashLevel = dashLevel < DashLevel.None ? DashLevel.None : dashLevel;
 
-            ShowCursorFirecracker(cursorFirecrakerColors[1], 75);
+            dashGuageEvent.Invoke(dashLevel);
+            scroll.ScrollParticle(dashLevel);
+            ChangeFlyColliderPosition(dashLevel);
+
+            yield return null;
         }
-        else if (dashLevel > DashLevel.None && !changedCursor[0])
-        {
-            changedCursor[0] = true;
 
-            Texture2D cursorImg = GameManager.instance.cursorImg[1];
-            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
+        thePlayerParticle.PlayMaxDash(false);
 
-            ShowCursorFirecracker(cursorFirecrakerColors[0], 75);
-        }
-    }
-
-    void ShowCursorFirecracker(Color color, int emit)
-    {
-        Vector3 targetPos = transform.position;
-        cursorFirecraker.transform.position = targetPos;
-
-        var temp = cursorFirecraker.main;
-        temp.startColor = color;
-
-        cursorFirecraker.Emit(emit);
-    }
-
-    void InitializeCursorImage(DashLevel dashLevel)
-    {
-        if (dashLevel == DashLevel.None)
-        {
-            changedCursor[0] = false; changedCursor[1] = false;
-            Texture2D cursorImg = GameManager.instance.cursorImg[0];
-            Cursor.SetCursor(cursorImg, new Vector2(cursorImg.width / 2, cursorImg.height / 2), CursorMode.ForceSoftware);
-        }
+        onMaxDash = false;
+        hasDash = true;
+        onInvincibility = false;
+        dashLevelEvent.Invoke(dashLevel);
+        ChangeCameraOption(dashLevel, 0.5f);
     }
 
     void ChangeCameraOption(DashLevel dashLevel, float duration)
@@ -618,11 +611,13 @@ public class PlayerController : MonoBehaviour
 
     void ResetDash()
     {
-        dashLevel = DashLevel.One;
+        if (onMaxDash)
+            return;
 
-        DashEvent.Invoke(dashLevel);
+        dashLevel = DashLevel.None;
+
+        dashGuageEvent.Invoke(dashLevel);
         scroll.ScrollParticle(dashLevel);
-        InitializeCursorImage(dashLevel);
         ChangeCameraOption(dashLevel, 0.5f);
         ChangeFlyColliderPosition(dashLevel);
     }

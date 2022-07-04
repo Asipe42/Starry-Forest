@@ -25,6 +25,7 @@ public class MapManager : MonoBehaviour
     public StageButton[] stages;
 
     Stage stage;
+    Guide guide;
     StageButton currentStageButton;
     FadeScreen fadeScreen;
     Animator anim;
@@ -54,6 +55,7 @@ public class MapManager : MonoBehaviour
     void Initialize()
     {
         stage = GameObject.FindObjectOfType<Stage>();
+        guide = GameObject.FindObjectOfType<Guide>();
         fadeScreen = GameObject.FindObjectOfType<FadeScreen>();
         anim = offset.GetComponent<Animator>();
     }
@@ -107,7 +109,7 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        if (!onLock)
+        if (!onLock && !guide.onGuide)
         {
             InputKey();
         }

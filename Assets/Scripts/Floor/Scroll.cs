@@ -3,18 +3,23 @@ using UnityEngine;
 
 public class Scroll : MonoBehaviour
 {
-    [SerializeField] List<GameObject> preFloors;
-    [SerializeField] Transform[] backgroundLayer_01;
-    [SerializeField] Transform[] backgroundLayer_02;
+    [SerializeField] GameObject preFloorGroup;
+    [SerializeField] GameObject[] backgroundLayerGroup;
     [SerializeField] GameObject screenParticlePrefab;
 
     [Header("Values")]
     [SerializeField] Vector3 deadline = new Vector3(-60f, 0f, 0f);
     [SerializeField] Vector3 reposition = new Vector3(188f, 0f, 0f);
     [SerializeField] float[] scrollSpeed_background;
+    [SerializeField] float[] scrollSpeed_background_maxDash;
     [SerializeField] float[] scrollSpeed_floor;
 
+    List<GameObject> preFloors;
+    List<Transform> backgroundLayer_01;
+    List<Transform> backgroundLayer_02;
     ParticleSystem screenParticle;
+
+    DashLevel appliedDashLevel;
 
     public bool canScroll;
     public bool createdLastFloor;
@@ -32,8 +37,26 @@ public class Scroll : MonoBehaviour
         GameObject particle = Instantiate(screenParticlePrefab, transform);
         particle.transform.position = new Vector3(11f, 0.9f, 0f);
         particle.transform.eulerAngles = new Vector3(-90f, 0f, 0f);
-
         screenParticle = particle.GetComponent<ParticleSystem>();
+
+        preFloors = new List<GameObject>();
+        backgroundLayer_01 = new List<Transform>();
+        backgroundLayer_02 = new List<Transform>();
+
+        for (int i = 0; i < preFloorGroup.transform.childCount; i++)
+        {
+            preFloors.Add(preFloorGroup.transform.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < backgroundLayerGroup[0].transform.childCount; i++)
+        {
+            backgroundLayer_01.Add(backgroundLayerGroup[0].transform.GetChild(i).transform);
+        }
+
+        for (int i = 0; i < backgroundLayerGroup[1].transform.childCount; i++)
+        {
+            backgroundLayer_02.Add(backgroundLayerGroup[1].transform.GetChild(i).transform);
+        }
     }
 
     void SubscribeEvent()
@@ -43,6 +66,9 @@ public class Scroll : MonoBehaviour
 
         PlayerController.deadEvent -= SetCanScroll;
         PlayerController.deadEvent += SetCanScroll;
+
+        PlayerController.dashLevelEvent -= ApplyDashLevel;
+        PlayerController.dashLevelEvent += ApplyDashLevel;
     }
     #endregion
 
@@ -88,26 +114,41 @@ public class Scroll : MonoBehaviour
 
     }
 
+    void ApplyDashLevel(DashLevel dashLevel)
+    {
+        appliedDashLevel = dashLevel;
+    }
+
     #region Scrolling
     void ScrollBackground()
-    {       
-        foreach (var layer in backgroundLayer_01)
-            layer.Translate(Vector2.left * scrollSpeed_background[0] * Time.deltaTime);
+    {   
+        if (appliedDashLevel != DashLevel.Max)
+        {
+            foreach (var layer in backgroundLayer_01)
+                layer.Translate(Vector2.left * scrollSpeed_background[0] * Time.deltaTime);
 
-        foreach (var layer in backgroundLayer_02)
-            layer.Translate(Vector2.left * scrollSpeed_background[1] * Time.deltaTime);
+            foreach (var layer in backgroundLayer_02)
+                layer.Translate(Vector2.left * scrollSpeed_background[1] * Time.deltaTime);
+        }
+        else
+        {
+            foreach (var layer in backgroundLayer_01)
+                layer.Translate(Vector2.left * scrollSpeed_background_maxDash[0] * Time.deltaTime);
+
+            foreach (var layer in backgroundLayer_02)
+                layer.Translate(Vector2.left * scrollSpeed_background_maxDash[1] * Time.deltaTime);
+        }
     }
 
     void ScrollFloor()
     {
         foreach (var floor in preFloors)
-            floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)PlayerController.instance.dashLevel] * Time.deltaTime);
+            floor.transform.Translate(Vector2.left * scrollSpeed_floor[(int)appliedDashLevel] * Time.deltaTime);
     }
 
     void Reposition()
     {
         if (FloorManager.instance.gaugeIsFull) // Last Floor
-
         {
             if (createdLastFloor)
                 return;

@@ -6,6 +6,7 @@ public class PlayerParticle : BaseParticle
     [SerializeField] ParticleSystem slidingDust;
     [SerializeField] ParticleSystem takeItem;
     [SerializeField] ParticleSystem recover;
+    [SerializeField] ParticleSystem maxDash;
     [SerializeField] ParticleSystem dandelion;
 
     void Update()
@@ -36,5 +37,10 @@ public class PlayerParticle : BaseParticle
     public void PlayDandelion(bool state = true)
     {
         SetParticleSystem(dandelion, state);
+    }
+
+    public void PlayMaxDash(bool state = true)
+    {
+        SetParticleSystem(maxDash, state);
     }
 }
