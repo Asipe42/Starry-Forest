@@ -6790,6 +6790,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: canFly
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: canDash
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: canJump
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: canSliding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: onTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8022158149417986643, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
+      propertyPath: canDownhill
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8022158149417986655, guid: b3eb3807dfa8df9469c5176d1a06b3bc, type: 3}
       propertyPath: m_Name
       value: Player_2

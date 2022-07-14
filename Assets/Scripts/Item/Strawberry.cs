@@ -1,13 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class Dandelion : MonoBehaviour
+public class Strawberry : MonoBehaviour
 {
-    AudioClip dandelionClip;
+    AudioClip strawberryClip;
 
     void Awake()
     {
-        dandelionClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Dandelion");
+        strawberryClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Dandelion");
     }
 
     void Start()
@@ -19,9 +19,9 @@ public class Dandelion : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerController.instance.flyCount++;
+            //PlayerController.instance.flyCount++;
             //UIManager.instance.dandelionStack.CheckDandelionCount();
-            SFXController.instance.PlaySFX(dandelionClip);
+            SFXController.instance.PlaySFX(strawberryClip);
             Destroy(gameObject);
         }
     }

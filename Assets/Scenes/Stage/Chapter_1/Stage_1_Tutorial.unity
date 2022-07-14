@@ -5572,6 +5572,34 @@ PrefabInstance:
       value: Player_1
       objectReference: {fileID: 0}
     - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: canDash
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: canJump
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: hasDash
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: canSliding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: onDownhill
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: onTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
+      propertyPath: canDownhill
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 852573294411072729, guid: 2f9fdea0e1dc62144876972bfc92b997, type: 3}
       propertyPath: cursorFirecraker
       value: 
       objectReference: {fileID: 0}

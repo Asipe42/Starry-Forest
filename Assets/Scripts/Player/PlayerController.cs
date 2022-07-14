@@ -513,7 +513,7 @@ public class PlayerController : MonoBehaviour
             hasFly = true;
 
             flyCount--;
-            UIManager.instance.dandelionStack.CheckDandelionCount();
+            //UIManager.instance.dandelionStack.CheckDandelionCount();
 
             thePlayerMovement.Movement_Fly(true);
             thePlayerAnimation.PlayFlyAnimation(true);

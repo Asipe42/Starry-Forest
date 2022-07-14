@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
             stageButtonInfo[i].highGrade = Grade.None;
         }
 
+        // TEST
         stageButtonInfo[0].isLockedStage = false;
         stageButtonInfo[1].isLockedStage = false;
         stageButtonInfo[2].isLockedStage = false;

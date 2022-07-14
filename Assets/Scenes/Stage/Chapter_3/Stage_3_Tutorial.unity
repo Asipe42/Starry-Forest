@@ -4648,6 +4648,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: canFly
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: canDash
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: canJump
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: canSliding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: onTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: canDownhill
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854473023348681969, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
+      propertyPath: specialAction
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4854473023348681971, guid: fb775bb9a18d2b5499af4dc49b1b629f, type: 3}
       propertyPath: m_RootOrder
       value: 9

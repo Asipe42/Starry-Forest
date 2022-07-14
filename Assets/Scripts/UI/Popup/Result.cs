@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -32,7 +31,6 @@ public class Result : MonoBehaviour
     [SerializeField] RectTransform rankBar;
     [SerializeField] Image rankBarGauge;
     [SerializeField] GameObject Diamonds;
-
 
     int timePoint;
     int itemBounusPoint;
@@ -82,7 +80,7 @@ public class Result : MonoBehaviour
     {
         var rotateSequence = DOTween.Sequence();
 
-        float intervalTime = 3f;
+        float intervalTime = 2.75f;
         float duration = 0.5f;
 
         rotateSequence.Append(timeCard.DORotate(new Vector3(0f, 180f, 0f), duration)
@@ -91,14 +89,14 @@ public class Result : MonoBehaviour
                                       .OnUpdate(() => ShowCardInfo(timeCard)))
                       .AppendCallback(() => PlayTimeCardAnimation())
                       .Insert(intervalTime, itemCard.DORotate(new Vector3(0f, 180f, 0f), duration)
-                                          .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
-                                          .SetEase(Ease.InSine)
-                                          .OnUpdate(() => ShowCardInfo(itemCard)))
+                                                    .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
+                                                    .SetEase(Ease.InSine)
+                                                    .OnUpdate(() => ShowCardInfo(itemCard)))
                       .AppendCallback(() => PlayItemCardAnimation())
                       .Insert(intervalTime * 2f, heartCard.DORotate(new Vector3(0f, 180f, 0f), duration)
-                                           .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
-                                           .SetEase(Ease.InSine)
-                                           .OnUpdate(() => ShowCardInfo(heartCard)))
+                                                          .OnPlay(() => SFXController.instance.PlaySFX(rotationClip))
+                                                          .SetEase(Ease.InSine)
+                                                          .OnUpdate(() => ShowCardInfo(heartCard)))
                       .AppendCallback(() => PlayHeartCardAnimation());
 
         rotateSequence.OnComplete(() => PlayRankBarSequence());
@@ -171,17 +169,17 @@ public class Result : MonoBehaviour
         float rate = CalculateItemPoint();
         float target = 0f;
 
-        if (rate >= 75)
+        if (rate >= 95)
         {
             target = 1f;
             itemBounusPoint = 70;
         }
-        else if (rate >= 50)
+        else if (rate >= 90)
         {
             target = 0.66f;
             itemBounusPoint = 50;
         }
-        else if (rate >= 25)
+        else if (rate >= 85)
         {
             target = 0.33f;
             itemBounusPoint = 30;
@@ -247,19 +245,24 @@ public class Result : MonoBehaviour
 
     void PlayRankBarSequence()
     {
+        Grade finalGrade = CheckRankUp();
+
         int index = Diamonds.transform.childCount;
         bool[] check = new bool[index];
         float[] diamondAmount = { 0.01f, 0.2f, 0.4f, 0.6f, 0.8f, 1f };
-        float gaugeRate = (float)(itemBounusPoint + heartBounusPoint) / 100f;
+        float guage = diamondAmount[CalculateRankBarFillAmountIndex(finalGrade)];
 
         var sequence = DOTween.Sequence();
 
         sequence.AppendInterval(1.5f)
                 .Append(rankBar.DOAnchorPosY(50f, 0.5f)
-                               .OnComplete(() => rankBarGauge.DOFillAmount(gaugeRate, 5f).SetEase(Ease.OutSine)))
+                               .OnComplete(() => rankBarGauge.DOFillAmount(guage, 5f).SetEase(Ease.OutSine)))
                                .OnUpdate(() => PlayDiamondAnimation(rankBarGauge.fillAmount, index, check, diamondAmount))
                 .InsertCallback(9f, () => endDirecting = true);
-          
+    }
+
+    Grade CheckRankUp()
+    {
         if (itemBounusPoint + heartBounusPoint > 100)
         {
             if (currentStageGrade > Grade.APlus)
@@ -267,6 +270,37 @@ public class Result : MonoBehaviour
                 currentStageGrade--;
             }
         }
+
+        return currentStageGrade;
+    }
+
+    int CalculateRankBarFillAmountIndex(Grade grade)
+    {
+        int index = 0;
+
+        switch (grade)
+        {
+            case Grade.APlus:
+                index = 5;
+                break;
+            case Grade.A:
+                index = 4;
+                break;
+            case Grade.BPlus:
+                index = 3;
+                break;
+            case Grade.B:
+                index = 2;
+                break;
+            case Grade.CPlus:
+                index = 1;
+                break;
+            case Grade.C:
+                index = 0;
+                break;
+        }
+
+        return index;
     }
 
     void PlayDiamondAnimation(float fillAmount, int index, bool[] check, float[] diamondAmount)
