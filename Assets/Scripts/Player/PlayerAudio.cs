@@ -13,6 +13,7 @@ public class PlayerAudio : MonoBehaviour
     AudioClip takeItemClip;
     AudioClip recoverClip;
     AudioClip flyClip;
+    AudioClip throwClip;
 
     void Awake()
     {
@@ -31,6 +32,7 @@ public class PlayerAudio : MonoBehaviour
         takeItemClip = Resources.Load<AudioClip>("Audio/SFX/SFX_TakeItem");
         recoverClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Recover");
         flyClip = Resources.Load<AudioClip>("Audio/SFX/SFX_Fly");
+        throwClip = Resources.Load<AudioClip>("Audio/SFx/SFX_Throwing");
 
         audioSource.clip = walkClip;
     }
@@ -94,5 +96,10 @@ public class PlayerAudio : MonoBehaviour
     public void PlaySFX_Fly(float delay = 0f, float pitch = 1f, float volume = 1f)
     {
         SFXController.instance.PlaySFX(flyClip, delay, pitch, volume);
+    }
+
+    public void PlaySFX_Throwing(float delay = 0f, float pitch = 1f, float volume = 1f)
+    {
+        SFXController.instance.PlaySFX(throwClip, delay, pitch, volume);
     }
 }

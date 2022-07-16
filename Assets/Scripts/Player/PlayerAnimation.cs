@@ -83,6 +83,11 @@ public class PlayerAnimation : BaseAnimation
     {
         base.SetAnimationClip(anim, "fly", state);
     }
+
+    public void PlayThrowingAnimation()
+    {
+        base.SetAnimationClip(anim, "throwing");
+    }
     #endregion
 
     /// <summary>

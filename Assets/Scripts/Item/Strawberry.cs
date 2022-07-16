@@ -19,8 +19,7 @@ public class Strawberry : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //PlayerController.instance.flyCount++;
-            //UIManager.instance.dandelionStack.CheckDandelionCount();
+            PlayerController.instance.TakeItem(ItemType.Strawberry);
             SFXController.instance.PlaySFX(strawberryClip);
             Destroy(gameObject);
         }

@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 6791398518146370035}
   - component: {fileID: 5256058786330508292}
   m_Layer: 0
-  m_Name: 01
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -315,7 +315,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4261794982163693355}
   m_Layer: 0
-  m_Name: Light
+  m_Name: Light Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] int damage;
+    [SerializeField] protected int damage;
 
     protected AudioClip hitClip;
 
@@ -11,7 +11,7 @@ public class Obstacle : MonoBehaviour
         reachPlayer = Physics2D.Linecast(start.position, end.position, whatIsPlayer);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {

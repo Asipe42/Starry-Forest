@@ -217,7 +217,7 @@ MonoBehaviour:
   - 6
   flyCollider: {fileID: 0}
   flyForce: 10
-  onTutorial: 0
+  onTutorial: 1
   onPause: 0
   onFix: 0
   reachLastFloor: 0
@@ -226,23 +226,27 @@ MonoBehaviour:
   onInvincibility: 0
   canMove: 1
   onWalk: 0
-  specialAction: 1
+  specialAction: 2
   targetTransform: {fileID: 9127752277926099786}
-  canJump: 1
+  canJump: 0
   onJump: 0
-  canSliding: 1
+  canSliding: 0
   onSliding: 0
-  canDownhill: 1
+  canDownhill: 0
   onDownhill: 0
   hasDownhill: 1
-  canDash: 1
+  canDash: 0
   onDash: 0
   hasDash: 1
   onMaxDash: 0
-  canFly: 1
+  maxFlyCount: 3
+  canFly: 0
   onFly: 0
   hasFly: 0
   flyCount: 0
+  strawberryPrefab: {fileID: 7266927459456603361, guid: 0b9fb8a259bc24b41a5aa5f8800005a5, type: 3}
+  maxThrowingCount: 3
+  throwingCount: 0
 --- !u!114 &7404623369881993625
 MonoBehaviour:
   m_ObjectHideFlags: 0

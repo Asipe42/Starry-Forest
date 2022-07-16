@@ -19,9 +19,13 @@ public class ProgressBar : MonoBehaviour
 
     [Header("Values")]
     [SerializeField, Range(1, 7)] int grade = 7;
+    [SerializeField] float decreaseGagueRatio = 0.05f;
     [SerializeField] float gauge;
     [SerializeField] float gaugeMax;
     [SerializeField] float[] fillSpeed;
+
+    public float Gauge { get { return gauge; } }
+    public float GaugeMax { get { return gaugeMax; } }  
 
     bool canProgress = true;
     bool gaugeIsFull;
@@ -60,12 +64,22 @@ public class ProgressBar : MonoBehaviour
     {
         PlayerController.deadEvent -= SetCanProgress;
         PlayerController.deadEvent += SetCanProgress;
+
+        PlayerController.WebDebuffEvent -= DecreaseGaugeValue;
+        PlayerController.WebDebuffEvent += DecreaseGaugeValue;
     }
     #endregion
 
     void SetCanProgress(bool state)
     {
         canProgress = state;
+    }
+
+    void DecreaseGaugeValue()
+    {
+        float decreaseValue = gaugeMax * decreaseGagueRatio;
+        gauge -= decreaseValue;
+        gauge = Mathf.Clamp(gauge, 0, gaugeMax);
     }
 
     void Update()
@@ -136,6 +150,7 @@ public class ProgressBar : MonoBehaviour
         gaugeImage.color = nextColor;
     }
 
+    #region Cheer Message
     void Cheer()
     {
         SFXController.instance.PlaySFX(notificationClip, 0.25f);
@@ -183,4 +198,5 @@ public class ProgressBar : MonoBehaviour
         sequence.Append(speechBubble.DOFade(0f, 1f))
                 .Append(cheerText.DOFade(0f, 1f));
     }
+    #endregion
 }

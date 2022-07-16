@@ -7,7 +7,6 @@ public class HUD : MonoBehaviour
     [SerializeField] RectTransform heartBox;
     [SerializeField] RectTransform rsBox; // rank and score
     [SerializeField] RectTransform pdBox; // progress and dash;
-    [SerializeField] RectTransform dsBox;
 
     void Start()
     {
@@ -24,7 +23,6 @@ public class HUD : MonoBehaviour
         ShowHeartBox(duration);
         ShowRSBox(duration);
         ShowPDBox(duration);
-        ShowDSBox(duration);
     }
 
     public void ShowHeartBox(float duration)
@@ -41,11 +39,6 @@ public class HUD : MonoBehaviour
     {
         pdBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
     }
-
-    public void ShowDSBox(float duration)
-    {
-        dsBox?.DOAnchorPos(new Vector2(0f, 0f), duration).SetEase(Ease.OutQuad);
-    }
     #endregion
 
     #region Hide HUD UI
@@ -55,7 +48,6 @@ public class HUD : MonoBehaviour
         HideHeartBox(duration);
         HideRSBox(duration);
         HidePDBox(duration);
-        HideDSBox(duration);
     }
 
     public void HideHeartBox(float duration)
@@ -71,11 +63,6 @@ public class HUD : MonoBehaviour
     public void HidePDBox(float duration)
     {
         pdBox?.DOAnchorPos(new Vector2(0f, -200f), duration).SetEase(Ease.InQuad);
-    }
-
-    public void HideDSBox(float duration)
-    {
-        dsBox?.DOAnchorPos(new Vector2(-200f, 0f), duration).SetEase(Ease.OutQuad);
     }
     #endregion
 }

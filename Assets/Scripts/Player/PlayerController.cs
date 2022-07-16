@@ -21,28 +21,45 @@ public enum DashLevel
 public enum SpecialAction
 {
     None = 0,
-    Fly
+    Fly,
+    Throwing
+}
+
+public enum ItemType
+{
+    None = 0,
+    Dandelion,
+    Strawberry,
+    Clock
+}
+
+public enum DebuffType
+{
+    None = 0,
+    Web
 }
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
 
-    [Header("Colliders")]
+    [SerializeField] Transform targetTransform;
     [SerializeField] BoxCollider2D theCollider;
+    [SerializeField] GameObject flyCollider;
+    [SerializeField] GameObject strawberryPrefab;
 
-    [Header("Dash")]
-    public DashLevel dashLevel = DashLevel.None;
+    [SerializeField] int maxFlyCount = 3;
+    [SerializeField] int maxThrowingCount = 3;
+
     [SerializeField] float[] dashTime;
     [SerializeField] float[] dashCameraSize;
     [SerializeField] float[] dashCameraPosition;
     [SerializeField] float[] dashFlyColliderPosition;
-
-    [Header("Fly")]
-    [SerializeField] GameObject flyCollider;
     [SerializeField] float flyForce;
 
-    [Header("Core")]
+    public int flyCount;
+    public int throwingCount;
+
     public bool onTutorial;
     public bool onPause;
     public bool onFix;
@@ -52,43 +69,34 @@ public class PlayerController : MonoBehaviour
     public bool onInvincibility;
     public bool canMove;
     public bool onWalk;
-    public SpecialAction specialAction = SpecialAction.None;
-    [SerializeField] Transform targetTransform;
-
-    [Header("Jump")]
     public bool canJump;
     public bool onJump;
-
-    [Header("Sliding")]
     public bool canSliding;
     public bool onSliding;
-
-    [Header("Downhill")]
     public bool canDownhill;
     public bool onDownhill;
     public bool hasDownhill;
-
-    [Header("Dash")]
     public bool canDash;
     public bool onDash;
     public bool hasDash;
     public bool onMaxDash;
-
-    [Header("Fly")]
     public bool canFly;
     public bool onFly;
     public bool hasFly;
-    public int flyCount;
 
     public PlayerAnimation thePlayerAnimation { get; private set; }
     public PlayerAudio thePlayerAudio { get; private set; }
     public PlayerMovement thePlayerMovement { get; private set; }
     public PlayerParticle thePlayerParticle { get; private set; }
+    public PlayerUI thePlayerUI { get; private set; }
     public Status theStatus { get; private set; }
     public Scroll scroll { get; private set; }
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
+
+    public SpecialAction specialAction = SpecialAction.None;
+    public DashLevel dashLevel = DashLevel.None;
 
     IEnumerator IncreaseDashLevelCoroutine;
     IEnumerator DecreaseDashLevelCoroutine;
@@ -99,6 +107,8 @@ public class PlayerController : MonoBehaviour
     public static event Action<DashLevel> dashGuageEvent;
     public static event Action<DashLevel> dashLevelEvent;
     public static event Action<bool> deadEvent;
+    public static event Action WebDebuffEvent;
+
 
     void Awake()
     {
@@ -352,6 +362,20 @@ public class PlayerController : MonoBehaviour
         ResetDash();
     }
 
+    void ResetDash()
+    {
+        if (onMaxDash)
+            return;
+
+        dashLevel = DashLevel.None;
+
+        dashGuageEvent.Invoke(dashLevel);
+        scroll.ScrollParticle(dashLevel);
+        ChangeCameraOption(dashLevel, 0.5f);
+        ChangeFlyColliderPosition(dashLevel);
+    }
+
+
     IEnumerator WaitCancleDash()
     {
         while (true)
@@ -489,6 +513,9 @@ public class PlayerController : MonoBehaviour
             case SpecialAction.Fly:
                 Fly();
                 break;
+            case SpecialAction.Throwing:
+                Throwing();
+                break;
         }
     }
 
@@ -512,8 +539,8 @@ public class PlayerController : MonoBehaviour
             onFly = true;
             hasFly = true;
 
+            thePlayerUI.dandelionStack.UpdateIcon(flyCount, false);
             flyCount--;
-            //UIManager.instance.dandelionStack.CheckDandelionCount();
 
             thePlayerMovement.Movement_Fly(true);
             thePlayerAnimation.PlayFlyAnimation(true);
@@ -554,6 +581,20 @@ public class PlayerController : MonoBehaviour
             }
             yield return null;
         }
+    }
+    #endregion
+
+    #region
+    void Throwing()
+    {
+        thePlayerAnimation.PlayThrowingAnimation();
+        thePlayerAudio.PlaySFX_Throwing();
+    }
+
+    public void CreateThrowingStrawberry()
+    {
+        Instantiate(strawberryPrefab);
+        // TO-DO: Connect Snake Animation
     }
     #endregion
 
@@ -609,17 +650,21 @@ public class PlayerController : MonoBehaviour
                                      .SetEase(Ease.OutQuad);
     }
 
-    void ResetDash()
+    public void OnDebuff(DebuffType type)
     {
-        if (onMaxDash)
-            return;
+        switch (type)
+        {
+            case DebuffType.Web:
+                ApplyDebuffWeb();
+                break;
+        }
+    }
 
-        dashLevel = DashLevel.None;
+    void ApplyDebuffWeb()
+    {
+        WebDebuffEvent.Invoke();
 
-        dashGuageEvent.Invoke(dashLevel);
-        scroll.ScrollParticle(dashLevel);
-        ChangeCameraOption(dashLevel, 0.5f);
-        ChangeFlyColliderPosition(dashLevel);
+        ResetDash();
     }
 
     void CameraSize(float x)
@@ -675,6 +720,45 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Take Item
+    public void TakeItem(ItemType type)
+    {
+        switch (type)
+        {
+            case ItemType.Dandelion:
+                TakeDandelion();
+                break;
+            case ItemType.Strawberry:
+                TakeStrawberry();
+                break;
+            case ItemType.Clock:
+                TakeClock();
+                break;
+        }
+    }
+
+    void TakeDandelion()
+    {
+        flyCount++;
+        if (flyCount >= maxFlyCount)
+            flyCount = maxFlyCount;
+
+        thePlayerUI.dandelionStack.UpdateIcon(flyCount, true);
+    }
+
+    void TakeStrawberry()
+    {
+        throwingCount++;
+        if (throwingCount >= maxThrowingCount)
+            throwingCount = maxThrowingCount;
+
+        thePlayerUI.strawberryStack.UpdateIcon(throwingCount, true);
+    }
+
+    void TakeClock()
+    {
+
+    }
+
     public void TakeItem(int score)
     {
         UIManager.instance.score?.CheckScore(score);

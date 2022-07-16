@@ -19,8 +19,7 @@ public class Dandelion : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerController.instance.flyCount++;
-            //UIManager.instance.dandelionStack.CheckDandelionCount();
+            PlayerController.instance.TakeItem(ItemType.Dandelion);
             SFXController.instance.PlaySFX(dandelionClip);
             Destroy(gameObject);
         }
