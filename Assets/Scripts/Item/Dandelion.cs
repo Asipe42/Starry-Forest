@@ -12,6 +12,11 @@ public class Dandelion : MonoBehaviour
 
     void Start()
     {
+        PlayMoveAnimation();
+    }
+
+    void PlayMoveAnimation()
+    {
         transform.DOMoveY(-0.02f, 3f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
 

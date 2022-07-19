@@ -462,6 +462,7 @@ public class PlayerController : MonoBehaviour
         if (WaitDashCancleCoroutine != null)
             StopCoroutine(WaitDashCancleCoroutine);
 
+        StartCoroutine(UIManager.instance.invincibilityDash.PlaySlidingAnimation());
         thePlayerParticle.PlayMaxDash(true);
 
         while (dashLevel > DashLevel.None)
@@ -717,6 +718,8 @@ public class PlayerController : MonoBehaviour
     void DecreaseLife()
     {
         GameManager.life--;
+        GameManager.changedLifeValue = true;
+        GameManager.lifeChangeState = LifeChangeState.Down;
     }
 
     #region Take Item

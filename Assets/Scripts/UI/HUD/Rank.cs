@@ -13,6 +13,13 @@ public enum Grade
 
 public class Rank : MonoBehaviour
 {
+    enum TimeState
+    {
+        None = 0,
+        Default,
+        Warning
+    }
+
     [Header("UI")]
     [SerializeField] Image rankEmpty;
     [SerializeField] Image rankFull;
@@ -21,13 +28,17 @@ public class Rank : MonoBehaviour
     [SerializeField] Sprite[] rankSpriteEmtpy;
 
     [Header("Values")]
+    [SerializeField] Color warningTextColor;
     [SerializeField] float maxTime = 300f;
     [SerializeField] float[] timeLimit;
     [SerializeField] bool[] onRank;
 
+    float currentTime;
+
     bool onGameOver;
 
     public Grade grade = Grade.APlus;
+    TimeState timeState = TimeState.Default;
 
     public float ElapsedTime
     {
@@ -39,18 +50,16 @@ public class Rank : MonoBehaviour
 
     public float CurrentTime
     {
-        get
-        {
-            return currentTime;
-        }
+        get { return currentTime; }
+        set { currentTime = value; }
     }
 
     AudioClip changeClip;
+    AudioClip warningClip;
 
     Vector3 originalScale_rankFull;
     Vector3 originalScale_rankEmpty;
 
-    float currentTime;
 
     void Awake()
     {
@@ -80,6 +89,7 @@ public class Rank : MonoBehaviour
             DisplayTime();
             CheckTime();
             CheckGameOver();
+            MonitorGrade();
         }
     }
 
@@ -148,5 +158,43 @@ public class Rank : MonoBehaviour
 
         rankFull.sprite = rankSpriteFull[(int)grade - 1];
         rankEmpty.sprite = rankSpriteEmtpy[(int)grade - 1];
+    }
+
+    void MonitorGrade()
+    {
+        if (grade >= Grade.CPlus)
+        {
+            if (timeState != TimeState.Warning)
+            {
+                timeState = TimeState.Warning;
+                PlayWarningClip(timeState);
+            }
+        }
+        else
+        {
+            if (timeState != TimeState.Default)
+            {
+                timeState = TimeState.Default;
+            }
+        }
+
+        ChangeTimeTextColor(timeState);
+    }
+
+    void ChangeTimeTextColor(TimeState timeState)
+    {
+        if (timeState == TimeState.Warning)
+        {
+            timeText.color = warningTextColor;
+        }
+        else
+        {
+            timeText.color = Color.white;
+        }
+    }
+
+    void PlayWarningClip(TimeState timeState)
+    {
+        SFXController.instance.PlaySFX(warningClip);
     }
 }

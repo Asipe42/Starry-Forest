@@ -108,9 +108,12 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        if (!onLock && !guide.onGuide)
+        if (!GameManager.onInputLock)
         {
-            InputKey();
+            if (!onLock && !guide.onGuide)
+            {
+                InputKey();
+            }
         }
     }
 

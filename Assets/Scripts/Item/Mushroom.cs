@@ -14,10 +14,10 @@ public class Mushroom : MonoBehaviour
 
     void Start()
     {
-        PlayAnimation();
+        PlayMoveAnimation();
     }
 
-    void PlayAnimation()
+    void PlayMoveAnimation()
     {
         transform.DOLocalMoveY(transform.position.y + 0.2f, 1f).SetEase(Ease.InOutQuad)
                                                                .SetLoops(-1, LoopType.Yoyo)

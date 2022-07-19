@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882883694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 8, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1019046606877264075}
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1983544396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 8, y: -3.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1019046606877264075}
@@ -199,12 +199,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3c5488716ab5844af2a740e615f2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  startTriggerTransform: {fileID: 0}
-  endTriggerTransform: {fileID: 0}
+  damage: 2
+  startTriggerTransform: {fileID: 882883695}
+  endTriggerTransform: {fileID: 1983544397}
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   animClips:
   - {fileID: 11400000, guid: 6b12a984733f0c7489d9f764e4a092c5, type: 2}
   - {fileID: 11400000, guid: 52f6846997436834688cfa9f288e35ae, type: 2}

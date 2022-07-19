@@ -1,10 +1,16 @@
 using UnityEngine;
-using DG.Tweening;
 
 public struct StageButtonInfo
 {
     public bool isLockedStage;
     public Grade highGrade;
+}
+
+public enum LifeChangeState
+{
+    None = 0,
+    Up,
+    Down
 }
 
 public class GameManager : MonoBehaviour
@@ -17,6 +23,9 @@ public class GameManager : MonoBehaviour
     public static int lastSelectedStageButtonIndex = 0;
     public static int stageIndex = 11;
     public static int currentChapterIndex;
+    public static bool onInputLock = false;
+    public static bool changedLifeValue = false;
+    public static LifeChangeState lifeChangeState = LifeChangeState.None;
 
     void Awake()
     {

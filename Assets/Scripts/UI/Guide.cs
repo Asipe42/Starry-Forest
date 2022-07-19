@@ -73,7 +73,10 @@ public class Guide : MonoBehaviour
 
     void Update()
     {
-        InputKey();
+        if (!GameManager.onInputLock)
+        {
+            InputKey();
+        }
     }
 
     void InputKey()

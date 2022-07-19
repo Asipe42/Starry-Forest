@@ -4570,12 +4570,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -10437,7 +10437,6 @@ MonoBehaviour:
   heartBox: {fileID: 7281014386344050881}
   rsBox: {fileID: 7281014386776524836}
   pdBox: {fileID: 7281014387547575049}
-  dsBox: {fileID: 0}
 --- !u!224 &7281014388315170045
 RectTransform:
   m_ObjectHideFlags: 0
